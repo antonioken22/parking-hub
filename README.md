@@ -25,8 +25,15 @@ FIREBASE_PRIVATE_KEY=
 
 ## Running Locally
 
-Terminal 1:
+1. Clone this repository into your machine.
 
+2. Run this code in your terminal to install all dependencies used in this project.
+```shell
+npm install
+```
+3. Fill in all the necessary variables in the `.env.local` outlined above. You can obtain these keys by watching the video from the playlist linked in the References below.  
+
+4. Build and run your web app at `http://localhost:3000` by running the code below in the terminal.
 ```shell
 npm run dev
 ```
