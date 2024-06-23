@@ -1,12 +1,9 @@
 import { Metadata } from "next";
-import { getServerSession } from "next-auth";
 import { Inter } from "next/font/google";
+import { Toaster } from "sonner";
 
 import "./globals.css";
-import { authOptions } from "../pages/api/auth/[...nextauth]";
-import SessionProvider from "./(auth)/SessionProvider";
-import Login from "./(auth)/Login";
-import Home from "./page";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,18 +26,24 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
-  const session = await getServerSession(authOptions);
+}>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <SessionProvider session={session}>
-          {!session ? <Login /> : <Home />}
-        </SessionProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+          storageKey="parking-hub-theme"
+        >
+          <Toaster position="bottom-center" />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
