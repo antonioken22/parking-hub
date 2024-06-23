@@ -3,24 +3,20 @@
 - User Authentication: [Firebase](https://firebase.google.com/docs/auth/)
 - Database Management: [Firestore](https://firebase.google.com/docs/firestore/)
 - User Interface Components: [shadcn-ui](https://ui.shadcn.com/)
+- User Interface Theme: [next-themes](https://www.npmjs.com/package/next-themes)
+- Icon Pack: [lucide-react](https://www.npmjs.com/package/lucide-react)
+- Toaster: [sonner](https://www.npmjs.com/package/sonner)
 
 ## .env.local
 
 ```env
-NEXTAUTH_URL=http://localhost:3000
-NEXTAUTH_SECRET=hashafamvaskdfhasklaskfasfmghafoothills
-
-GOOGLE_CLIENT_ID=
-GOOGLE_CLIENT_SECRET=
-
-GITHUB_ID=
-GITHUB_SECRET=
-
-GOOGLE_APPLICATION_CREDENTIALS=./firebase-service-account.json
-
-FIREBASE_PROJECT_ID=
-FIREBASE_CLIENT_EMAIL=
-FIREBASE_PRIVATE_KEY=
+NEXT_PUBLIC_FIREBASE_API_KEY=
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
+NEXT_PUBLIC_FIREBASE_APP_ID=
+NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=
 ```
 
 ## Running Locally
@@ -40,4 +36,4 @@ npm run dev
 
 ## References
 
-- [Rifik's Coding Tutorials Playlist](https://youtube.com/playlist?list=PLncPs6Oyr6mZ7r3qw1b4ukIgJTemJAu_X&si=v3OyYd4ly6qXcB9G): https://youtu.be/zrjybW3UKr8?si=rcHQHqJ7P5dxAMiV
+- [Rifik](https://www.youtube.com/@GetRifik) : [AUTHENTICATION made EASY with Usernames and Passwords using NextJS 13 and Firebase](https://www.youtube.com/watch?v=ogYhXbtrCJM&t=77s)
