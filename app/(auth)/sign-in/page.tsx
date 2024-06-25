@@ -1,5 +1,4 @@
-"use client";
-
+"use client"
 import { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { signInWithEmailAndPassword } from "firebase/auth";
@@ -31,7 +30,7 @@ const SignInPage = () => {
       const user = userCredential.user;
 
       if (user.emailVerified) {
-        // Retireve user data from local storage
+        // Retrieve user data from local storage
         const registrationData = localStorage.getItem("registrationData");
         const { firstName = "", lastName = "" } = registrationData
           ? JSON.parse(registrationData)
@@ -55,26 +54,39 @@ const SignInPage = () => {
       if (error instanceof Error) {
         setError("Incorrect email/password.");
       } else {
-        setError("An unknown error occured");
+        setError("An unknown error occurred");
       }
     }
   };
 
   return (
-    <div className="bg-gradient-to-b from-gray-600 to-black justify-center items-center h-screen w-screen flex flex-col relative">
-      <div className="absolute top-4 right-4">
-        <ModeToggle />
-      </div>
-      <div className="p-4 border border-gray-300 rounded">
-        <h2 className="w-full text-2xl font-bold text-center mt-4 mb-10 ">
-          Parking Hub
+    <div 
+    
+      className="w-full min-h-screen bg-no-repeat bg-cover flex justify-center items-center" 
+      style={{ 
+        backgroundImage: "url('/PHbackground.png')"
+      }}
+    >
+      <div className="absolute top-0 left-0 w-full h-20 bg-mainColor"></div>
+      <div className="relative w-full max-w-md p-8 border bg-contain"
+            style={{ 
+              backgroundImage: "url('/LoginBG.png')"
+            }}>
+        <div className="absolute top-4 right-4">
+          <ModeToggle />
+        </div>
+        <h2 className="w-full text-2xl font-bold text-center mt-4 mb-8 text-mainColor font-poppins">
+          Parking <span className="bg-mainColor text-black  border-customOrange px-1 rounded-lg">Hub</span>
         </h2>
-
-        <form onSubmit={handleSignIn} className="space-y-6 px-6 pb-4">
+        <h3 className="w-full text-4xl font-normal text-center mt-6 mb-1 text-mainColor font-roboto">
+        Welcome! 
+        </h3>
+        <p className="w-full text-s font-extralight text-center text-mainColor font-roboto"> Please sign in to access ParkingHub</p>
+        <form onSubmit={handleSignIn} className="space-y-6">
           <div>
             <label
               htmlFor="email"
-              className="text-sm font-medium block mb-2 text-gray-300"
+              className="text-sm font-medium block mb-2 text-mainColor"
             >
               Email
             </label>
@@ -84,13 +96,13 @@ const SignInPage = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="border-2 outline-none sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-gray-600 border-gray-500 placeholder-gray-400 text-white"
+              className="border-2 outline-none sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-gray-200 border-gray-400 placeholder-gray-400 text-gray-900"
             />
           </div>
           <div>
             <label
               htmlFor="password"
-              className="text-sm font-medium block mb-2 text-gray-300"
+              className="text-sm font-medium block mb-2 text-mainColor"
             >
               Password
             </label>
@@ -100,19 +112,19 @@ const SignInPage = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="border-2 outline-none sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-gray-600 border-gray-500 placeholder-gray-400 text-white"
+              className="border-2 outline-none sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-gray-200 border-gray-400 placeholder-gray-400 text-gray-900"
             />
           </div>
           {error && <p className="text-red-500 text-sm">{error}</p>}
-          <Button type="submit" className="w-full flex">
+          <Button type="submit" className="w-full flex justify-center">
             Sign In
           </Button>
         </form>
 
-        <div className="flex flex-col items-center space-y-6 px-6 pb-4">
-          <p className="text-sm font-medium text-gray-300">
+        <div className="flex flex-col items-center space-y-2 mt-6">
+          <p className="text-sm font-medium text-mainColor">
             Don&apos;t have an account?{" "}
-            <Link href="/sign-up" className="text-blue-700 hover:underline">
+            <Link href="/sign-up" className="text-orange hover:underline">
               Register here
             </Link>
           </p>
