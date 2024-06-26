@@ -73,16 +73,30 @@ const SignUpPage = () => {
   };
 
   return (
-    <div className="bg-gradient-to-b from-gray-600 to-black justify-center items-center h-screen w-screen flex flex-col relative">
-      <div className="p-4 border border-gray-300 rounded">
-        <h2 className="text-2xl font-bold text-center mt-2 mb-2">
-          Registration
+    <div className="justify-center items-center  h-screen w-screen flex  bg-no-repeat bg-cover bg-primary"
+          style={{ 
+            backgroundImage: "url('/ph-background.png')"
+          }}>
+      <div className="absolute top-0 left-0 w-full h-20  bg-primary"></div>
+      
+      <div className="relative w-full max-w-md p-4 border bg-contain"
+      style={{ 
+        backgroundImage: "url('/login-bg.png')"
+      }}>
+      <h1 className="w-full text-2xl font-bold text-center mt-4 mb-8 text-primary font-poppins">
+          Parking <span className="bg-primary text-black  border-customOrange px-1 rounded-lg">Hub</span>
+      </h1>
+        <h2 className="text-4xl font-thin text-center mt-2 mb-2 font-roboto text-primary">
+          Sign Up! 
         </h2>
+        <p className="text-xs font-thin text-center mt-2 mb-2 font-roboto text-primary">
+          Welcome! Please sign up to access ParkingHub.
+        </p>
         <form onSubmit={handleSignUp} className="space-y-4 px-6 pb-4">
           <div>
             <label
               htmlFor="firstName"
-              className="text-sm font-medium block mb-2 text-gray-300"
+              className="text-sm font-medium block mb-2 text-primary"
             >
               First Name
             </label>
@@ -92,13 +106,13 @@ const SignUpPage = () => {
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
               required
-              className="border-2 outline-none sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 bg-gray-600 border-gray-500 placeholder-gray-400 text-white"
+              className="border-2 outline-none sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 bg-white border-gray-500 placeholder-gray-400 text-white"
             />
           </div>
           <div>
             <label
               htmlFor="lastName"
-              className="text-sm font-medium block mb-2 text-gray-300"
+              className="text-sm font-medium block mb-2 text-primary"
             >
               Last Name
             </label>
@@ -108,13 +122,13 @@ const SignUpPage = () => {
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
               required
-              className="border-2 outline-none sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 bg-gray-600 border-gray-500 placeholder-gray-400 text-white"
+              className="border-2 outline-none sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 bg-white border-gray-500 placeholder-gray-400 text-white"
             />
           </div>
           <div>
             <label
               htmlFor="email"
-              className="text-sm font-medium block mb-2 text-gray-300"
+              className="text-sm font-medium block mb-2 text-primary"
             >
               Email
             </label>
@@ -124,13 +138,13 @@ const SignUpPage = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="border-2 outline-none sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 bg-gray-600 border-gray-500 placeholder-gray-400 text-white"
+              className="border-2 outline-none sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 bg-white border-gray-500 placeholder-gray-400 text-white"
             />
           </div>
           <div>
             <label
               htmlFor="password"
-              className="text-sm font-medium block mb-2 text-gray-300"
+              className="text-sm font-medium block mb-2 text-primary"
             >
               Password
             </label>
@@ -140,13 +154,13 @@ const SignUpPage = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="border-2 outline-none sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 bg-gray-600 border-gray-500 placeholder-gray-400 text-white"
+              className="border-2 outline-none sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 bg-white border-gray-500 placeholder-gray-400 text-white"
             />
           </div>
-          <div>
+          <div className="mb-48">
             <label
               htmlFor="confirmPassword"
-              className="text-sm font-medium block mb-2 text-gray-300"
+              className="text-sm font-medium block mb-2 text-primary"
             >
               Confirm Password
             </label>
@@ -156,19 +170,19 @@ const SignUpPage = () => {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
-              className="border-2 outline-none sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 bg-gray-600 border-gray-500 placeholder-gray-400 text-white"
+              className="border-2 outline-none sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 bg-white border-gray-500 placeholder-gray-400 text-white"
             />
           </div>
           {error && <p className="text-red-500 text-sm">{error}</p>}
           {message && <p className="text-green-500 text-sm">{message}</p>}
-          <Button type="submit" className="w-full flex">
+          <Button type="submit" className="w-full flex bg-primary ">
             Sign Up
           </Button>
         </form>
         <div className="flex flex-col items-center space-y-6 px-6 pb-4">
-          <p className="text-sm font-medium text-gray-300">
+          <p className="text-sm font-medium text-primary">
             Already have an account?{" "}
-            <Link href="/sign-in" className="text-blue-700 hover:underline">
+            <Link href="/sign-in" className="text-primary hover:underline">
               Login here
             </Link>
           </p>
@@ -182,6 +196,7 @@ const SignUpPage = () => {
           </Link>
         </div>
       </div>
+
     </div>
   );
 };

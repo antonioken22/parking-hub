@@ -64,29 +64,29 @@ const SignInPage = () => {
     
       className="w-full min-h-screen bg-no-repeat bg-cover flex justify-center items-center" 
       style={{ 
-        backgroundImage: "url('/PHbackground.png')"
+        backgroundImage: "url('/ph-background.png')"
       }}
     >
-      <div className="absolute top-0 left-0 w-full h-20 bg-mainColor"></div>
+      <div className="absolute top-0 left-0 w-full h-20 bg-primary"></div>
       <div className="relative w-full max-w-md p-8 border bg-contain"
             style={{ 
-              backgroundImage: "url('/LoginBG.png')"
+              backgroundImage: "url('/login-bg.png')"
             }}>
         <div className="absolute top-4 right-4">
           <ModeToggle />
         </div>
-        <h2 className="w-full text-2xl font-bold text-center mt-4 mb-8 text-mainColor font-poppins">
+        <h2 className="w-full text-2xl font-bold text-center mt-4 mb-8 text-primary font-poppins">
           Parking <span className="bg-mainColor text-black  border-customOrange px-1 rounded-lg">Hub</span>
         </h2>
-        <h3 className="w-full text-4xl font-normal text-center mt-6 mb-1 text-mainColor font-roboto">
+        <h3 className="w-full text-4xl font-normal text-center mt-6 mb-1 text-primary font-roboto">
         Welcome! 
         </h3>
-        <p className="w-full text-s font-extralight text-center text-mainColor font-roboto"> Please sign in to access ParkingHub</p>
+        <p className="w-full text-s font-extralight text-center text-primary font-roboto"> Please sign in to access ParkingHub</p>
         <form onSubmit={handleSignIn} className="space-y-6">
           <div>
             <label
               htmlFor="email"
-              className="text-sm font-medium block mb-2 text-mainColor"
+              className="text-sm font-medium block mb-2 text-primary"
             >
               Email
             </label>
@@ -102,7 +102,7 @@ const SignInPage = () => {
           <div>
             <label
               htmlFor="password"
-              className="text-sm font-medium block mb-2 text-mainColor"
+              className="text-sm font-medium block mb-2 text-primary"
             >
               Password
             </label>
@@ -122,7 +122,7 @@ const SignInPage = () => {
         </form>
 
         <div className="flex flex-col items-center space-y-2 mt-6">
-          <p className="text-sm font-medium text-mainColor">
+          <p className="text-sm font-medium text-primary">
             Don&apos;t have an account?{" "}
             <Link href="/sign-up" className="text-orange hover:underline">
               Register here
