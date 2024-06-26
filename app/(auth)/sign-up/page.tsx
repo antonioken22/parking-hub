@@ -73,30 +73,30 @@ const SignUpPage = () => {
   };
 
   return (
-    <div className="justify-center items-center  h-screen w-screen flex  bg-no-repeat bg-cover"
+    <div className="justify-center items-center  h-screen w-screen flex  bg-no-repeat bg-cover bg-primary"
           style={{ 
             backgroundImage: "url('/ph-background.png')"
           }}>
-      <div className="absolute top-0 left-0 w-full h-20  bg-mainColor"></div>
+      <div className="absolute top-0 left-0 w-full h-20  bg-primary"></div>
       
       <div className="relative w-full max-w-md p-4 border bg-contain"
       style={{ 
         backgroundImage: "url('/login-bg.png')"
       }}>
-      <h1 className="w-full text-2xl font-bold text-center mt-4 mb-8 text-mainColor font-poppins">
-          Parking <span className="bg-mainColor text-black  border-customOrange px-1 rounded-lg">Hub</span>
+      <h1 className="w-full text-2xl font-bold text-center mt-4 mb-8 text-primary font-poppins">
+          Parking <span className="bg-primary text-black  border-customOrange px-1 rounded-lg">Hub</span>
       </h1>
-        <h2 className="text-4xl font-thin text-center mt-2 mb-2 font-roboto text-mainColor">
+        <h2 className="text-4xl font-thin text-center mt-2 mb-2 font-roboto text-primary">
           Sign Up! 
         </h2>
-        <p className="text-xs font-thin text-center mt-2 mb-2 font-roboto text-mainColor">
+        <p className="text-xs font-thin text-center mt-2 mb-2 font-roboto text-primary">
           Welcome! Please sign up to access ParkingHub.
         </p>
         <form onSubmit={handleSignUp} className="space-y-4 px-6 pb-4">
           <div>
             <label
               htmlFor="firstName"
-              className="text-sm font-medium block mb-2 text-mainColor"
+              className="text-sm font-medium block mb-2 text-primary"
             >
               First Name
             </label>
@@ -112,7 +112,7 @@ const SignUpPage = () => {
           <div>
             <label
               htmlFor="lastName"
-              className="text-sm font-medium block mb-2 text-mainColor"
+              className="text-sm font-medium block mb-2 text-primary"
             >
               Last Name
             </label>
@@ -128,7 +128,7 @@ const SignUpPage = () => {
           <div>
             <label
               htmlFor="email"
-              className="text-sm font-medium block mb-2 text-mainColor"
+              className="text-sm font-medium block mb-2 text-primary"
             >
               Email
             </label>
@@ -144,7 +144,7 @@ const SignUpPage = () => {
           <div>
             <label
               htmlFor="password"
-              className="text-sm font-medium block mb-2 text-mainColor"
+              className="text-sm font-medium block mb-2 text-primary"
             >
               Password
             </label>
@@ -160,7 +160,7 @@ const SignUpPage = () => {
           <div className="mb-48">
             <label
               htmlFor="confirmPassword"
-              className="text-sm font-medium block mb-2 text-mainColor"
+              className="text-sm font-medium block mb-2 text-primary"
             >
               Confirm Password
             </label>
@@ -175,14 +175,14 @@ const SignUpPage = () => {
           </div>
           {error && <p className="text-red-500 text-sm">{error}</p>}
           {message && <p className="text-green-500 text-sm">{message}</p>}
-          <Button type="submit" className="w-full flex bg-mainColor ">
+          <Button type="submit" className="w-full flex bg-primary ">
             Sign Up
           </Button>
         </form>
         <div className="flex flex-col items-center space-y-6 px-6 pb-4">
-          <p className="text-sm font-medium text-gray-300">
+          <p className="text-sm font-medium text-primary">
             Already have an account?{" "}
-            <Link href="/sign-in" className="text-blue-700 hover:underline">
+            <Link href="/sign-in" className="text-primary hover:underline">
               Login here
             </Link>
           </p>
