@@ -73,13 +73,16 @@ const SignUpPage = () => {
   };
 
   return (
-    <div className="bg-gradient-to-b from-gray-600 to-black justify-center items-start object-left h-screen w-screen grid grid-cols-3 relative p-32 bg-no-repeat bg-cover"
+    <div className="justify-center items-center  h-screen w-screen flex  bg-no-repeat bg-cover"
           style={{ 
-            backgroundImage: "url('/PHbackground.png')"
+            backgroundImage: "url('/ph-background.png')"
           }}>
-      <div className="absolute top-0 left-0 w-full h-20 bg-mainColor"></div>
+      <div className="absolute top-0 left-0 w-full h-20  bg-mainColor"></div>
       
-      <div className="py-0 px-8  rounded self-start">
+      <div className="relative w-full max-w-md p-4 border bg-contain"
+      style={{ 
+        backgroundImage: "url('/login-bg.png')"
+      }}>
       <h1 className="w-full text-2xl font-bold text-center mt-4 mb-8 text-mainColor font-poppins">
           Parking <span className="bg-mainColor text-black  border-customOrange px-1 rounded-lg">Hub</span>
       </h1>
@@ -193,10 +196,7 @@ const SignUpPage = () => {
           </Link>
         </div>
       </div>
-      <div className="p-80 ml-56 mt-20 border border-mainColor rounded"
-            style={{ 
-              backgroundImage: "url('/LoginBG.png')"
-            }}> </div>
+
     </div>
   );
 };

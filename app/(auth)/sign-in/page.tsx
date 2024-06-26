@@ -64,13 +64,13 @@ const SignInPage = () => {
     
       className="w-full min-h-screen bg-no-repeat bg-cover flex justify-center items-center" 
       style={{ 
-        backgroundImage: "url('/PHbackground.png')"
+        backgroundImage: "url('/ph-background.png')"
       }}
     >
       <div className="absolute top-0 left-0 w-full h-20 bg-mainColor"></div>
       <div className="relative w-full max-w-md p-8 border bg-contain"
             style={{ 
-              backgroundImage: "url('/LoginBG.png')"
+              backgroundImage: "url('/login-bg.png')"
             }}>
         <div className="absolute top-4 right-4">
           <ModeToggle />
