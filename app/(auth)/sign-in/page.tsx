@@ -1,9 +1,11 @@
-"use client"
+"use client";
+
+import Link from "next/link";
+import Image from "next/image";
 import { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 
 import { auth, firestore } from "@/firebase/config";
@@ -60,28 +62,40 @@ const SignInPage = () => {
   };
 
   return (
-    <div 
-    
-      className="w-full min-h-screen bg-no-repeat bg-cover flex justify-center items-center" 
-      style={{ 
-        backgroundImage: "url('/ph-background.png')"
-      }}
-    >
-      <div className="absolute top-0 left-0 w-full h-20 bg-primary"></div>
-      <div className="relative w-full max-w-md p-8 border bg-contain"
-            style={{ 
-              backgroundImage: "url('/login-bg.png')"
-            }}>
+    <div className="relative w-screen min-h-screen flex justify-center items-center">
+      <Image
+        loading={"lazy"}
+        alt="Parking Hub Background"
+        src="/login-bg.png"
+        layout="fill"
+        objectFit="fill"
+        className="dark:hidden"
+      />
+      <Image
+        loading={"lazy"}
+        alt="Parking Hub Background"
+        src="/login-bg-dark.png"
+        layout="fill"
+        objectFit="fill"
+        className="hidden dark:block"
+      />
+
+      <div className="relative w-full max-w-md p-8 border border-primary bg-gray-300 bg-opacity-90 dark:bg-opacity-0">
         <div className="absolute top-4 right-4">
           <ModeToggle />
         </div>
-        <h2 className="w-full text-2xl font-bold text-center mt-4 mb-8 text-primary font-poppins">
-          Parking <span className="bg-mainColor text-black  border-customOrange px-1 rounded-lg">Hub</span>
+        <h2 className="w-full text-2xl font-bold text-center mt-4 mb-8 text-primary">
+          Parking{" "}
+          <span className="bg-primary text-background  border-primary-foreground px-2 rounded-lg">
+            Hub
+          </span>
         </h2>
-        <h3 className="w-full text-4xl font-normal text-center mt-6 mb-1 text-primary font-roboto">
-        Welcome! 
+        <h3 className="w-full text-4xl font-normal text-center mt-6 mb-1 text-primary font-roboto mb-2">
+          Log in
         </h3>
-        <p className="w-full text-s font-extralight text-center text-primary font-roboto"> Please sign in to access ParkingHub</p>
+        <p className="w-full text-s font-extralight text-center text-primary font-roboto mb-2">
+          Enter your registered account to access Parking Hub
+        </p>
         <form onSubmit={handleSignIn} className="space-y-6">
           <div>
             <label
@@ -93,10 +107,11 @@ const SignInPage = () => {
             <input
               type="text"
               id="email"
+              placeholder="juandelacruz@gmail.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="border-2 outline-none sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-gray-200 border-gray-400 placeholder-gray-400 text-gray-900"
+              className="border-2 outline-none sm:text-sm rounded-lg focus:primary-foreground block w-full p-2.5 bg-gray-200 border-primary focus:border-primary-foreground placeholder-gray-400 text-gray-900"
             />
           </div>
           <div>
@@ -112,7 +127,7 @@ const SignInPage = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="border-2 outline-none sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-gray-200 border-gray-400 placeholder-gray-400 text-gray-900"
+              className="border-2 outline-none sm:text-sm rounded-lg focus:primary-foreground block w-full p-2.5 bg-gray-200 border-primary focus:border-primary-foreground text-gray-900"
             />
           </div>
           {error && <p className="text-red-500 text-sm">{error}</p>}
@@ -124,14 +139,14 @@ const SignInPage = () => {
         <div className="flex flex-col items-center space-y-2 mt-6">
           <p className="text-sm font-medium text-primary">
             Don&apos;t have an account?{" "}
-            <Link href="/sign-up" className="text-orange hover:underline">
+            <Link href="/sign-up" className="text-primary hover:underline">
               Register here
             </Link>
           </p>
           <Link href="/sign-up">
             <div
               role="button"
-              className="h-8 w-8 text-muted-foreground rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600"
+              className="h-8 w-8 text-primary rounded-sm hover:bg-primary-foreground hover:text-white"
             >
               <ChevronRight className="h-8 w-8" />
             </div>
