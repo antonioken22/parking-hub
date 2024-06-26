@@ -193,7 +193,7 @@ const SignUpPage = () => {
           </Link>
         </div>
       </div>
-      <div className="p-80 ml-56 mt-20 border border-gray-300 rounded"
+      <div className="p-80 ml-56 mt-20 border border-mainColor rounded"
             style={{ 
               backgroundImage: "url('/LoginBG.png')"
             }}> </div>
