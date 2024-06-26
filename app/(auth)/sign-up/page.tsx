@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+import Image from "next/image";
 import { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -7,10 +9,10 @@ import {
   sendEmailVerification,
 } from "firebase/auth";
 import { ChevronLeft } from "lucide-react";
-import Link from "next/link";
 
 import { auth } from "@/firebase/config";
 import { Button } from "@/components/ui/button";
+import { ModeToggle } from "@/components/mode-toggle";
 
 const SignUpPage = () => {
   const [firstName, setFirstName] = useState("");
@@ -73,24 +75,39 @@ const SignUpPage = () => {
   };
 
   return (
-    <div className="justify-center items-center  h-screen w-screen flex  bg-no-repeat bg-cover bg-primary"
-          style={{ 
-            backgroundImage: "url('/ph-background.png')"
-          }}>
-      <div className="absolute top-0 left-0 w-full h-20  bg-primary"></div>
-      
-      <div className="relative w-full max-w-md p-4 border bg-contain"
-      style={{ 
-        backgroundImage: "url('/login-bg.png')"
-      }}>
-      <h1 className="w-full text-2xl font-bold text-center mt-4 mb-8 text-primary font-poppins">
-          Parking <span className="bg-primary text-black  border-customOrange px-1 rounded-lg">Hub</span>
-      </h1>
+    <div className="relative w-screen min-h-screen flex justify-center items-center">
+      <Image
+        loading={"lazy"}
+        alt="Parking Hub Background"
+        src="/login-bg.png"
+        layout="fill"
+        objectFit="cover"
+        className="dark:hidden"
+      />
+      <Image
+        loading={"lazy"}
+        alt="Parking Hub Background"
+        src="/login-bg-dark.png"
+        layout="fill"
+        objectFit="cover"
+        className="hidden dark:block"
+      />
+
+      <div className="relative w-full max-w-md p-4 border border-primary bg-gray-300 bg-opacity-90 dark:bg-opacity-0">
+        <div className="absolute top-4 right-4">
+          <ModeToggle />
+        </div>
+        <h1 className="w-full text-2xl font-bold text-center mt-4 mb-8 text-primary font-poppins">
+          Parking{" "}
+          <span className="bg-primary text-background px-2 rounded-lg">
+            Hub
+          </span>
+        </h1>
         <h2 className="text-4xl font-thin text-center mt-2 mb-2 font-roboto text-primary">
-          Sign Up! 
+          Registration Form
         </h2>
-        <p className="text-xs font-thin text-center mt-2 mb-2 font-roboto text-primary">
-          Welcome! Please sign up to access ParkingHub.
+        <p className="text-s text-center mt-2 mb-2 font-roboto text-primary">
+          Please fill up to register an account.
         </p>
         <form onSubmit={handleSignUp} className="space-y-4 px-6 pb-4">
           <div>
@@ -103,10 +120,11 @@ const SignUpPage = () => {
             <input
               type="text"
               id="firstName"
+              placeholder="Juan"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
               required
-              className="border-2 outline-none sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 bg-white border-gray-500 placeholder-gray-400 text-white"
+              className="border-2 outline-none sm:text-sm rounded-lg ring-primary-foreground focus:primary-foreground block w-full p-2.5 bg-gray-200 border-primary focus:border-primary-foreground placeholder-gray-400 text-gray-900"
             />
           </div>
           <div>
@@ -119,10 +137,11 @@ const SignUpPage = () => {
             <input
               type="text"
               id="lastName"
+              placeholder="Dela Cruz"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
               required
-              className="border-2 outline-none sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 bg-white border-gray-500 placeholder-gray-400 text-white"
+              className="border-2 outline-none sm:text-sm rounded-lg focus:primary-foreground block w-full p-2.5 bg-gray-200 border-primary focus:border-primary-foreground placeholder-gray-400 text-gray-900"
             />
           </div>
           <div>
@@ -135,10 +154,11 @@ const SignUpPage = () => {
             <input
               type="text"
               id="email"
+              placeholder="juandelacruz@gmail.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="border-2 outline-none sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 bg-white border-gray-500 placeholder-gray-400 text-white"
+              className="border-2 outline-none sm:text-sm rounded-lg focus:primary-foreground block w-full p-2.5 bg-gray-200 border-primary focus:border-primary-foreground placeholder-gray-400 text-gray-900"
             />
           </div>
           <div>
@@ -154,7 +174,7 @@ const SignUpPage = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="border-2 outline-none sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 bg-white border-gray-500 placeholder-gray-400 text-white"
+              className="border-2 outline-none sm:text-sm rounded-lg focus:primary-foreground block w-full p-2.5 bg-gray-200 border-primary focus:border-primary-foreground text-gray-900"
             />
           </div>
           <div className="mb-48">
@@ -170,7 +190,7 @@ const SignUpPage = () => {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
-              className="border-2 outline-none sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 bg-white border-gray-500 placeholder-gray-400 text-white"
+              className="border-2 outline-none sm:text-sm rounded-lg focus:primary-foreground block w-full p-2.5 bg-gray-200 border-primary focus:border-primary-foreground text-gray-900"
             />
           </div>
           {error && <p className="text-red-500 text-sm">{error}</p>}
@@ -189,14 +209,13 @@ const SignUpPage = () => {
           <Link href="/sign-in">
             <div
               role="button"
-              className="h-8 w-8 text-muted-foreground rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600"
+              className="h-8 w-8 text-primary rounded-sm hover:bg-primary-foreground hover:text-white"
             >
               <ChevronLeft className="h-8 w-8" />
             </div>
           </Link>
         </div>
       </div>
-
     </div>
   );
 };
