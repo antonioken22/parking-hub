@@ -77,19 +77,17 @@ const SignUpPage = () => {
   return (
     <div className="relative w-screen min-h-screen flex justify-center items-center">
       <Image
-        loading={"lazy"}
+        loading="lazy"
         alt="Parking Hub Background"
         src="/login-bg.png"
-        layout="fill"
-        objectFit="cover"
+        fill
         className="dark:hidden"
       />
       <Image
-        loading={"lazy"}
+        loading="lazy"
         alt="Parking Hub Background"
         src="/login-bg-dark.png"
-        layout="fill"
-        objectFit="cover"
+        fill
         className="hidden dark:block"
       />
 
@@ -97,12 +95,14 @@ const SignUpPage = () => {
         <div className="absolute top-4 right-4">
           <ModeToggle />
         </div>
-        <h1 className="w-full text-2xl font-bold text-center mt-4 mb-8 text-primary font-poppins">
-          Parking{" "}
-          <span className="bg-primary text-background px-2 rounded-lg">
-            Hub
-          </span>
-        </h1>
+        <Link href="/">
+          <h1 className="w-full text-2xl font-bold text-center mt-4 mb-8 text-primary font-poppins">
+            Parking{" "}
+            <span className="bg-primary text-background px-2 rounded-lg">
+              Hub
+            </span>
+          </h1>
+        </Link>
         <h2 className="text-4xl font-thin text-center mt-2 mb-2 font-roboto text-primary">
           Registration Form
         </h2>
