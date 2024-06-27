@@ -34,8 +34,8 @@ const testimonials = [
     description: "gwapo kaayo si kuya guard <3",
   },
   {
-    name: "Shawnnheiser",
-    avatar: "S",
+    name: "Shawn Carl",
+    avatar: "SC",
     title: "Computer Engineer",
     description: "Great parking space.",
   },
