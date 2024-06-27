@@ -55,6 +55,7 @@ const SignInPage = () => {
     } catch (error) {
       if (error instanceof Error) {
         setError("Incorrect email/password.");
+        console.log(error.message);
       } else {
         setError("An unknown error occurred");
       }
@@ -64,19 +65,17 @@ const SignInPage = () => {
   return (
     <div className="relative w-screen min-h-screen flex justify-center items-center">
       <Image
-        loading={"lazy"}
+        loading="lazy"
         alt="Parking Hub Background"
         src="/login-bg.png"
-        layout="fill"
-        objectFit="fill"
+        fill
         className="dark:hidden"
       />
       <Image
-        loading={"lazy"}
+        loading="lazy"
         alt="Parking Hub Background"
         src="/login-bg-dark.png"
-        layout="fill"
-        objectFit="fill"
+        fill
         className="hidden dark:block"
       />
 
@@ -84,12 +83,14 @@ const SignInPage = () => {
         <div className="absolute top-4 right-4">
           <ModeToggle />
         </div>
-        <h2 className="w-full text-2xl font-bold text-center mt-4 mb-8 text-primary">
-          Parking{" "}
-          <span className="bg-primary text-background  border-primary-foreground px-2 rounded-lg">
-            Hub
-          </span>
-        </h2>
+        <Link href="/">
+          <h2 className="w-full text-2xl font-bold text-center mt-4 mb-8 text-primary">
+            Parking{" "}
+            <span className="bg-primary text-background  border-primary-foreground px-2 rounded-lg">
+              Hub
+            </span>
+          </h2>
+        </Link>
         <h3 className="w-full text-4xl font-normal text-center mt-6 mb-1 text-primary font-roboto mb-2">
           Log in
         </h3>
