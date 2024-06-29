@@ -91,7 +91,7 @@ const SignInPage = () => {
             </span>
           </h2>
         </Link>
-        <h3 className="w-full text-4xl font-normal text-center mt-6 mb-1 text-primary font-roboto mb-2">
+        <h3 className="w-full text-4xl font-normal text-center mt-6 mb-2 text-primary font-roboto">
           Log in
         </h3>
         <p className="w-full text-s font-extralight text-center text-primary font-roboto mb-2">
