@@ -2,15 +2,17 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import type { User } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
+import { FileClock } from "lucide-react";
 
 import { auth, firestore } from "@/firebase/config";
 import { Spinner } from "@/components/spinner";
 import { Heading } from "@/app/_components/heading";
+import { Button } from "@/components/ui/button";
 
-const DashboardPage = () => {
+const ParkingHistoryPage = () => {
   const [user, setUser] = useState<User | null>(null);
   const [userName, setUserName] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -46,15 +48,18 @@ const DashboardPage = () => {
 
   return (
     <div>
-      <main className="flex flex-col items-center justify-center flex-grow mt-10">
-        {userName && (
-          <h1 className="text-4xl font-bold mb-6 ml-10">
-            Welcome, {userName}!
-          </h1>
-        )}
-      </main>
+      <div className="flex items-center gap-x-3 mr-auto pl-4">
+        <FileClock className="w-10 h-10 text-primary" />
+        <div>
+          <Heading
+            title="Parking History"
+            description="View your parking history."
+          />
+        </div>
+      </div>
+      <div className="px-4 lg:px-8 space-y-4 pt-4"></div>
     </div>
   );
 };
 
-export default DashboardPage;
+export default ParkingHistoryPage;
