@@ -2,15 +2,17 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import type { User } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
+import { Settings } from "lucide-react";
 
 import { auth, firestore } from "@/firebase/config";
 import { Spinner } from "@/components/spinner";
 import { Heading } from "@/app/_components/heading";
+import { Button } from "@/components/ui/button";
 
-const DashboardPage = () => {
+const SettingsPage = () => {
   const [user, setUser] = useState<User | null>(null);
   const [userName, setUserName] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -36,6 +38,19 @@ const DashboardPage = () => {
     return () => unsubscribe();
   }, [router]);
 
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      router.push("/sign-in");
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+  };
+
+  const handleChangePassword = () => {
+    router.push("/change-password");
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center absolute inset-y-0 h-full w-full bg-background/80 z-50 lg:pr-56">
@@ -46,15 +61,20 @@ const DashboardPage = () => {
 
   return (
     <div>
-      <main className="flex flex-col items-center justify-center flex-grow mt-10">
-        {userName && (
-          <h1 className="text-4xl font-bold mb-6 ml-10">
-            Welcome, {userName}!
-          </h1>
-        )}
-      </main>
+      <div className="flex items-center gap-x-3 mr-auto pl-4">
+        <Settings className="w-10 h-10 text-primary" />
+        <div>
+          <Heading title="Settings" description="Manage account settings." />
+        </div>
+      </div>
+      <div className="px-4 lg:px-8 space-y-4 pt-4">
+        <div className="space-x-4">
+          <Button onClick={handleLogout}>Log out</Button>
+          <Button onClick={handleChangePassword}>Change Password</Button>
+        </div>
+      </div>
     </div>
   );
 };
 
-export default DashboardPage;
+export default SettingsPage;
