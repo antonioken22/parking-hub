@@ -4,7 +4,7 @@ import { Sidebar } from "./_components/sidebar";
 const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="h-screen relative">
-      <div className="hidden h-screen md:flex md:w-56 md:flex-col md:fixed md:inset-y-0 z-80 ">
+      <div className="hidden h-screen md:flex md:w-56 md:flex-col md:fixed md:inset-y-0 z-50">
         <Sidebar />
       </div>
       <Navbar />

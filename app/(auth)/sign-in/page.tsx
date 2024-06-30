@@ -46,6 +46,7 @@ const SignInPage = () => {
             firstName,
             lastName,
             email: user.email,
+            role: "user",
           });
         }
         router.push("/dashboard");
