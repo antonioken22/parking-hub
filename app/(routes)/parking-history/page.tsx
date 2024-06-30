@@ -2,19 +2,15 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { onAuthStateChanged, signOut } from "firebase/auth";
-import type { User } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { FileClock } from "lucide-react";
 
 import { auth, firestore } from "@/firebase/config";
 import { Spinner } from "@/components/spinner";
 import { Heading } from "@/app/(routes)/_components/heading";
-import { Button } from "@/components/ui/button";
 
 const ParkingHistoryPage = () => {
-  const [user, setUser] = useState<User | null>(null);
-  const [userName, setUserName] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   const router = useRouter();
@@ -22,11 +18,8 @@ const ParkingHistoryPage = () => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        setUser(user);
         const userDoc = await getDoc(doc(firestore, "users", user.uid));
         if (userDoc.exists()) {
-          const userData = userDoc.data();
-          setUserName(`${userData.firstName} ${userData.lastName}`);
         }
       } else {
         router.push("/sign-in");
