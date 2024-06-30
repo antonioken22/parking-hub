@@ -8,7 +8,7 @@ import { doc, getDoc } from "firebase/firestore";
 
 import { auth, firestore } from "@/firebase/config";
 import { Spinner } from "@/components/spinner";
-import { Heading } from "@/app/_components/heading";
+import { Heading } from "@/app/(routes)/_components/heading";
 
 const DashboardPage = () => {
   const [user, setUser] = useState<User | null>(null);

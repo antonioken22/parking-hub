@@ -9,7 +9,7 @@ import { Car } from "lucide-react";
 
 import { auth, firestore } from "@/firebase/config";
 import { Spinner } from "@/components/spinner";
-import { Heading } from "@/app/_components/heading";
+import { Heading } from "@/app/(routes)/_components/heading";
 import { Button } from "@/components/ui/button";
 
 const MyVehiclesPage = () => {
