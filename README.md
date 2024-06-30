@@ -1,3 +1,6 @@
+# [<img src="/public/logo-dark.svg" alt="Logo Dark Mode" width="32" height="32"> Parking Hub](parking-hub.vercel.app)
+By Team Wild Tech
+
 ## Services Used
 
 - User Authentication: [Firebase](https://firebase.google.com/docs/auth/)
