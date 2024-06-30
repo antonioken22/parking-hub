@@ -40,7 +40,7 @@ const ParkingMapPage = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center absolute inset-y-0 h-full w-full bg-background/80 z-50 lg:pr-56">
+      <div className="flex items-center justify-center absolute inset-y-0 h-full w-full bg-background/80 z-50 md:pr-56">
         <Spinner size="lg" />
       </div>
     );
