@@ -5,7 +5,6 @@
 - User Interface Components: [shadcn-ui](https://ui.shadcn.com/)
 - User Interface Theme: [next-themes](https://www.npmjs.com/package/next-themes)
 - Icon Pack: [lucide-react](https://www.npmjs.com/package/lucide-react)
-- Toaster: [sonner](https://www.npmjs.com/package/sonner)
 
 ## .env.local
 
