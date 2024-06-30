@@ -1,4 +1,4 @@
-# [<img src="/public/logo-dark.svg" alt="Logo Dark Mode" width="32" height="32"> Parking Hub](parking-hub.vercel.app)
+# [<img src="/public/logo-dark.svg" alt="Logo Dark Mode" width="32" height="32"> Parking Hub](https://parking-hub.vercel.app)
 By Team Wild Tech
 
 ## Services Used
