@@ -1,9 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useState, FormEvent } from "react";
-import { useRouter } from "next/navigation";
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
@@ -22,8 +20,6 @@ const SignUpPage = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
-
-  const router = useRouter();
 
   const handleSignUp = async (event: FormEvent) => {
     event.preventDefault();
@@ -75,22 +71,7 @@ const SignUpPage = () => {
   };
 
   return (
-    <div className="relative w-screen min-h-screen flex justify-center items-center">
-      <Image
-        loading="lazy"
-        alt="Parking Hub Background"
-        src="/login-bg.png"
-        fill
-        className="dark:hidden"
-      />
-      <Image
-        loading="lazy"
-        alt="Parking Hub Background"
-        src="/login-bg-dark.png"
-        fill
-        className="hidden dark:block"
-      />
-
+    <div>
       <div className="relative w-full max-w-md p-4 border border-primary bg-gray-300 bg-opacity-90 dark:bg-opacity-0">
         <div className="absolute top-4 right-4">
           <ModeToggle />

@@ -2,45 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { onAuthStateChanged } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
 import { MapPin, SquareParking } from "lucide-react";
 
-import { auth, firestore } from "@/firebase/config";
-import { Spinner } from "@/components/spinner";
 import { Heading } from "@/app/(routes)/_components/heading";
+import CITUVicinityMap from "@/public/citu-vicinity-map.png";
 
 const ParkingMapPage = () => {
-  const [loading, setLoading] = useState(true);
-
-  const router = useRouter();
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        const userDoc = await getDoc(doc(firestore, "users", user.uid));
-        if (userDoc.exists()) {
-        }
-      } else {
-        router.push("/sign-in");
-      }
-      setLoading(false);
-    });
-
-    // Cleanup subscription on unmount
-    return () => unsubscribe();
-  }, [router]);
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center absolute inset-y-0 h-full w-full bg-background/80 z-50 md:pr-56">
-        <Spinner size="lg" />
-      </div>
-    );
-  }
-
   return (
     <div>
       <div className="flex items-center gap-x-3 mr-auto pl-4">
@@ -69,12 +36,13 @@ const ParkingMapPage = () => {
           {/* Add more map pins here */}
           <div className="relative z-0">
             <Image
-              loading="lazy"
               alt="CIT-U Vicinity Map"
-              src="/citu-vicinity-map.png"
+              src={CITUVicinityMap}
               layout="intrinsic"
               width={1448}
               height={2048}
+              placeholder="blur"
+              priority
             />
           </div>
         </div>
