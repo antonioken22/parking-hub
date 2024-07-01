@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { Toaster } from "sonner";
 
 import "./globals.css";
 import { ThemeProvider } from "@/components/providers/theme-provider";
@@ -42,6 +43,10 @@ export default function RootLayout({
           disableTransitionOnChange
           storageKey="parking-hub-theme"
         >
+          <Toaster
+            className="text-primary bg-muted border border-primary"
+            position="bottom-center"
+          />
           {children}
         </ThemeProvider>
       </body>
