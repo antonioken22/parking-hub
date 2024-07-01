@@ -72,7 +72,7 @@ const SignUpPage = () => {
 
   return (
     <div>
-      <div className="relative w-full max-w-md p-4 border border-primary bg-gray-300 bg-opacity-90 dark:bg-opacity-0">
+      <div className="relative w-full max-w-md p-8 border border-primary bg-gray-300 bg-opacity-90 dark:bg-opacity-0">
         <div className="absolute top-4 right-4">
           <ModeToggle />
         </div>
@@ -90,7 +90,7 @@ const SignUpPage = () => {
         <p className="text-s text-center mt-2 mb-2 font-roboto text-primary">
           Please fill up to register an account.
         </p>
-        <form onSubmit={handleSignUp} className="space-y-4 px-6 pb-4">
+        <form onSubmit={handleSignUp} className="space-y-6">
           <div>
             <label
               htmlFor="firstName"
@@ -180,7 +180,7 @@ const SignUpPage = () => {
             Sign Up
           </Button>
         </form>
-        <div className="flex flex-col items-center space-y-6 px-6 pb-4">
+        <div className="flex flex-col items-center space-y-6 px-6 pb-4 mt-6">
           <p className="text-sm font-medium text-primary">
             Already have an account?{" "}
             <Link href="/sign-in" className="text-primary hover:underline">

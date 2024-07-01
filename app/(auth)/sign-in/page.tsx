@@ -80,7 +80,7 @@ const SignInPage = () => {
           Log in
         </h3>
         <p className="w-full text-s font-extralight text-center text-primary font-roboto mb-2">
-          Enter your registered account to access Parking Hub
+          Enter your registered account to access Parking Hub.
         </p>
         <form onSubmit={handleSignIn} className="space-y-6">
           <div>
