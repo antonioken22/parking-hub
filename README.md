@@ -6,7 +6,7 @@ By Team Wild Tech
 
 - User Authentication: [Firebase](https://firebase.google.com/docs/auth/)
 - Database Management: [Firestore](https://firebase.google.com/docs/firestore/)
-- User Interface Components: [shadcn-ui](https://ui.shadcn.com/), [sonner](https://sonner.emilkowal.ski/), & [NextUI](https://nextui.org/)
+- User Interface Components: [shadcn-ui](https://ui.shadcn.com/), [sonner](https://sonner.emilkowal.ski/), & [react-datetime-picker](https://www.npmjs.com/package/react-datetime-picker)
 - User Interface Theme: [next-themes](https://www.npmjs.com/package/next-themes)
 - Icon Pack: [lucide-react](https://www.npmjs.com/package/lucide-react)
 
