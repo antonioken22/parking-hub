@@ -4,30 +4,18 @@ import Link from "next/link";
 import { SquareParking, Undo2 } from "lucide-react";
 
 import { Heading } from "@/app/(routes)/_components/heading";
-import ParkingLayout from "./_components/parking-layout";
-import useAuthState from "@/hooks/useAuthState";
-import { Spinner } from "@/components/spinner";
+import ParkingLayout from "@/app/(routes)/parking-map/rtl-open-court/_components/parking-layout";
 
-const RTLOpenCourtPage = () => {
-  const { userData, loading } = useAuthState();
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center absolute inset-y-0 h-full w-full bg-background/80 z-50 md:pr-56">
-        <Spinner size="lg" />
-      </div>
-    );
-  }
-
+const RTLOpenCourtViewablePage = () => {
   return (
-    <div>
+    <div className="pt-4">
       <div className="flex items-center gap-x-3 mr-auto pl-4">
         <SquareParking className="w-10 h-10 text-primary" />
         <div>
           <Heading title="RTL Open Court" description="Parking area status." />
         </div>
         <div className="ml-auto pr-4">
-          <Link href="/parking-map">
+          <Link href="/parking-map-public-view">
             <Undo2 className="text-primary" />
           </Link>
         </div>
@@ -37,4 +25,4 @@ const RTLOpenCourtPage = () => {
   );
 };
 
-export default RTLOpenCourtPage;
+export default RTLOpenCourtViewablePage;

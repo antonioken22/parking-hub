@@ -44,8 +44,18 @@ export default function RootLayout({
           storageKey="parking-hub-theme"
         >
           <Toaster
-            className="text-primary bg-muted border border-primary"
-            position="bottom-center"
+            position="bottom-left"
+            toastOptions={{
+              unstyled: false,
+              classNames: {
+                closeButton: "bg-lime-400",
+                loading: "bg-secondary text-primary border border-primary",
+                success: "bg-secondary text-green-500 border border-green-500",
+                error: "bg-secondary text-red-500 border border-red-500",
+                warning:
+                  "bg-secondary text-yellow-500 border border-yellow-500",
+              },
+            }}
           />
           {children}
         </ThemeProvider>

@@ -1,31 +1,23 @@
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Car,
-  RefreshCw,
   ChevronLeft,
   ChevronRight,
   ChevronUp,
   ChevronDown,
   SquarePen,
+  Info,
 } from "lucide-react";
-import React, { useState, useEffect, useCallback } from "react";
-import { ParkingSlotInfo } from "./parking-slot-info";
+
+import { ParkingSlotInfoCard } from "./parking-slot-info-card";
+import { ParkingSlotData } from "@/types/ParkingSlotData";
+import { ParkingSlotInfoDrawer } from "./parking-slot-info-drawer";
 
 interface ParkingSlotProps {
-  slot: {
-    id: string;
-    top: number;
-    left: number;
-    color: string;
-    status: string;
-    name: string | null;
-    countdown: Date | null;
-    description: string | null;
-    pushNotification: boolean;
-  };
+  slot: ParkingSlotData;
   index: number;
   onPositionChange: (index: number, top: number, left: number) => void;
-  onColorChange: (index: number, color: string) => void;
-  onEdit: (index: number, updatedSlot: any) => void;
+  onEdit: (index: number, updatedSlot: ParkingSlotData) => void;
   role: string | null;
   selected: boolean;
   onSelect: () => void;
@@ -35,7 +27,6 @@ const ParkingSlot: React.FC<ParkingSlotProps> = ({
   slot,
   index,
   onPositionChange,
-  onColorChange,
   onEdit,
   role,
   selected,
@@ -45,6 +36,7 @@ const ParkingSlot: React.FC<ParkingSlotProps> = ({
   const [left, setLeft] = useState(slot.left);
   const [zIndex, setZIndex] = useState(10);
   const [isEditing, setIsEditing] = useState(false);
+  const [isViewing, setIsViewing] = useState(false);
   const [keyboardListenerActive, setKeyboardListenerActive] = useState(true);
 
   const handleTopChange = useCallback(
@@ -123,20 +115,12 @@ const ParkingSlot: React.FC<ParkingSlotProps> = ({
     onSelect();
   };
 
-  const handleColorChange = () => {
-    const colors = ["gray", "green", "red", "yellow"];
-    const currentIndex = colors.indexOf(slot.color);
-    const nextIndex = (currentIndex + 1) % colors.length;
-    const nextColor = colors[nextIndex];
-    onColorChange(index, nextColor);
-  };
-
   const handleEdit = () => {
     setIsEditing(true);
   };
 
   const handleSave = useCallback(
-    (updatedSlot: any) => {
+    (updatedSlot: ParkingSlotData) => {
       onEdit(index, updatedSlot);
       setIsEditing(false);
     },
@@ -145,6 +129,14 @@ const ParkingSlot: React.FC<ParkingSlotProps> = ({
 
   const handleClose = () => {
     setIsEditing(false);
+  };
+
+  const handleInfoView = () => {
+    setIsViewing(true);
+  };
+
+  const handleInfoClose = () => {
+    setIsViewing(false);
   };
 
   return (
@@ -169,6 +161,15 @@ const ParkingSlot: React.FC<ParkingSlotProps> = ({
             style={{ color: slot.color }}
           />
         </div>
+        {selected && (
+          <div className="absolute top-1/2 -right-6 md:-right-8 transform -translate-y-1/2">
+            <Info
+              className="w-5 h-5 md:w-7 md:h-7 p-1 bg-secondary text-primary cursor-pointer border border-primary"
+              onClick={handleInfoView}
+            />
+          </div>
+        )}
+
         {role === "admin" && selected && (
           <>
             <div className="absolute -top-8 left-1/2 transform -translate-x-1/2">
@@ -189,12 +190,7 @@ const ParkingSlot: React.FC<ParkingSlotProps> = ({
                 onClick={() => handleLeftChange(left - 1)}
               />
             </div>
-            <div className="absolute top-1/2 -right-6 md:-right-8 transform -translate-y-1/2">
-              <RefreshCw
-                className="w-5 h-5 md:w-7 md:h-7 p-1 bg-secondary text-primary cursor-pointer border border-primary"
-                onClick={handleColorChange}
-              />
-            </div>
+
             <div className="absolute top-1/2 -right-11 md:-right-16 transform -translate-y-1/2">
               <SquarePen
                 className="w-5 h-5 md:w-7 md:h-7 p-1 bg-secondary text-primary cursor-pointer border border-primary"
@@ -213,22 +209,19 @@ const ParkingSlot: React.FC<ParkingSlotProps> = ({
       {isEditing && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-4 rounded shadow-lg">
-            <ParkingSlotInfo
-              id={slot.id}
-              top={slot.top}
-              left={slot.left}
-              color={slot.color}
-              status={slot.status}
-              name={slot.name}
-              countdown={slot.countdown}
-              description={slot.description}
-              pushNotification={slot.pushNotification}
+            <ParkingSlotInfoCard
+              slot={slot}
               onSave={handleSave}
               onClose={handleClose}
             />
           </div>
         </div>
       )}
+      <ParkingSlotInfoDrawer
+        slot={slot}
+        isOpen={isViewing}
+        onClose={handleInfoClose}
+      />
     </>
   );
 };
