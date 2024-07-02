@@ -7,7 +7,7 @@ import {
   ChevronDown,
   SquarePen,
 } from "lucide-react";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { ParkingSlotInfo } from "./parking-slot-info";
 
 interface ParkingSlotProps {
@@ -45,28 +45,82 @@ const ParkingSlot: React.FC<ParkingSlotProps> = ({
   const [left, setLeft] = useState(slot.left);
   const [zIndex, setZIndex] = useState(10);
   const [isEditing, setIsEditing] = useState(false);
+  const [keyboardListenerActive, setKeyboardListenerActive] = useState(true);
+
+  const handleTopChange = useCallback(
+    (newTop: number) => {
+      newTop = Math.max(1, Math.min(100, newTop));
+      setTop(newTop);
+      onPositionChange(index, newTop, left);
+    },
+    [index, left, onPositionChange]
+  );
+
+  const handleLeftChange = useCallback(
+    (newLeft: number) => {
+      newLeft = Math.max(1, Math.min(100, newLeft));
+      setLeft(newLeft);
+      onPositionChange(index, top, newLeft);
+    },
+    [index, top, onPositionChange]
+  );
 
   useEffect(() => {
     if (!selected) {
       setZIndex(10); // Reset zIndex to 10 when not selected
+    } else {
+      const handleKeyDown = (event: KeyboardEvent) => {
+        if (keyboardListenerActive) {
+          switch (event.key) {
+            case "ArrowUp":
+            case "w":
+              handleTopChange(top - 1);
+              break;
+            case "ArrowDown":
+            case "s":
+              handleTopChange(top + 1);
+              break;
+            case "ArrowLeft":
+            case "a":
+              handleLeftChange(left - 1);
+              break;
+            case "ArrowRight":
+            case "d":
+              handleLeftChange(left + 1);
+              break;
+            default:
+              break;
+          }
+        }
+      };
+
+      document.addEventListener("keydown", handleKeyDown);
+
+      return () => {
+        document.removeEventListener("keydown", handleKeyDown);
+      };
     }
-  }, [selected]);
+  }, [
+    top,
+    left,
+    selected,
+    handleLeftChange,
+    handleTopChange,
+    keyboardListenerActive,
+  ]);
+
+  // Disable keyboard listener when editing
+  useEffect(() => {
+    if (isEditing) {
+      setKeyboardListenerActive(false);
+    } else {
+      setKeyboardListenerActive(true);
+    }
+  }, [isEditing]);
 
   const handleClick = () => {
     setZIndex(20); // Set zIndex to 20 when selected
     onSelect();
-  };
-
-  const handleTopChange = (newTop: number) => {
-    newTop = Math.max(1, Math.min(100, newTop));
-    setTop(newTop);
-    onPositionChange(index, newTop, left);
-  };
-
-  const handleLeftChange = (newLeft: number) => {
-    newLeft = Math.max(1, Math.min(100, newLeft));
-    setLeft(newLeft);
-    onPositionChange(index, top, newLeft);
   };
 
   const handleColorChange = () => {
@@ -81,10 +135,13 @@ const ParkingSlot: React.FC<ParkingSlotProps> = ({
     setIsEditing(true);
   };
 
-  const handleSave = (updatedSlot: any) => {
-    onEdit(index, updatedSlot);
-    setIsEditing(false);
-  };
+  const handleSave = useCallback(
+    (updatedSlot: any) => {
+      onEdit(index, updatedSlot);
+      setIsEditing(false);
+    },
+    [index, onEdit]
+  );
 
   const handleClose = () => {
     setIsEditing(false);
