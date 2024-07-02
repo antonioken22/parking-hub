@@ -11,11 +11,26 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 import { ParkingSlotData } from "@/types/ParkingSlotData";
+import Logo from "@/public/logo.svg";
+import LogoDark from "@/public/logo-dark.svg";
+import Image from "next/image";
 
 type ParkingSlotInfoDrawerProps = {
   slot: ParkingSlotData;
   isOpen: boolean;
   onClose: () => void;
+};
+
+const formatDateTime = (date: Date | undefined) => {
+  if (!date) return "N/A";
+  return new Date(date).toLocaleString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
 };
 
 export function ParkingSlotInfoDrawer({
@@ -34,16 +49,26 @@ export function ParkingSlotInfoDrawer({
       <DrawerContent className="border border-primary">
         <div className="mx-auto w-full max-w-sm">
           <DrawerHeader className="flex justify-between items-center">
-            <div className="text-center flex-grow">
-              <div className="mb-2">
-                <DrawerTitle>Parking Slot Info</DrawerTitle>
+            <div className="flex items-center flex-grow">
+              <Image
+                alt="Logo"
+                src={Logo}
+                className="w-6 h-6  md:w-10 md:h-10 mr-2 text-primary dark:hidden"
+              />
+              <Image
+                alt="Logo"
+                src={LogoDark}
+                className="w-6 h-6  md:w-10 md:h-10 mr-2 text-primary hidden dark:block"
+              />
+              <div>
+                <DrawerTitle className="mb-1">Parking Slot Info</DrawerTitle>
+                <DrawerDescription className="text-xs md:text-base">
+                  Details of the selected parking slot.
+                </DrawerDescription>
               </div>
-              <DrawerDescription>
-                Details of the selected parking slot.
-              </DrawerDescription>
             </div>
             <div
-              className="h-6 w-6 md:h-8 md:w-8 rounded-full"
+              className=" w-6 h-6  md:w-8 md:h-8 rounded-full"
               style={{ backgroundColor: slot.color }}
               title={slot.status}
             ></div>
@@ -56,15 +81,15 @@ export function ParkingSlotInfoDrawer({
               <strong>Name:</strong> {slot.name || "N/A"}
             </div>
             <div className="mb-4">
+              <strong>Description:</strong> {slot.description || "N/A"}
+            </div>
+            <div className="mb-4">
               <strong>Start Time:</strong>{" "}
-              {slot.startTime ? slot.startTime.toString() : "N/A"}
+              {slot.startTime ? formatDateTime(slot.startTime) : "N/A"}
             </div>
             <div className="mb-4">
               <strong>End Time:</strong>{" "}
-              {slot.endTime ? slot.endTime.toString() : "N/A"}
-            </div>
-            <div className="mb-4">
-              <strong>Description:</strong> {slot.description || "N/A"}
+              {slot.endTime ? formatDateTime(slot.endTime) : "N/A"}
             </div>
           </div>
           <DrawerFooter>

@@ -27,7 +27,7 @@ export const Publish = () => {
     <Popover>
       <PopoverTrigger asChild>
         <Button variant="ghost">
-          Publish
+          Share
           {copied ? (
             <Check className="text-primary w-4 h-4 ml-2" />
           ) : (
@@ -49,7 +49,7 @@ export const Publish = () => {
               <Globe className="text-primary h-4 w-4" />
             )}
             <p className="text-xs font-medium text-primary">
-              {copied ? "URL Copied!" : "Copy current URL"}
+              {copied ? "URL Copied!" : "Copy shareable URL"}
             </p>
           </div>
           <div className="flex items-center">
