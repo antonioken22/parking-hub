@@ -47,6 +47,8 @@ const ParkingSlot: React.FC<ParkingSlotProps> = ({
   const [isEditing, setIsEditing] = useState(false);
   const [keyboardListenerActive, setKeyboardListenerActive] = useState(true);
 
+  const isMobile = window.innerWidth <= 768; // Consider devices with width <= 768px as mobile
+
   const handleTopChange = useCallback(
     (newTop: number) => {
       newTop = Math.max(1, Math.min(100, newTop));
@@ -66,8 +68,8 @@ const ParkingSlot: React.FC<ParkingSlotProps> = ({
   );
 
   useEffect(() => {
-    if (!selected) {
-      setZIndex(10); // Reset zIndex to 10 when not selected
+    if (!selected || isMobile) {
+      setZIndex(10); // Reset zIndex to 10 when not selected or on mobile
     } else {
       const handleKeyDown = (event: KeyboardEvent) => {
         if (keyboardListenerActive) {
@@ -107,6 +109,7 @@ const ParkingSlot: React.FC<ParkingSlotProps> = ({
     handleLeftChange,
     handleTopChange,
     keyboardListenerActive,
+    isMobile,
   ]);
 
   // Disable keyboard listener when editing
