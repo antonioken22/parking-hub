@@ -140,13 +140,6 @@ export function ParkingSlotInfo({
     }
   };
 
-  if (Notification.permission === "granted") {
-    // Show a test notification when enabling push notifications
-    new Notification("Parking Slot Notification", {
-      body: "Push notifications enabled for this slot.",
-    });
-  }
-
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <Card className={cn("w-[340px]", className)} {...props}>
