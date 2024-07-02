@@ -57,9 +57,9 @@ const ParkingLayout = () => {
     };
 
     toast.promise(fetchParkingSlots(), {
-      loading: "Loading parking slot data...",
-      success: "Successfully loaded parking slot data.",
-      error: "Failed to load parking slot data.",
+      loading: "Loading parking slots...",
+      success: "Successfully loaded parking slots.",
+      error: "Failed to load parking slots.",
     });
   }, []);
 
@@ -108,7 +108,7 @@ const ParkingLayout = () => {
       },
       {
         loading: "Adding new parking slot...",
-        success: "New parking slot added successfully!",
+        success: "New parking slot added successfully.",
         error: "Failed to add new parking slot.",
       }
     );
@@ -141,7 +141,7 @@ const ParkingLayout = () => {
       },
       {
         loading: "Saving parking slots...",
-        success: "Parking slots updated successfully!",
+        success: "Parking slots updated successfully.",
         error: "Failed to update parking slots.",
       }
     );
@@ -173,7 +173,7 @@ const ParkingLayout = () => {
       },
       {
         loading: "Deleting parking slot...",
-        success: "Parking slot deleted successfully!",
+        success: "Parking slot deleted successfully.",
         error: "Failed to delete parking slot.",
       }
     );
