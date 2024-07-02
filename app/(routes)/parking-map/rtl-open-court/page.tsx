@@ -20,20 +20,27 @@ const RTLOpenCourtPage = () => {
   }
 
   return (
-    <div>
-      <div className="flex items-center gap-x-3 mr-auto pl-4">
-        <SquareParking className="w-10 h-10 text-primary" />
+    <>
+      {!loading && userData !== null && (
         <div>
-          <Heading title="RTL Open Court" description="Parking area status." />
+          <div className="flex items-center gap-x-3 mr-auto pl-4">
+            <SquareParking className="w-10 h-10 text-primary" />
+            <div>
+              <Heading
+                title="RTL Open Court"
+                description="Parking area status."
+              />
+            </div>
+            <div className="ml-auto pr-4">
+              <Link href="/parking-map">
+                <Undo2 className="text-primary" />
+              </Link>
+            </div>
+          </div>
+          <ParkingLayout />
         </div>
-        <div className="ml-auto pr-4">
-          <Link href="/parking-map">
-            <Undo2 className="text-primary" />
-          </Link>
-        </div>
-      </div>
-      <ParkingLayout />
-    </div>
+      )}
+    </>
   );
 };
 

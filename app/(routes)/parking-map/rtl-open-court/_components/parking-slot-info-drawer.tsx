@@ -46,29 +46,31 @@ export function ParkingSlotInfoDrawer({
 
   return (
     <Drawer open={isOpen} onOpenChange={handleOpenChange}>
-      <DrawerContent className="border border-primary">
+      <DrawerContent>
         <div className="mx-auto w-full max-w-sm">
           <DrawerHeader className="flex justify-between items-center">
             <div className="flex items-center flex-grow">
-              <Image
-                alt="Logo"
-                src={Logo}
-                className="w-6 h-6  md:w-10 md:h-10 mr-2 text-primary dark:hidden"
-              />
-              <Image
-                alt="Logo"
-                src={LogoDark}
-                className="w-6 h-6  md:w-10 md:h-10 mr-2 text-primary hidden dark:block"
-              />
-              <div>
+              <div className="flex items-center">
+                <Image
+                  alt="Logo"
+                  src={Logo}
+                  className="w-6 h-6 md:w-10 md:h-10 mr-2 text-primary dark:hidden"
+                  priority
+                />
+                <Image
+                  alt="Logo"
+                  src={LogoDark}
+                  className="w-6 h-6 md:w-10 md:h-10 mr-2 text-primary hidden dark:block"
+                  priority
+                />
+              </div>
+              <div className="flex flex-col">
                 <DrawerTitle className="mb-1">Parking Slot Info</DrawerTitle>
-                <DrawerDescription className="text-xs md:text-base">
-                  Details of the selected parking slot.
-                </DrawerDescription>
+                <DrawerDescription className="text-xs md:text-sm "></DrawerDescription>
               </div>
             </div>
             <div
-              className=" w-6 h-6  md:w-8 md:h-8 rounded-full"
+              className="w-6 h-6 md:w-8 md:h-8 rounded-full"
               style={{ backgroundColor: slot.color }}
               title={slot.status}
             ></div>
