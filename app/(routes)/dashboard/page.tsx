@@ -8,12 +8,14 @@ import { doc, getDoc } from "firebase/firestore";
 import { auth, firestore } from "@/firebase/config";
 import { Spinner } from "@/components/spinner";
 
+import DashboardLayout from "@/app/(landing)/_components/dashboard-layout";
+
 const DashboardPage = () => {
   const [userName, setUserName] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   const router = useRouter();
-
+  
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
@@ -32,6 +34,7 @@ const DashboardPage = () => {
     return () => unsubscribe();
   }, [router]);
 
+
   if (loading) {
     return (
       <div className="flex items-center justify-center absolute inset-y-0 h-full w-full bg-background/80 z-50 md:pr-56">
@@ -39,7 +42,8 @@ const DashboardPage = () => {
       </div>
     );
   }
-
+ 
+  
   return (
     <div>
       <main className="flex flex-col items-center justify-center flex-grow mt-10">
@@ -47,7 +51,12 @@ const DashboardPage = () => {
           <h1 className="text-4xl font-bold mb-6 ml-10">
             Welcome, {userName}!
           </h1>
+          
         )}
+        <div className="items-center">
+        <DashboardLayout />
+        </div>
+        
       </main>
     </div>
   );
