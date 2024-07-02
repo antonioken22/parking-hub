@@ -10,8 +10,12 @@ export const Heading = ({ title, description }: HeadingProps) => {
     <>
       <div className="flex items-center">
         <div>
-          <h2 className="text-3xl font-bold text-primary">{title}</h2>
-          <p className="text-sm text-muted-foreground">{description}</p>
+          <h2 className="text-xl md:text-3xl font-bold text-primary">
+            {title}
+          </h2>
+          <p className="text-xs md:text-sm text-muted-foreground">
+            {description}
+          </p>
         </div>
       </div>
     </>
