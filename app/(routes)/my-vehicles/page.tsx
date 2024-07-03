@@ -45,6 +45,8 @@ const MyVehiclesPage = () => {
         <Car className="w-10 h-10 text-primary" />
         <div>
           <Heading title="My Vehicles" description="View your cars." />
+          <p className=" hover:text-red-500y
+          ">HONDA NSX RED GAE-32</p>
         </div>
       </div>
       <div className="px-4 lg:px-8 space-y-4 pt-4"></div>

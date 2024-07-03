@@ -47,9 +47,18 @@ const DashboardPage = () => {
           <h1 className="text-4xl font-bold mb-6 ml-10">
             Welcome, {userName}!
           </h1>
+          
         )}
+        <div>
+        <p className=" items-center flex-center"
+        >
+          thesting whdhah
+        </p>
+      </div>
       </main>
+      
     </div>
+    
   );
 };
 
