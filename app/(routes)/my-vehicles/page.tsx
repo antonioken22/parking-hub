@@ -1,35 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { onAuthStateChanged, signOut } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
 import { Car } from "lucide-react";
 
-import { auth, firestore } from "@/firebase/config";
 import { Spinner } from "@/components/spinner";
 import { Heading } from "@/app/(routes)/_components/heading";
+import useAuthState from "@/hooks/useAuthState";
 
 const MyVehiclesPage = () => {
-  const [loading, setLoading] = useState(true);
-
-  const router = useRouter();
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        const userDoc = await getDoc(doc(firestore, "users", user.uid));
-        if (userDoc.exists()) {
-        }
-      } else {
-        router.push("/sign-in");
-      }
-      setLoading(false);
-    });
-
-    // Cleanup subscription on unmount
-    return () => unsubscribe();
-  }, [router]);
+  const { userId, loading } = useAuthState();
 
   if (loading) {
     return (
@@ -40,15 +18,19 @@ const MyVehiclesPage = () => {
   }
 
   return (
-    <div>
-      <div className="flex items-center gap-x-3 mr-auto pl-4">
-        <Car className="w-10 h-10 text-primary" />
+    <>
+      {!loading && userId && (
         <div>
-          <Heading title="My Vehicles" description="View your cars." />
+          <div className="flex items-center gap-x-3 mr-auto pl-4">
+            <Car className="w-10 h-10 text-primary" />
+            <div>
+              <Heading title="My Vehicles" description="View your cars." />
+            </div>
+          </div>
+          <div className="px-4 lg:px-8 space-y-4 pt-4"></div>
         </div>
-      </div>
-      <div className="px-4 lg:px-8 space-y-4 pt-4"></div>
-    </div>
+      )}
+    </>
   );
 };
 

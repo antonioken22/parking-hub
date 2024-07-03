@@ -1,25 +1,33 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { User, onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
+
 import { auth, firestore } from "@/firebase/config";
+import { UserData } from "@/types/UserData";
 
 const useAuthState = () => {
-  const [userData, setUserData] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [userPhotoUrl, setUserPhotoUrl] = useState<string | null>(null);
+  const [userFirstname, setUserFirstname] = useState<string | null>(null);
+  const [userLastname, setUserLastname] = useState<string | null>(null);
+  const [userRole, setUserRole] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        try {
-          const userDoc = await getDoc(doc(firestore, "users", user.uid));
-          if (userDoc.exists()) {
-            const userData = userDoc.data();
-            setUserData(userData as User);
-          }
-        } catch (error) {
-          // console.error("Error fetching user document:", error);
+        const userDoc = await getDoc(doc(firestore, "users", user.uid));
+        if (userDoc.exists()) {
+          const userData = userDoc.data() as UserData;
+          setUserId(user.uid);
+          setUserEmail(userData.email);
+          setUserPhotoUrl(userData.photoUrl);
+          setUserFirstname(userData.firstName);
+          setUserLastname(userData.lastName);
+          setUserRole(userData.role);
         }
       } else {
         router.push("/sign-in");
@@ -31,7 +39,15 @@ const useAuthState = () => {
     return () => unsubscribe();
   }, [router]);
 
-  return { userData, loading };
+  return {
+    userId,
+    userEmail,
+    userPhotoUrl,
+    userFirstname,
+    userLastname,
+    userRole,
+    loading,
+  };
 };
 
 export default useAuthState;

@@ -10,7 +10,7 @@ import useAuthState from "@/hooks/useAuthState";
 import { Spinner } from "@/components/spinner";
 
 const ParkingMapPage = () => {
-  const { userData, loading } = useAuthState();
+  const { userId, loading } = useAuthState();
 
   if (loading) {
     return (
@@ -22,7 +22,7 @@ const ParkingMapPage = () => {
 
   return (
     <>
-      {!loading && userData !== null && (
+      {!loading && userId !== null && (
         <div>
           <div className="flex items-center gap-x-3 mr-auto pl-4">
             <SquareParking className="w-10 h-10 text-primary" />
