@@ -41,9 +41,21 @@ const ParkingMapPage = () => {
                   <MapPin className="text-primary w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10 hover:scale-150" />
                 </Link>
               </div>
-              {/* Open Court Area */}
-              <div className="absolute z-10 top-[32%] left-[36%] ">
-                <Link href="/parking-map/">
+              {/*GLE Open Area */}
+              <div className="absolute z-10 top-[48%] left-[65%] ">
+                <Link href="/parking-map/gle-open-area">
+                  <MapPin className="text-primary w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10 hover:scale-150" />
+                </Link>
+              </div>
+              {/*SAL Open Court */}
+              <div className="absolute z-10 top-[32%] left-[45%] ">
+                <Link href="/parking-map/sal-open-court">
+                  <MapPin className="text-primary w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10 hover:scale-150" />
+                </Link>
+              </div>
+              {/*NGE Open Area */}
+              <div className="absolute z-10 top-[70%] left-[33%] ">
+                <Link href="/parking-map/nge-open-area">
                   <MapPin className="text-primary w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10 hover:scale-150" />
                 </Link>
               </div>

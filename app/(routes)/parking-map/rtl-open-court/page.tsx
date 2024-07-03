@@ -4,7 +4,7 @@ import Link from "next/link";
 import { SquareParking, Undo2 } from "lucide-react";
 
 import { Heading } from "@/app/(routes)/_components/heading";
-import ParkingLayout from "./_components/parking-layout";
+import ParkingLayout from "./parking-layout";
 import useAuthState from "@/hooks/useAuthState";
 import { Spinner } from "@/components/spinner";
 
