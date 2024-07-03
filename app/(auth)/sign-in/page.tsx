@@ -45,6 +45,7 @@ const SignInPage = () => {
             firstName,
             lastName,
             email: user.email,
+            photoUrl: user.photoURL,
             role: "user",
           });
         }

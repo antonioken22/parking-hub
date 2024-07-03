@@ -160,400 +160,416 @@ const SettingsPage = () => {
   }
 
   return (
-    <div className="p-4 lg:px-16 space-y-4 pt-4">
-      <div className="flex items-center gap-x-2 mr-auto pl-4">
-        <Settings className="w-10 h-10 text-primary" />
-        <div>
-          <Heading title="Settings" description="Manage account settings." />
-        </div>
-      </div>
-
-      <div className="px-4 lg:px-16 space-y-4 pt-4">
-        <nav className="flex space-x-4 border-b pb-2 flex-nowrap overflow-x-auto">
-          <button
-            className={`flex-1 px-3 py-2 rounded text-center ${
-              activeSection === "account"
-                ? "bg-primary text-white"
-                : "bg-transparent text-gray-700"
-            }`}
-            onClick={() => handleSectionChange("account")}
-          >
-            Account
-          </button>
-          <button
-            className={`flex-1 px-3 py-2 rounded text-center ${
-              activeSection === "password"
-                ? "bg-primary text-white"
-                : "bg-transparent text-gray-700"
-            }`}
-            onClick={() => handleSectionChange("password")}
-          >
-            Password
-          </button>
-          <button
-            className={`flex-1 px-3 py-2 rounded text-center ${
-              activeSection === "notifications"
-                ? "bg-primary text-white"
-                : "bg-transparent text-gray-700"
-            }`}
-            onClick={() => handleSectionChange("notifications")}
-          >
-            Notifications
-          </button>
-          <button
-            className={`flex-1 px-3 py-2 rounded text-center ${
-              activeSection === "help"
-                ? "bg-primary text-white"
-                : "bg-transparent text-gray-700"
-            }`}
-            onClick={() => handleSectionChange("help")}
-          >
-            Help
-          </button>
-        </nav>
-        {activeSection === "account" && (
-          <div className="bg-transparent">
-            {/* Dropdowns */}
-            <Dropdown
-              title="View Profile Information"
-              expanded={dropdownExpanded === "View Profile Information"}
-              onToggle={() =>
-                setDropdownExpanded(
-                  dropdownExpanded === "View Profile Information"
-                    ? null
-                    : "View Profile Information"
-                )
-              }
-            >
-              <div className="relative w-full flex">
-                <div className="relative w-full max-w-md p-4 border border-primary bg-gray-300 bg-opacity-90 dark:bg-opacity-0">
-                  <div className="absolute top-4 right-4"></div>
-                  <h2 className="text-2xl font-thin text-center mt-2 mb-2 font-roboto text-primary">
-                    Profile Information
-                  </h2>
-                  <div className="grid grid-cols-1 gap-4">
-                    <div>
-                      <label className="text-sm font-medium block mb-2 text-primary">
-                        First Name
-                      </label>
-                      <input
-                        type="text"
-                        value={firstName}
-                        readOnly
-                        className="border-2 outline-none sm:text-sm rounded-lg focus:primary-foreground block w-full p-2.5 bg-gray-200 border-primary focus:border-primary-foreground placeholder-gray-400 text-gray-900"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium block mb-2 text-primary">
-                        Last Name
-                      </label>
-                      <input
-                        type="text"
-                        value={lastName}
-                        readOnly
-                        className="border-2 outline-none sm:text-sm rounded-lg focus:primary-foreground block w-full p-2.5 bg-gray-200 border-primary focus:border-primary-foreground placeholder-gray-400 text-gray-900"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium block mb-2 text-primary">
-                        Email
-                      </label>
-                      <input
-                        type="text"
-                        value={user?.email || ""}
-                        readOnly
-                        className="border-2 outline-none sm:text-sm rounded-lg focus:primary-foreground block w-full p-2.5 bg-gray-200 border-primary focus:border-primary-foreground placeholder-gray-400 text-gray-900"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </Dropdown>
-            <Dropdown
-              title="Manage Profile Information"
-              expanded={dropdownExpanded === "Manage Profile Information"}
-              onToggle={() =>
-                setDropdownExpanded(
-                  dropdownExpanded === "Manage Profile Information"
-                    ? null
-                    : "Manage Profile Information"
-                )
-              }
-            >
-              <div className="relative w-full flex">
-                <div className="relative w-full max-w-md p-4 border border-primary bg-gray-300 bg-opacity-90 dark:bg-opacity-0">
-                  <div className="absolute top-4 right-4"></div>
-                  <h2 className="text-2xl font-thin text-center mt-2 mb-2 font-roboto text-primary">
-                    Manage Profile
-                  </h2>
-                  <div className="grid grid-cols-1 gap-4">
-                    <div>
-                      <label className="text-sm font-medium block mb-2 text-primary">
-                        First Name
-                      </label>
-                      <input
-                        type="text"
-                        value={firstName}
-                        onChange={(e) => setFirstName(e.target.value)}
-                        required
-                        className="border-2 outline-none sm:text-sm rounded-lg focus:primary-foreground block w-full p-2.5 bg-gray-200 border-primary focus:border-primary-foreground placeholder-gray-400 text-gray-900"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium block mb-2 text-primary">
-                        Last Name
-                      </label>
-                      <input
-                        type="text"
-                        value={lastName}
-                        onChange={(e) => setLastName(e.target.value)}
-                        required
-                        className="border-2 outline-none sm:text-sm rounded-lg focus:primary-foreground block w-full p-2.5 bg-gray-200 border-primary focus:border-primary-foreground placeholder-gray-400 text-gray-900"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium block mb-2 text-primary">
-                        Email
-                      </label>
-                      <input
-                        type="text"
-                        value={user?.email || ""}
-                        readOnly
-                        className="border-2 outline-none sm:text-sm rounded-lg focus:primary-foreground block w-full p-2.5 bg-gray-200 border-primary focus:border-primary-foreground placeholder-gray-400 text-gray-900"
-                      />
-                    </div>
-                  </div>
-                  <div className="flex justify-end space-x-4 mt-4">
-                    <Button
-                      onClick={handleCancelChanges}
-                      className="bg-gray-200 text-gray-700"
-                    >
-                      Cancel
-                    </Button>
-                    <Button
-                      onClick={handleSaveChanges}
-                      className="bg-primary text-white"
-                    >
-                      Save
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </Dropdown>
-            <Dropdown
-              title="Account Ownership and Control"
-              expanded={dropdownExpanded === "Account Ownership and Control"}
-              onToggle={() =>
-                setDropdownExpanded(
-                  dropdownExpanded === "Account Ownership and Control"
-                    ? null
-                    : "Account Ownership and Control"
-                )
-              }
-            >
-              <div className="relative w-full flex">
-                <div className="relative w-full max-w-md p-4 border border-primary bg-gray-300 bg-opacity-90 dark:bg-opacity-0">
-                  <div className="absolute top-4 right-4"></div>
-                  <h2 className="text-2xl font-thin text-center mt-2 mb-2 font-roboto text-primary">
-                    Control Account
-                  </h2>
-                  <div className="grid grid-cols-1 gap-4">
-                    <div>
-                      <label className="text-sm font-medium block mb-2 text-primary">
-                        Deactivate Account
-                      </label>
-                      <label className="text-sm font-medium block mb-2 text-muted-foreground">
-                        For deactivating your account, please specify the
-                        duration in days or hours.
-                      </label>
-                      <div className="flex space-x-2">
-                        <input
-                          type="number"
-                          placeholder="Input number"
-                          className="border-2 outline-none sm:text-sm rounded-lg focus:primary-foreground block w-full p-2.5 bg-gray-200 border-primary focus:border-primary-foreground placeholder-gray-400 text-gray-900"
-                        />
-                        <select className="border-2 outline-none sm:text-sm rounded-lg focus:primary-foreground block p-2.5 bg-gray-200 border-primary focus:border-primary-foreground placeholder-gray-400 text-gray-900">
-                          <option value="days">Days</option>
-                          <option value="hours">Hours</option>
-                        </select>
-                      </div>
-                      <div className="flex justify-center space-x-4 mt-4">
-                        <Button className="bg-primary text-white">
-                          Deactivate
-                        </Button>
-                      </div>
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium block mb-2 text-primary">
-                        Delete Account
-                      </label>
-                      <label className="text-sm font-medium block mb-2 text-muted-foreground">
-                        If you wish to permanently delete your account, please
-                        proceed with the delete option. Note that account
-                        deletion is irreversible.
-                      </label>
-                      <div className="flex justify-center space-x-4 mt-4">
-                        <Button className="bg-red-600 text-white">
-                          Delete
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </Dropdown>
+    <>
+      {!loading && userName && (
+        <div className="p-4 lg:px-16 space-y-4 pt-4">
+          <div className="flex items-center gap-x-2 mr-auto pl-4">
+            <Settings className="w-10 h-10 text-primary" />
+            <div>
+              <Heading
+                title="Settings"
+                description="Manage account settings."
+              />
+            </div>
           </div>
-        )}
-        {activeSection === "password" && (
-          <div className="bg-transparent">
-            {/* Dropdowns */}
-            <Dropdown
-              title="View Login Activity"
-              expanded={dropdownExpanded === "View Login Activity"}
-              onToggle={() =>
-                setDropdownExpanded(
-                  dropdownExpanded === "View Login Activity"
-                    ? null
-                    : "View Login Activity"
-                )
-              }
-            >
-              <div className="relative w-full flex">
-                <div className="relative w-full max-w-md p-4 border border-primary bg-gray-300 bg-opacity-90 dark:bg-opacity-0">
-                  <h2 className="text-2xl font-thin text-center mt-2 mb-2 font-roboto text-primary">
-                    Login Activity
-                  </h2>
-                  {loginActivity.length > 0 ? (
-                    <div className="space-y-4">
-                      {loginActivity.map((activity, index) => (
-                        <div
-                          key={index}
-                          className="border-2 outline-none rounded-lg focus:primary-foreground block w-full p-2.5 bg-gray-200 border-primary focus:border-primary-foreground placeholder-gray-400"
+
+          <div className="px-4 lg:px-16 space-y-4 pt-4">
+            <nav className="flex space-x-4 border-b pb-2 flex-nowrap overflow-x-auto">
+              <button
+                className={`flex-1 px-3 py-2 rounded text-center ${
+                  activeSection === "account"
+                    ? "bg-primary text-white"
+                    : "bg-transparent text-gray-700"
+                }`}
+                onClick={() => handleSectionChange("account")}
+              >
+                Account
+              </button>
+              <button
+                className={`flex-1 px-3 py-2 rounded text-center ${
+                  activeSection === "password"
+                    ? "bg-primary text-white"
+                    : "bg-transparent text-gray-700"
+                }`}
+                onClick={() => handleSectionChange("password")}
+              >
+                Password
+              </button>
+              <button
+                className={`flex-1 px-3 py-2 rounded text-center ${
+                  activeSection === "notifications"
+                    ? "bg-primary text-white"
+                    : "bg-transparent text-gray-700"
+                }`}
+                onClick={() => handleSectionChange("notifications")}
+              >
+                Notifications
+              </button>
+              <button
+                className={`flex-1 px-3 py-2 rounded text-center ${
+                  activeSection === "help"
+                    ? "bg-primary text-white"
+                    : "bg-transparent text-gray-700"
+                }`}
+                onClick={() => handleSectionChange("help")}
+              >
+                Help
+              </button>
+            </nav>
+            {activeSection === "account" && (
+              <div className="bg-transparent">
+                {/* Dropdowns */}
+                <Dropdown
+                  title="View Profile Information"
+                  expanded={dropdownExpanded === "View Profile Information"}
+                  onToggle={() =>
+                    setDropdownExpanded(
+                      dropdownExpanded === "View Profile Information"
+                        ? null
+                        : "View Profile Information"
+                    )
+                  }
+                >
+                  <div className="relative w-full flex">
+                    <div className="relative w-full max-w-md p-4 border border-primary bg-gray-300 bg-opacity-90 dark:bg-opacity-0">
+                      <div className="absolute top-4 right-4"></div>
+                      <h2 className="text-2xl font-thin text-center mt-2 mb-2 font-roboto text-primary">
+                        Profile Information
+                      </h2>
+                      <div className="grid grid-cols-1 gap-4">
+                        <div>
+                          <label className="text-sm font-medium block mb-2 text-primary">
+                            First Name
+                          </label>
+                          <input
+                            type="text"
+                            value={firstName}
+                            readOnly
+                            className="border-2 outline-none sm:text-sm rounded-lg focus:primary-foreground block w-full p-2.5 bg-gray-200 border-primary focus:border-primary-foreground placeholder-gray-400 text-gray-900"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium block mb-2 text-primary">
+                            Last Name
+                          </label>
+                          <input
+                            type="text"
+                            value={lastName}
+                            readOnly
+                            className="border-2 outline-none sm:text-sm rounded-lg focus:primary-foreground block w-full p-2.5 bg-gray-200 border-primary focus:border-primary-foreground placeholder-gray-400 text-gray-900"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium block mb-2 text-primary">
+                            Email
+                          </label>
+                          <input
+                            type="text"
+                            value={user?.email || ""}
+                            readOnly
+                            className="border-2 outline-none sm:text-sm rounded-lg focus:primary-foreground block w-full p-2.5 bg-gray-200 border-primary focus:border-primary-foreground placeholder-gray-400 text-gray-900"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </Dropdown>
+                <Dropdown
+                  title="Manage Profile Information"
+                  expanded={dropdownExpanded === "Manage Profile Information"}
+                  onToggle={() =>
+                    setDropdownExpanded(
+                      dropdownExpanded === "Manage Profile Information"
+                        ? null
+                        : "Manage Profile Information"
+                    )
+                  }
+                >
+                  <div className="relative w-full flex">
+                    <div className="relative w-full max-w-md p-4 border border-primary bg-gray-300 bg-opacity-90 dark:bg-opacity-0">
+                      <div className="absolute top-4 right-4"></div>
+                      <h2 className="text-2xl font-thin text-center mt-2 mb-2 font-roboto text-primary">
+                        Manage Profile
+                      </h2>
+                      <div className="grid grid-cols-1 gap-4">
+                        <div>
+                          <label className="text-sm font-medium block mb-2 text-primary">
+                            First Name
+                          </label>
+                          <input
+                            type="text"
+                            value={firstName}
+                            onChange={(e) => setFirstName(e.target.value)}
+                            required
+                            className="border-2 outline-none sm:text-sm rounded-lg focus:primary-foreground block w-full p-2.5 bg-gray-200 border-primary focus:border-primary-foreground placeholder-gray-400 text-gray-900"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium block mb-2 text-primary">
+                            Last Name
+                          </label>
+                          <input
+                            type="text"
+                            value={lastName}
+                            onChange={(e) => setLastName(e.target.value)}
+                            required
+                            className="border-2 outline-none sm:text-sm rounded-lg focus:primary-foreground block w-full p-2.5 bg-gray-200 border-primary focus:border-primary-foreground placeholder-gray-400 text-gray-900"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium block mb-2 text-primary">
+                            Email
+                          </label>
+                          <input
+                            type="text"
+                            value={user?.email || ""}
+                            readOnly
+                            className="border-2 outline-none sm:text-sm rounded-lg focus:primary-foreground block w-full p-2.5 bg-gray-200 border-primary focus:border-primary-foreground placeholder-gray-400 text-gray-900"
+                          />
+                        </div>
+                      </div>
+                      <div className="flex justify-end space-x-4 mt-4">
+                        <Button
+                          onClick={handleCancelChanges}
+                          className="bg-gray-200 text-gray-700"
                         >
-                          <div className="flex justify-between mb-2">
-                            <div className="font-medium text-muted-foreground">
-                              {activity.device}
-                            </div>
-                            <div className="text-sm text-muted-foreground">
-                              {activity.date}, {activity.time}
-                            </div>
+                          Cancel
+                        </Button>
+                        <Button
+                          onClick={handleSaveChanges}
+                          className="bg-primary text-white"
+                        >
+                          Save
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </Dropdown>
+                <Dropdown
+                  title="Account Ownership and Control"
+                  expanded={
+                    dropdownExpanded === "Account Ownership and Control"
+                  }
+                  onToggle={() =>
+                    setDropdownExpanded(
+                      dropdownExpanded === "Account Ownership and Control"
+                        ? null
+                        : "Account Ownership and Control"
+                    )
+                  }
+                >
+                  <div className="relative w-full flex">
+                    <div className="relative w-full max-w-md p-4 border border-primary bg-gray-300 bg-opacity-90 dark:bg-opacity-0">
+                      <div className="absolute top-4 right-4"></div>
+                      <h2 className="text-2xl font-thin text-center mt-2 mb-2 font-roboto text-primary">
+                        Control Account
+                      </h2>
+                      <div className="grid grid-cols-1 gap-4">
+                        <div>
+                          <label className="text-sm font-medium block mb-2 text-primary">
+                            Deactivate Account
+                          </label>
+                          <label className="text-sm font-medium block mb-2 text-muted-foreground">
+                            For deactivating your account, please specify the
+                            duration in days or hours.
+                          </label>
+                          <div className="flex space-x-2">
+                            <input
+                              type="number"
+                              placeholder="Input number"
+                              className="border-2 outline-none sm:text-sm rounded-lg focus:primary-foreground block w-full p-2.5 bg-gray-200 border-primary focus:border-primary-foreground placeholder-gray-400 text-gray-900"
+                            />
+                            <select className="border-2 outline-none sm:text-sm rounded-lg focus:primary-foreground block p-2.5 bg-gray-200 border-primary focus:border-primary-foreground placeholder-gray-400 text-gray-900">
+                              <option value="days">Days</option>
+                              <option value="hours">Hours</option>
+                            </select>
                           </div>
-                          <div className="text-sm text-muted-foreground">
-                            Location: {activity.location}
+                          <div className="flex justify-center space-x-4 mt-4">
+                            <Button className="bg-primary text-white">
+                              Deactivate
+                            </Button>
                           </div>
                         </div>
-                      ))}
+                        <div>
+                          <label className="text-sm font-medium block mb-2 text-primary">
+                            Delete Account
+                          </label>
+                          <label className="text-sm font-medium block mb-2 text-muted-foreground">
+                            If you wish to permanently delete your account,
+                            please proceed with the delete option. Note that
+                            account deletion is irreversible.
+                          </label>
+                          <div className="flex justify-center space-x-4 mt-4">
+                            <Button className="bg-red-600 text-white">
+                              Delete
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  ) : (
-                    <p className="text-gray-600 text-center">
-                      No login activity to display.
-                    </p>
-                  )}
-                </div>
+                  </div>
+                </Dropdown>
               </div>
-            </Dropdown>
-            <Dropdown
-              title="Manage your password"
-              expanded={dropdownExpanded === "Manage your password"}
-              onToggle={() =>
-                setDropdownExpanded(
-                  dropdownExpanded === "Manage your password"
-                    ? null
-                    : "Manage your password"
-                )
-              }
-            >
-              <div className="relative w-full flex">
-                <div className="relative w-full max-w-md p-4 border border-primary bg-gray-300 bg-opacity-90 dark:bg-opacity-0">
-                  <div className="absolute top-4 right-4"></div>
-                  <h2 className="text-2xl font-thin text-center mt-2 mb-2 font-roboto text-primary">
-                    Change Password
-                  </h2>
-                  <form
-                    onSubmit={handleChangePassword}
-                    className="space-y-4 px-6 pb-4"
-                  >
-                    <div>
-                      <label
-                        htmlFor="currentPassword"
-                        className="text-sm font-medium block mb-2 text-primary"
-                      >
-                        Current Password
-                      </label>
-                      <input
-                        type="password"
-                        id="currentPassword"
-                        value={currentPassword}
-                        onChange={(e) => setCurrentPassword(e.target.value)}
-                        required
-                        className="border-2 outline-none sm:text-sm rounded-lg focus:primary-foreground block w-full p-2.5 bg-gray-200 border-primary focus:border-primary-foreground placeholder-gray-400 text-gray-900"
-                      />
+            )}
+            {activeSection === "password" && (
+              <div className="bg-transparent">
+                {/* Dropdowns */}
+                <Dropdown
+                  title="View Login Activity"
+                  expanded={dropdownExpanded === "View Login Activity"}
+                  onToggle={() =>
+                    setDropdownExpanded(
+                      dropdownExpanded === "View Login Activity"
+                        ? null
+                        : "View Login Activity"
+                    )
+                  }
+                >
+                  <div className="relative w-full flex">
+                    <div className="relative w-full max-w-md p-4 border border-primary bg-gray-300 bg-opacity-90 dark:bg-opacity-0">
+                      <h2 className="text-2xl font-thin text-center mt-2 mb-2 font-roboto text-primary">
+                        Login Activity
+                      </h2>
+                      {loginActivity.length > 0 ? (
+                        <div className="space-y-4">
+                          {loginActivity.map((activity, index) => (
+                            <div
+                              key={index}
+                              className="border-2 outline-none rounded-lg focus:primary-foreground block w-full p-2.5 bg-gray-200 border-primary focus:border-primary-foreground placeholder-gray-400"
+                            >
+                              <div className="flex justify-between mb-2">
+                                <div className="font-medium text-muted-foreground">
+                                  {activity.device}
+                                </div>
+                                <div className="text-sm text-muted-foreground">
+                                  {activity.date}, {activity.time}
+                                </div>
+                              </div>
+                              <div className="text-sm text-muted-foreground">
+                                Location: {activity.location}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="text-gray-600 text-center">
+                          No login activity to display.
+                        </p>
+                      )}
                     </div>
-                    <div>
-                      <label
-                        htmlFor="newPassword"
-                        className="text-sm font-medium block mb-2 text-primary"
+                  </div>
+                </Dropdown>
+                <Dropdown
+                  title="Manage your password"
+                  expanded={dropdownExpanded === "Manage your password"}
+                  onToggle={() =>
+                    setDropdownExpanded(
+                      dropdownExpanded === "Manage your password"
+                        ? null
+                        : "Manage your password"
+                    )
+                  }
+                >
+                  <div className="relative w-full flex">
+                    <div className="relative w-full max-w-md p-4 border border-primary bg-gray-300 bg-opacity-90 dark:bg-opacity-0">
+                      <div className="absolute top-4 right-4"></div>
+                      <h2 className="text-2xl font-thin text-center mt-2 mb-2 font-roboto text-primary">
+                        Change Password
+                      </h2>
+                      <form
+                        onSubmit={handleChangePassword}
+                        className="space-y-4 px-6 pb-4"
                       >
-                        New Password
-                      </label>
-                      <input
-                        type="password"
-                        id="newPassword"
-                        value={newPassword}
-                        onChange={(e) => setNewPassword(e.target.value)}
-                        required
-                        className="border-2 outline-none sm:text-sm rounded-lg focus:primary-foreground block w-full p-2.5 bg-gray-200 border-primary focus:border-primary-foreground placeholder-gray-400 text-gray-900"
-                      />
+                        <div>
+                          <label
+                            htmlFor="currentPassword"
+                            className="text-sm font-medium block mb-2 text-primary"
+                          >
+                            Current Password
+                          </label>
+                          <input
+                            type="password"
+                            id="currentPassword"
+                            value={currentPassword}
+                            onChange={(e) => setCurrentPassword(e.target.value)}
+                            required
+                            className="border-2 outline-none sm:text-sm rounded-lg focus:primary-foreground block w-full p-2.5 bg-gray-200 border-primary focus:border-primary-foreground placeholder-gray-400 text-gray-900"
+                          />
+                        </div>
+                        <div>
+                          <label
+                            htmlFor="newPassword"
+                            className="text-sm font-medium block mb-2 text-primary"
+                          >
+                            New Password
+                          </label>
+                          <input
+                            type="password"
+                            id="newPassword"
+                            value={newPassword}
+                            onChange={(e) => setNewPassword(e.target.value)}
+                            required
+                            className="border-2 outline-none sm:text-sm rounded-lg focus:primary-foreground block w-full p-2.5 bg-gray-200 border-primary focus:border-primary-foreground placeholder-gray-400 text-gray-900"
+                          />
+                        </div>
+                        <div className="mb-48">
+                          <label
+                            htmlFor="confirmNewPassword"
+                            className="text-sm font-medium block mb-2 text-primary"
+                          >
+                            Confirm New Password
+                          </label>
+                          <input
+                            type="password"
+                            id="confirmNewPassword"
+                            value={confirmNewPassword}
+                            onChange={(e) =>
+                              setConfirmNewPassword(e.target.value)
+                            }
+                            required
+                            className="border-2 outline-none sm:text-sm rounded-lg focus:primary-foreground block w-full p-2.5 bg-gray-200 border-primary focus:border-primary-foreground text-gray-900"
+                          />
+                        </div>
+                        {error && (
+                          <p className="text-red-500 text-sm">{error}</p>
+                        )}
+                        {message && (
+                          <p className="text-green-500 text-sm">{message}</p>
+                        )}
+                        <Button
+                          type="submit"
+                          className="w-full flex bg-primary"
+                        >
+                          Change Password
+                        </Button>
+                        <Button
+                          className="w-full flex bg-primary"
+                          onClick={handleLogout}
+                        >
+                          Log out
+                        </Button>
+                      </form>
                     </div>
-                    <div className="mb-48">
-                      <label
-                        htmlFor="confirmNewPassword"
-                        className="text-sm font-medium block mb-2 text-primary"
-                      >
-                        Confirm New Password
-                      </label>
-                      <input
-                        type="password"
-                        id="confirmNewPassword"
-                        value={confirmNewPassword}
-                        onChange={(e) => setConfirmNewPassword(e.target.value)}
-                        required
-                        className="border-2 outline-none sm:text-sm rounded-lg focus:primary-foreground block w-full p-2.5 bg-gray-200 border-primary focus:border-primary-foreground text-gray-900"
-                      />
-                    </div>
-                    {error && <p className="text-red-500 text-sm">{error}</p>}
-                    {message && (
-                      <p className="text-green-500 text-sm">{message}</p>
-                    )}
-                    <Button type="submit" className="w-full flex bg-primary">
-                      Change Password
-                    </Button>
-                    <Button
-                      className="w-full flex bg-primary"
-                      onClick={handleLogout}
-                    >
-                      Log out
-                    </Button>
-                  </form>
-                </div>
+                  </div>
+                </Dropdown>
               </div>
-            </Dropdown>
+            )}
+            {activeSection === "notifications" && (
+              <div>
+                {/* Render content related to Notifications */}
+                <p>Notification settings content here...</p>
+              </div>
+            )}
+            {activeSection === "help" && (
+              <div>
+                {/* Render content related to Help */}
+                <p>Help and support content here...</p>
+              </div>
+            )}
           </div>
-        )}
-        {activeSection === "notifications" && (
-          <div>
-            {/* Render content related to Notifications */}
-            <p>Notification settings content here...</p>
-          </div>
-        )}
-        {activeSection === "help" && (
-          <div>
-            {/* Render content related to Help */}
-            <p>Help and support content here...</p>
-          </div>
-        )}
-      </div>
-    </div>
+        </div>
+      )}
+    </>
   );
 };
 
