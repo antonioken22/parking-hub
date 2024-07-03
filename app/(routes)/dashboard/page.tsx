@@ -2,9 +2,74 @@
 
 import { Spinner } from "@/components/spinner";
 import useAuthState from "@/hooks/useAuthState";
+import { Bar } from "react-chartjs-2";
+import { useState, useEffect } from "react";
+import "chart.js/auto";
+import ChartDataLabels from "chartjs-plugin-datalabels";
+
+interface ParkingSlot {
+  name: string;
+  availableSlots: number;
+  takenSlots: number;
+}
 
 const DashboardPage = () => {
   const { userId, userFirstname, userLastname, loading } = useAuthState();
+  const [parkingSlots, setParkingSlots] = useState<ParkingSlot[]>([]);
+  const [chartData, setChartData] = useState<any>({});
+
+  useEffect(() => {
+    const fetchParkingSlots = async () => {
+      // Example data, replace with your actual data fetching logic
+      const data = [
+        { name: "RTL", availableSlots: 10, takenSlots: 5 },
+        { name: "GLE", availableSlots: 5, takenSlots: 10 },
+        { name: "ALLIED", availableSlots: 15, takenSlots: 0 },
+        { name: "NGE", availableSlots: 7, takenSlots: 8 },
+        { name: "PE AREA", availableSlots: 12, takenSlots: 3 },
+        { name: "Back Gate", availableSlots: 8, takenSlots: 7 },
+      ];
+      setParkingSlots(data);
+      setChartData({
+        labels: data.map((lot) => lot.name),
+        datasets: [
+          {
+            label: "Available Parking Slots",
+            data: data.map((lot) => lot.availableSlots),
+            backgroundColor: "rgba(247, 149, 29)",
+          },
+          {
+            label: "Taken Parking Slots",
+            data: data.map((lot) => lot.takenSlots),
+            backgroundColor: "rgba(250, 50, 81)",
+          },
+        ],
+      });
+    };
+
+    fetchParkingSlots();
+  }, []);
+
+  const chartOptions = {
+    plugins: {
+      datalabels: {
+        display: true,
+        color: "white",
+        font: {
+          weight: "bold" as const, // Ensure type compatibility
+        },
+      },
+    },
+    responsive: true,
+    scales: {
+      x: {
+        beginAtZero: true,
+      },
+      y: {
+        beginAtZero: true,
+      },
+    },
+  };
 
   if (loading) {
     return (
@@ -24,6 +89,10 @@ const DashboardPage = () => {
                 Welcome, {userFirstname} {userLastname}!
               </h1>
             )}
+            <div className="w-full max-w-4xl p-4">
+              <h2 className="text-2xl font-bold mb-4">Parking Slot Comparison</h2>
+              <Bar data={chartData} options={chartOptions} plugins={[ChartDataLabels]} />
+            </div>
           </main>
         </div>
       )}
