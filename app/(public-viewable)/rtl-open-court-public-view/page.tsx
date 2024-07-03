@@ -4,7 +4,7 @@ import Link from "next/link";
 import { SquareParking, Undo2 } from "lucide-react";
 
 import { Heading } from "@/app/(routes)/_components/heading";
-import ParkingLayout from "@/app/(routes)/parking-map/rtl-open-court/_components/parking-layout";
+import ParkingLayout from "@/app/(routes)/parking-map/rtl-open-court/parking-layout";
 
 const RTLOpenCourtViewablePage = () => {
   return (
