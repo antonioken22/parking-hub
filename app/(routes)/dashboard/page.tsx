@@ -10,6 +10,8 @@ import { Spinner } from "@/components/spinner";
 import { ModeToggle } from "@/components/mode-toggle";
 import DashboardLayout from "@/app/(landing)/_components/dashboard-layout";
 
+import DashboardLayout from "@/app/(landing)/_components/dashboard-layout";
+
 const DashboardPage = () => {
   const [userName, setUserName] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -53,7 +55,11 @@ const DashboardPage = () => {
           </h1>
           
         )}
+<<<<<<< HEAD
         <div className="flex-col items-center w-2/3">
+=======
+        <div className="items-center">
+>>>>>>> 40747e5c2cadceabc7427188d1b760da293799bb
         <DashboardLayout />
         </div>
         
