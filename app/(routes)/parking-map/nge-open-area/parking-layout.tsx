@@ -192,8 +192,8 @@ const ParkingLayout = () => {
           alt="NGE Open Area"
           src={NGEOpenAreatImage}
           layout="intrinsic"
-          width={1448 / 2.6}
-          height={2048 / 2.6}
+          width={1000 / 2}
+          height={3127 / 2}
           placeholder="blur"
           priority
         />

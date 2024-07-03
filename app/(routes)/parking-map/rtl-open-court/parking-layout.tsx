@@ -73,12 +73,6 @@ const ParkingLayout = () => {
     setParkingSlots(updatedSlots);
   };
 
-  const handleColorChange = (index: number, color: string) => {
-    const updatedSlots = [...parkingSlots];
-    updatedSlots[index] = { ...updatedSlots[index], color };
-    setParkingSlots(updatedSlots);
-  };
-
   const handleEditSlot = (index: number, updatedSlot: ParkingSlotData) => {
     const updatedSlots = [...parkingSlots];
     updatedSlots[index] = { ...updatedSlot };
@@ -198,8 +192,8 @@ const ParkingLayout = () => {
           alt="RTL Open Court"
           src={RTLOpenCourtImage}
           layout="intrinsic"
-          width={1448 / 2.6}
-          height={2048 / 2.6}
+          width={1448 / 3.2}
+          height={2048 / 3.2}
           placeholder="blur"
           priority
         />

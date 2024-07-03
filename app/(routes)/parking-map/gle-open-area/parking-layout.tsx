@@ -192,8 +192,8 @@ const ParkingLayout = () => {
           alt="GLE Open Area"
           src={GLEOpenAreatImage}
           layout="intrinsic"
-          width={1448 / 2.6}
-          height={2048 / 2.6}
+          width={2400 / 5}
+          height={3854 / 5}
           placeholder="blur"
           priority
         />
