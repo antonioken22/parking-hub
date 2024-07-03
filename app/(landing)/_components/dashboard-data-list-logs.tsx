@@ -36,7 +36,7 @@ const DataList: React.FC<{ tab: string }> = ({ tab }) => {
       {users.map(user => (
          <div className="flex flex-col space-y-4">
          {users.map(user => (
-           <div key={user.id} className="p-4 bg-main rounded-lg shadow">
+           <div key={user.id} className="p-4 bg-background rounded-lg shadow">
              {tab === 'logs' && <p>{user.email}</p>}
              {tab === 'vehicles' && <p>{user.firstName}</p>}
            </div>

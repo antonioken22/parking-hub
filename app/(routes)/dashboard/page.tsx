@@ -7,7 +7,7 @@ import { doc, getDoc } from "firebase/firestore";
 
 import { auth, firestore } from "@/firebase/config";
 import { Spinner } from "@/components/spinner";
-
+import { ModeToggle } from "@/components/mode-toggle";
 import DashboardLayout from "@/app/(landing)/_components/dashboard-layout";
 
 const DashboardPage = () => {
@@ -53,7 +53,7 @@ const DashboardPage = () => {
           </h1>
           
         )}
-        <div className="items-center">
+        <div className="flex-col items-center w-2/3">
         <DashboardLayout />
         </div>
         
