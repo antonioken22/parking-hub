@@ -4,11 +4,12 @@ import Link from "next/link";
 import { SquareParking, Undo2 } from "lucide-react";
 
 import { Heading } from "@/app/(routes)/_components/heading";
-import ParkingLayout from "./parking-layout";
+import ParkingLayout from "../_components/parking-layout";
 import useAuthState from "@/hooks/useAuthState";
 import { Spinner } from "@/components/spinner";
+import GLEOpenAreatImage from "@/public/gle-open-area-zoomed.png";
 
-const GLEOpenAreatPage = () => {
+const GLEOpenAreaPage = () => {
   const { userId, loading } = useAuthState();
 
   if (loading) {
@@ -37,11 +38,21 @@ const GLEOpenAreatPage = () => {
               </Link>
             </div>
           </div>
-          <ParkingLayout />
+          <ParkingLayout
+            databaseTable="GLEOpenAreaParkingSlots"
+            parkingSlotDefaultWidth={11}
+            parkingSlotDefaultHeight={3}
+            parkingSlotDefaultRotation={-22}
+            srcImage={GLEOpenAreatImage}
+            altImage="Gle Parking Area"
+            imgWidth={2400}
+            imgHeight={3854}
+            imgScaleMultiplier={0.235}
+          />
         </div>
       )}
     </>
   );
 };
 
-export default GLEOpenAreatPage;
+export default GLEOpenAreaPage;

@@ -4,9 +4,10 @@ import Link from "next/link";
 import { SquareParking, Undo2 } from "lucide-react";
 
 import { Heading } from "@/app/(routes)/_components/heading";
-import ParkingLayout from "./parking-layout";
+import ParkingLayout from "../_components/parking-layout";
 import useAuthState from "@/hooks/useAuthState";
 import { Spinner } from "@/components/spinner";
+import RTLOpenCourtImage from "@/public/rtl-open-court-zoomed.png";
 
 const RTLOpenCourtPage = () => {
   const { userId, loading } = useAuthState();
@@ -37,7 +38,17 @@ const RTLOpenCourtPage = () => {
               </Link>
             </div>
           </div>
-          <ParkingLayout />
+          <ParkingLayout
+            databaseTable="RTLOpenCourtParkingSlots"
+            parkingSlotDefaultWidth={17}
+            parkingSlotDefaultHeight={4}
+            parkingSlotDefaultRotation={0}
+            srcImage={RTLOpenCourtImage}
+            altImage="RTL Parking Area"
+            imgWidth={1144}
+            imgHeight={2000}
+            imgScaleMultiplier={0.39}
+          />
         </div>
       )}
     </>

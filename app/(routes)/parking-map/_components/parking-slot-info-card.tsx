@@ -28,17 +28,17 @@ type ParkingSlotInfoCardProps = {
 };
 
 const colorStatusMap: Record<string, string> = {
-  red: "Unavailable",
+  green: "Available",
   gray: "Occupied",
-  green: "Unoccupied",
   yellow: "Reserved",
+  red: "Unavailable",
 };
 
 const statusColorMap: Record<string, string> = {
-  Unavailable: "red",
+  Available: "green",
   Occupied: "gray",
-  Unoccupied: "green",
   Reserved: "yellow",
+  Unavailable: "red",
 };
 
 export function ParkingSlotInfoCard({
@@ -51,6 +51,9 @@ export function ParkingSlotInfoCard({
   const [slotId, setSlotId] = useState(slot.id);
   const [editTop, setEditTop] = useState(slot.top);
   const [editLeft, setEditLeft] = useState(slot.left);
+  const [editWidth, setEditWidth] = useState(slot.width);
+  const [editHeight, setEditHeight] = useState(slot.height);
+  const [editRotation, setEditRotation] = useState(slot.rotation);
   const [editColor, setEditColor] = useState(slot.color);
   const [editStatus, setEditStatus] = useState(slot.status);
   const [editName, setEditName] = useState(slot.name);
@@ -65,6 +68,9 @@ export function ParkingSlotInfoCard({
     setSlotId(slot.id);
     setEditTop(slot.top);
     setEditLeft(slot.left);
+    setEditWidth(slot.width);
+    setEditHeight(slot.height);
+    setEditRotation(slot.rotation);
     setEditColor(slot.color);
     setEditStatus(slot.status);
     setEditName(slot.name);
@@ -85,6 +91,9 @@ export function ParkingSlotInfoCard({
       id: slotId,
       top: editTop,
       left: editLeft,
+      width: editWidth,
+      height: editHeight,
+      rotation: editRotation,
       color: editColor,
       status: colorStatusMap[editColor],
       name: editName,
@@ -95,6 +104,7 @@ export function ParkingSlotInfoCard({
     });
   };
 
+  // Local operations
   const handleColorChange = (newColor: string) => {
     setEditColor(newColor);
     setEditStatus(statusColorMap[colorStatusMap[newColor]]);
@@ -112,7 +122,8 @@ export function ParkingSlotInfoCard({
     }
   };
 
-  const isMobile = window.innerWidth <= 768; // Consider devices with width <= 768px as mobile
+  // Consider devices with width less than or equal to 768px as mobile
+  const isMobile = window.innerWidth <= 768;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -171,10 +182,10 @@ export function ParkingSlotInfoCard({
                 onChange={(e) => handleColorChange(e.target.value)}
                 className="ml-2 p-1 border rounded"
               >
-                <option value="red">Unavailable</option>
+                <option value="green">Available</option>
                 <option value="gray">Occupied</option>
-                <option value="green">Unoccupied</option>
                 <option value="yellow">Reserved</option>
+                <option value="red">Unavailable</option>
               </select>
             </div>
             <p className="text-sm font-medium leading-none">Start Time</p>
@@ -193,11 +204,13 @@ export function ParkingSlotInfoCard({
                 className="text-primary"
               />
             </div>
-
             {!isMobile && (
               <>
+                <hr />
                 <div className="flex items-center space-x-2">
-                  <p className="text-sm font-medium leading-none">Position</p>
+                  <p className="text-sm font-medium leading-none">
+                    Properties:{" "}
+                  </p>
                 </div>
                 <div className="flex items-center space-x-2">
                   <p>Top:</p>
@@ -222,6 +235,43 @@ export function ParkingSlotInfoCard({
                     className="w-16"
                   />
                   <span>%</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <p>Width:</p>
+                  <Input
+                    type="number"
+                    placeholder="Width (%)"
+                    value={editWidth}
+                    min={0}
+                    max={100}
+                    onChange={(e) => setEditWidth(parseInt(e.target.value))}
+                    className="w-16"
+                  />
+                  <span>%</span>
+                  <p>Height:</p>
+                  <Input
+                    type="number"
+                    placeholder="Height (%)"
+                    value={editHeight}
+                    min={0}
+                    max={100}
+                    onChange={(e) => setEditHeight(parseInt(e.target.value))}
+                    className="w-16"
+                  />
+                  <span>%</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <p>Rotation:</p>
+                  <Input
+                    type="number"
+                    placeholder="Rotation (°)"
+                    value={editRotation}
+                    min={-90}
+                    max={90}
+                    onChange={(e) => setEditRotation(parseInt(e.target.value))}
+                    className="w-16"
+                  />
+                  <span>°</span>
                 </div>
               </>
             )}

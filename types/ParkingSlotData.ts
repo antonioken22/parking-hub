@@ -2,6 +2,9 @@ export interface ParkingSlotData {
   id: string;
   top: number;
   left: number;
+  width: number;
+  height: number;
+  rotation: number;
   color: string;
   status: string;
   name: string | null;

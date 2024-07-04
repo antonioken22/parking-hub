@@ -7,11 +7,11 @@ import {
   PopoverContent,
 } from "@/components/ui/popover";
 
-export const Publish = () => {
-  const baseUrl = window.location.href + "-public-view";
+export const ShareURLButton = () => {
+  const baseUrl = window.location.href + "-public-view-only";
   const [copied, setCopied] = useState(false);
 
-  // Remove "/parking-map-public-view" from the URL if it exists
+  // Remove "/parking-map" from the URL if it exists
   const url = baseUrl.replace(/\/parking-map\b/g, "");
 
   const onCopy = () => {
@@ -49,7 +49,7 @@ export const Publish = () => {
               <Globe className="text-primary h-4 w-4" />
             )}
             <p className="text-xs font-medium text-primary">
-              {copied ? "URL Copied!" : "Copy shareable URL"}
+              {copied ? "Link Copied!" : "Copy shareable link"}
             </p>
           </div>
           <div className="flex items-center">
