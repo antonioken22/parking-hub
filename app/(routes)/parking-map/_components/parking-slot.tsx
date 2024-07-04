@@ -216,7 +216,7 @@ const ParkingSlot: React.FC<ParkingSlotProps> = ({
 
         {role === "admin" && selected && (
           <>
-            <div className="absolute -top-8 -left-2 md:left-0 transform -translate-x-1/2">
+            <div className="absolute -top-8 -left-3 md:-left-2 transform -translate-x-1/2">
               <RotateCcwSquare
                 className="w-4 h-4 md:w-6 md:h-6 text-primary cursor-pointer"
                 onClick={() => handleRotationChange(rotation - 1)}
@@ -228,13 +228,13 @@ const ParkingSlot: React.FC<ParkingSlotProps> = ({
                 onClick={() => handleTopChange(top - 1)}
               />
             </div>
-            <div className="absolute -top-8 -right-6 md:left-[100%] transform -translate-x-1/2">
+            <div className="absolute -top-8 -right-7 md:-right-8 transform -translate-x-1/2">
               <RotateCwSquare
                 className="w-4 h-4 md:w-6 md:h-6 text-primary cursor-pointer"
                 onClick={() => handleRotationChange(rotation + 1)}
               />
             </div>
-            <div className="absolute -bottom-8 left-0 transform -translate-x-1/2">
+            <div className="absolute -bottom-8 -left-3 md:-left-2 transform -translate-x-1/2">
               <ChevronsLeftRight
                 className="w-4 h-4 md:w-6 md:h-6 text-primary cursor-pointer"
                 onClick={() => handleWidthChange(width + 1)}
@@ -252,7 +252,7 @@ const ParkingSlot: React.FC<ParkingSlotProps> = ({
                 onClick={() => handleTopChange(top + 1)}
               />
             </div>
-            <div className="absolute -bottom-8 left-[100%] transform -translate-x-1/2">
+            <div className="absolute -bottom-8 -right-7 md:-right-8 transform -translate-x-1/2">
               <ChevronsUpDown
                 className="w-4 h-4 md:w-6 md:h-6 text-primary cursor-pointer"
                 onClick={() => handleHeightChange(height + 1)}
