@@ -56,7 +56,6 @@ const SignInPage = () => {
     } catch (error) {
       if (error instanceof Error) {
         setError("Incorrect email/password.");
-        console.log(error.message);
       } else {
         setError("An unknown error occurred");
       }
