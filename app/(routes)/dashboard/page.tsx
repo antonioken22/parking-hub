@@ -1,80 +1,81 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { onAuthStateChanged } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
-import { auth, firestore } from "@/firebase/config";
-import DashboardLayout from "./_components/dashboard-layout";
-import { Spinner } from "@/components/spinner";
-import useAuthState from "@/hooks/useAuthState";
-import { Bar } from "react-chartjs-2";
-import { useState, useEffect } from "react";
 import "chart.js/auto";
 import ChartDataLabels from "chartjs-plugin-datalabels";
+import { Bar } from "react-chartjs-2";
+import { useState, useEffect } from "react";
 
-interface ParkingSlot {
-  name: string;
-  availableSlots: number;
-  takenSlots: number;
-}
+import { Spinner } from "@/components/spinner";
+import useAuthState from "@/hooks/useAuthState";
+import useParkingSlotCount from "@/hooks/useParkingSlotCount";
 
 const DashboardPage = () => {
-  const [userName, setUserName] = useState<string | null>(null);
-  const { userId, userFirstname, userLastname } = useAuthState();
-  const [parkingSlots, setParkingSlots] = useState<ParkingSlot[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { userId, userFirstname, userLastname, loading } = useAuthState();
   const [chartData, setChartData] = useState<any>({});
-  const router = useRouter();
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        const userDoc = await getDoc(doc(firestore, "users", user.uid));
-        if (userDoc.exists()) {
-          const userData = userDoc.data();
-          setUserName(`${userData.firstName} ${userData.lastName}`);
-        }
-      } else {
-        router.push("/sign-in");
-      }
-      setLoading(false);
-    });
-
-    // Cleanup subscription on unmount
-    return () => unsubscribe();
-  }, [router]);
+  const { GLE, NGE, RTL, SAL } = useParkingSlotCount();
 
   useEffect(() => {
     const fetchParkingSlots = async () => {
-      // Example data, replace with your actual data fetching logic
       const data = [
-        { name: "RTL", availableSlots: 10, takenSlots: 5 },
-        { name: "GLE", availableSlots: 5, takenSlots: 10 },
-        { name: "ALLIED", availableSlots: 15, takenSlots: 0 },
-        { name: "NGE", availableSlots: 7, takenSlots: 8 },
-        { name: "PE AREA", availableSlots: 12, takenSlots: 3 },
-        { name: "Back Gate", availableSlots: 8, takenSlots: 7 },
+        {
+          name: "GLE Open Area",
+          availableSlots: GLE.available,
+          occupiedSlots: GLE.occupied,
+          reservedSlots: GLE.reserved,
+          unavailableSlots: GLE.unavailable,
+        },
+        {
+          name: "NGE Open Area",
+          availableSlots: NGE.available,
+          occupiedSlots: NGE.occupied,
+          reservedSlots: NGE.reserved,
+          unavailableSlots: NGE.unavailable,
+        },
+        {
+          name: "RTL Open Court",
+          availableSlots: RTL.available,
+          occupiedSlots: RTL.occupied,
+          reservedSlots: RTL.reserved,
+          unavailableSlots: RTL.unavailable,
+        },
+        {
+          name: "SAL Open Court",
+          availableSlots: SAL.available,
+          occupiedSlots: SAL.occupied,
+          reservedSlots: SAL.reserved,
+          unavailableSlots: SAL.unavailable,
+        },
       ];
-      setParkingSlots(data);
+
       setChartData({
         labels: data.map((lot) => lot.name),
         datasets: [
           {
-            label: "Available Parking Slots",
+            label: "Available",
             data: data.map((lot) => lot.availableSlots),
-            backgroundColor: "rgba(247, 149, 29)",
+            backgroundColor: "green",
           },
           {
-            label: "Taken Parking Slots",
-            data: data.map((lot) => lot.takenSlots),
-            backgroundColor: "rgba(250, 50, 81)",
+            label: "Occupied",
+            data: data.map((lot) => lot.occupiedSlots),
+            backgroundColor: "gray",
+          },
+          {
+            label: "Reserved",
+            data: data.map((lot) => lot.reservedSlots),
+            backgroundColor: "yellow",
+          },
+          {
+            label: "Unavailable",
+            data: data.map((lot) => lot.unavailableSlots),
+            backgroundColor: "red",
           },
         ],
       });
     };
 
     fetchParkingSlots();
-  }, []);
+  }, [GLE, NGE, RTL, SAL]);
 
   const chartOptions = {
     plugins: {
@@ -82,7 +83,7 @@ const DashboardPage = () => {
         display: true,
         color: "white",
         font: {
-          weight: "bold" as const, // Ensure type compatibility
+          weight: "bold" as const,
         },
       },
     },

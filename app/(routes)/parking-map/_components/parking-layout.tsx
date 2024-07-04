@@ -73,7 +73,7 @@ const ParkingLayout = ({
 
         setParkingSlots(slotsData);
       } catch (error) {
-        console.error("Error fetching parking slots:", error);
+        // console.error("Error fetching parking slots:", error);
       }
     };
 
