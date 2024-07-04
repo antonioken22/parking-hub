@@ -1,5 +1,10 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import { onAuthStateChanged } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
+import { auth, firestore } from "@/firebase/config";
+import DashboardLayout from "./components/dashboard-layout";
 import { Spinner } from "@/components/spinner";
 import useAuthState from "@/hooks/useAuthState";
 import { Bar } from "react-chartjs-2";
@@ -14,15 +19,38 @@ interface ParkingSlot {
 }
 
 const DashboardPage = () => {
-  const { userId, userFirstname, userLastname, loading } = useAuthState();
+  const [userName, setUserName] = useState<string | null>(null);
+  const { userId, userFirstname, userLastname } = useAuthState();
   const [parkingSlots, setParkingSlots] = useState<ParkingSlot[]>([]);
+  const [loading, setLoading] = useState(true);
   const [chartData, setChartData] = useState<any>({});
+  const router = useRouter();
+
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const userDoc = await getDoc(doc(firestore, "users", user.uid));
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          setUserName(`${userData.firstName} ${userData.lastName}`);
+        }
+      } else {
+        router.push("/sign-in");
+      }
+      setLoading(false);
+    });
+
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
+  }, [router]);
+
 
   useEffect(() => {
     const fetchParkingSlots = async () => {
       // Example data, replace with your actual data fetching logic
       const data = [
-        { name: "RTL", availableSlots: 10, takenSlots: 5 },
+        { name: "RTL", availableSlots: 10 , takenSlots: 5 },
         { name: "GLE", availableSlots: 5, takenSlots: 10 },
         { name: "ALLIED", availableSlots: 15, takenSlots: 0 },
         { name: "NGE", availableSlots: 7, takenSlots: 8 },
@@ -93,6 +121,7 @@ const DashboardPage = () => {
               <h2 className="text-2xl font-bold mb-4">Parking Slot Comparison</h2>
               <Bar data={chartData} options={chartOptions} plugins={[ChartDataLabels]} />
             </div>
+            <DashboardLayout />
           </main>
         </div>
       )}
