@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { auth, firestore } from "@/firebase/config";
-import DashboardLayout from "./components/dashboard-layout";
+import DashboardLayout from "./_components/dashboard-layout";
 import { Spinner } from "@/components/spinner";
 import useAuthState from "@/hooks/useAuthState";
 import { Bar } from "react-chartjs-2";
@@ -26,7 +26,6 @@ const DashboardPage = () => {
   const [chartData, setChartData] = useState<any>({});
   const router = useRouter();
 
-
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
@@ -45,12 +44,11 @@ const DashboardPage = () => {
     return () => unsubscribe();
   }, [router]);
 
-
   useEffect(() => {
     const fetchParkingSlots = async () => {
       // Example data, replace with your actual data fetching logic
       const data = [
-        { name: "RTL", availableSlots: 10 , takenSlots: 5 },
+        { name: "RTL", availableSlots: 10, takenSlots: 5 },
         { name: "GLE", availableSlots: 5, takenSlots: 10 },
         { name: "ALLIED", availableSlots: 15, takenSlots: 0 },
         { name: "NGE", availableSlots: 7, takenSlots: 8 },
@@ -118,10 +116,16 @@ const DashboardPage = () => {
               </h1>
             )}
             <div className="w-full max-w-4xl p-4">
-              <h2 className="text-2xl font-bold mb-4">Parking Slot Comparison</h2>
-              <Bar data={chartData} options={chartOptions} plugins={[ChartDataLabels]} />
+              <h2 className="text-2xl font-bold mb-4">
+                Parking Slot Comparison
+              </h2>
+              <Bar
+                data={chartData}
+                options={chartOptions}
+                plugins={[ChartDataLabels]}
+              />
             </div>
-            <DashboardLayout />
+            {/* <DashboardLayout /> */}
           </main>
         </div>
       )}
