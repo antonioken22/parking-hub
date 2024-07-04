@@ -7,6 +7,12 @@ import {
   ChevronDown,
   SquarePen,
   Info,
+  RotateCcwSquare,
+  RotateCwSquare,
+  ChevronsRightLeft,
+  ChevronsLeftRight,
+  ChevronsUpDown,
+  ChevronsDownUp,
 } from "lucide-react";
 
 import { ParkingSlotInfoCard } from "./parking-slot-info-card";
@@ -17,6 +23,8 @@ interface ParkingSlotProps {
   slot: ParkingSlotData;
   index: number;
   onPositionChange: (index: number, top: number, left: number) => void;
+  onSizeChange: (index: number, width: number, height: number) => void;
+  onRotationChange: (index: number, rotation: number) => void;
   onEdit: (index: number, updatedSlot: ParkingSlotData) => void;
   role: string | null;
   selected: boolean;
@@ -27,6 +35,8 @@ const ParkingSlot: React.FC<ParkingSlotProps> = ({
   slot,
   index,
   onPositionChange,
+  onSizeChange,
+  onRotationChange,
   onEdit,
   role,
   selected,
@@ -34,6 +44,9 @@ const ParkingSlot: React.FC<ParkingSlotProps> = ({
 }) => {
   const [top, setTop] = useState(slot.top);
   const [left, setLeft] = useState(slot.left);
+  const [width, setWidth] = useState(slot.width);
+  const [height, setHeight] = useState(slot.height);
+  const [rotation, setRotation] = useState(slot.rotation);
   const [zIndex, setZIndex] = useState(10);
   const [isEditing, setIsEditing] = useState(false);
   const [isViewing, setIsViewing] = useState(false);
@@ -57,6 +70,34 @@ const ParkingSlot: React.FC<ParkingSlotProps> = ({
     [index, top, onPositionChange]
   );
 
+  const handleWidthChange = useCallback(
+    (newWidth: number) => {
+      newWidth = Math.max(1, Math.min(100, newWidth));
+      setWidth(newWidth);
+      onSizeChange(index, newWidth, height);
+    },
+    [index, height, onSizeChange]
+  );
+
+  const handleHeightChange = useCallback(
+    (newHeight: number) => {
+      newHeight = Math.max(1, Math.min(100, newHeight));
+      setHeight(newHeight);
+      onSizeChange(index, width, newHeight);
+    },
+    [index, width, onSizeChange]
+  );
+
+  const handleRotationChange = useCallback(
+    (newRotation: number) => {
+      newRotation = Math.max(-90, Math.min(90, newRotation));
+      setRotation(newRotation);
+      onRotationChange(index, newRotation);
+    },
+    [index, onRotationChange]
+  );
+
+  // Handle keyboard lister
   useEffect(() => {
     if (!selected) {
       setZIndex(10); // Reset zIndex to 10 when not selected
@@ -142,12 +183,15 @@ const ParkingSlot: React.FC<ParkingSlotProps> = ({
   return (
     <>
       <div
-        className={`absolute z-${zIndex} w-12 h-6 md:w-20 md:h-8 flex justify-center items-center ${
+        className={`absolute z-${zIndex} flex justify-center items-center ${
           selected ? "border-2 border-primary" : "border border-primary"
         }`}
         style={{
           top: `${top}%`,
           left: `${left}%`,
+          width: `${width}%`,
+          height: `${height}%`,
+          transform: `rotate(${rotation}deg)`,
         }}
         onClick={handleClick}
       >
@@ -172,10 +216,34 @@ const ParkingSlot: React.FC<ParkingSlotProps> = ({
 
         {role === "admin" && selected && (
           <>
+            <div className="absolute -top-8 -left-2 md:left-0 transform -translate-x-1/2">
+              <RotateCcwSquare
+                className="w-4 h-4 md:w-6 md:h-6 text-primary cursor-pointer"
+                onClick={() => handleRotationChange(rotation - 1)}
+              />
+            </div>
             <div className="absolute -top-8 left-1/2 transform -translate-x-1/2">
               <ChevronUp
                 className="w-8 h-8 md:w-10 md:h-10 text-primary cursor-pointer"
                 onClick={() => handleTopChange(top - 1)}
+              />
+            </div>
+            <div className="absolute -top-8 -right-6 md:left-[100%] transform -translate-x-1/2">
+              <RotateCwSquare
+                className="w-4 h-4 md:w-6 md:h-6 text-primary cursor-pointer"
+                onClick={() => handleRotationChange(rotation + 1)}
+              />
+            </div>
+            <div className="absolute -bottom-8 left-0 transform -translate-x-1/2">
+              <ChevronsLeftRight
+                className="w-4 h-4 md:w-6 md:h-6 text-primary cursor-pointer"
+                onClick={() => handleWidthChange(width + 1)}
+              />
+            </div>
+            <div className="absolute -bottom-8 -left-8 transform -translate-x-1/2">
+              <ChevronsRightLeft
+                className="w-4 h-4 md:w-6 md:h-6 text-primary cursor-pointer"
+                onClick={() => handleWidthChange(width - 1)}
               />
             </div>
             <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2">
@@ -184,13 +252,24 @@ const ParkingSlot: React.FC<ParkingSlotProps> = ({
                 onClick={() => handleTopChange(top + 1)}
               />
             </div>
+            <div className="absolute -bottom-8 left-[100%] transform -translate-x-1/2">
+              <ChevronsUpDown
+                className="w-4 h-4 md:w-6 md:h-6 text-primary cursor-pointer"
+                onClick={() => handleHeightChange(height + 1)}
+              />
+            </div>
+            <div className="absolute -bottom-8 -right-12 transform -translate-x-1/2">
+              <ChevronsDownUp
+                className="w-4 h-4 md:w-6 md:h-6 text-primary cursor-pointer"
+                onClick={() => handleHeightChange(height - 1)}
+              />
+            </div>
             <div className="absolute top-1/2 -left-8 transform -translate-y-1/2">
               <ChevronLeft
                 className="w-8 h-8 md:w-10 md:h-10 text-primary cursor-pointer"
                 onClick={() => handleLeftChange(left - 1)}
               />
             </div>
-
             <div className="absolute top-1/2 -right-11 md:-right-16 transform -translate-y-1/2">
               <SquarePen
                 className="w-5 h-5 md:w-7 md:h-7 p-1 bg-secondary text-primary cursor-pointer border border-primary"

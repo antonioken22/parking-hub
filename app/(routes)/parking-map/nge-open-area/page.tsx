@@ -4,11 +4,12 @@ import Link from "next/link";
 import { SquareParking, Undo2 } from "lucide-react";
 
 import { Heading } from "@/app/(routes)/_components/heading";
-import ParkingLayout from "./parking-layout";
+import ParkingLayout from "../_components/parking-layout";
 import useAuthState from "@/hooks/useAuthState";
 import { Spinner } from "@/components/spinner";
+import NGEOpenAreaImage from "@/public/nge-open-area-zoomed.png";
 
-const NGEOpenAreatPage = () => {
+const NGEOpenAreaPage = () => {
   const { userId, loading } = useAuthState();
 
   if (loading) {
@@ -37,11 +38,21 @@ const NGEOpenAreatPage = () => {
               </Link>
             </div>
           </div>
-          <ParkingLayout />
+          <ParkingLayout
+            databaseTable="NGEOpenAreaParkingSlots"
+            parkingSlotDefaultWidth={19}
+            parkingSlotDefaultHeight={2}
+            parkingSlotDefaultRotation={0}
+            srcImage={NGEOpenAreaImage}
+            altImage="NGE Parking Area"
+            imgWidth={1000}
+            imgHeight={3127}
+            imgScaleMultiplier={0.57}
+          />
         </div>
       )}
     </>
   );
 };
 
-export default NGEOpenAreatPage;
+export default NGEOpenAreaPage;

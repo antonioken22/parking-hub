@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import { useEffect, useState } from "react";
 import {
   collection,
@@ -12,14 +12,35 @@ import {
 import { toast } from "sonner";
 
 import { firestore } from "@/firebase/config";
-import ParkingSlot from "../_components/parking-slot";
+import ParkingSlot from "./parking-slot";
 import { Button } from "@/components/ui/button";
-import RTLOpenCourtImage from "@/public/rtl-open-court-zoomed.png";
 import { ParkingSlotData } from "@/types/ParkingSlotData";
 import { useUserRole } from "@/hooks/useUserRole";
-import { Publish } from "../_components/publish";
+import { ShareURLButton } from "./share-url-button";
 
-const ParkingLayout = () => {
+interface ParkingLayoutProps {
+  databaseTable: string;
+  parkingSlotDefaultWidth: number;
+  parkingSlotDefaultHeight: number;
+  parkingSlotDefaultRotation: number;
+  srcImage: StaticImageData;
+  altImage: string;
+  imgWidth: number;
+  imgHeight: number;
+  imgScaleMultiplier: number;
+}
+
+const ParkingLayout = ({
+  databaseTable,
+  parkingSlotDefaultWidth,
+  parkingSlotDefaultHeight,
+  parkingSlotDefaultRotation,
+  altImage,
+  srcImage,
+  imgWidth,
+  imgHeight,
+  imgScaleMultiplier,
+}: ParkingLayoutProps) => {
   const userRole = useUserRole();
   const [parkingSlots, setParkingSlots] = useState<ParkingSlotData[]>([]);
   const [selectedSlotIndex, setSelectedSlotIndex] = useState<number | null>(
@@ -30,7 +51,7 @@ const ParkingLayout = () => {
   useEffect(() => {
     const fetchParkingSlots = async () => {
       try {
-        const slotsRef = collection(firestore, "RTLOpenCourtParkingSlots");
+        const slotsRef = collection(firestore, databaseTable);
         const slotsSnapshot = await getDocs(slotsRef);
 
         const slotsData: ParkingSlotData[] = slotsSnapshot.docs.map((doc) => {
@@ -61,8 +82,9 @@ const ParkingLayout = () => {
       success: "Successfully loaded parking slots.",
       error: "Failed to load parking slots.",
     });
-  }, []);
+  }, [databaseTable]);
 
+  // Local operations
   const handleSlotPositionChange = (
     index: number,
     top: number,
@@ -73,19 +95,43 @@ const ParkingLayout = () => {
     setParkingSlots(updatedSlots);
   };
 
+  const handleSlotSizeChange = (
+    index: number,
+    width: number,
+    height: number
+  ) => {
+    const updatedSlots = [...parkingSlots];
+    updatedSlots[index] = { ...updatedSlots[index], width, height };
+    setParkingSlots(updatedSlots);
+  };
+
+  const handleSlotRotationChange = (index: number, rotation: number) => {
+    const updatedSlots = [...parkingSlots];
+    updatedSlots[index] = { ...updatedSlots[index], rotation };
+    setParkingSlots(updatedSlots);
+  };
+
   const handleEditSlot = (index: number, updatedSlot: ParkingSlotData) => {
     const updatedSlots = [...parkingSlots];
     updatedSlots[index] = { ...updatedSlot };
     setParkingSlots(updatedSlots);
   };
 
+  const handleDeselect = () => {
+    setSelectedSlotIndex(null);
+  };
+
+  // Cloud operations
   // Add to Firestore
   const addParkingSlot = async () => {
     const newSlot = {
       top: 50,
       left: 50,
+      width: parkingSlotDefaultWidth,
+      height: parkingSlotDefaultHeight,
+      rotation: parkingSlotDefaultRotation,
       color: "green",
-      status: "Unoccupied",
+      status: "Available",
       name: null,
       startTime: null,
       endTime: null,
@@ -95,7 +141,7 @@ const ParkingLayout = () => {
 
     toast.promise(
       async () => {
-        const slotsRef = collection(firestore, "RTLOpenCourtParkingSlots");
+        const slotsRef = collection(firestore, databaseTable);
         const docRef = await addDoc(slotsRef, newSlot);
         const updatedSlots = [...parkingSlots, { id: docRef.id, ...newSlot }];
         setParkingSlots(updatedSlots);
@@ -112,7 +158,7 @@ const ParkingLayout = () => {
   const saveParkingSlots = async () => {
     toast.promise(
       async () => {
-        const slotsRef = collection(firestore, "RTLOpenCourtParkingSlots");
+        const slotsRef = collection(firestore, databaseTable);
 
         await Promise.all(
           parkingSlots.map(async (slot) => {
@@ -122,6 +168,9 @@ const ParkingLayout = () => {
             await updateDoc(doc(slotsRef, slot.id), {
               top: slot.top,
               left: slot.left,
+              width: slot.width,
+              height: slot.height,
+              rotation: slot.rotation,
               color: slot.color,
               status: slot.status,
               name: slot.name || null,
@@ -144,7 +193,7 @@ const ParkingLayout = () => {
   // Delete from Firestore
   const deleteParkingSlot = async () => {
     if (selectedSlotIndex === null) {
-      console.warn("No slot selected for deletion");
+      toast.error("No slot selected for deletion.");
       return;
     }
 
@@ -152,11 +201,7 @@ const ParkingLayout = () => {
 
     toast.promise(
       async () => {
-        const slotRef = doc(
-          firestore,
-          "RTLOpenCourtParkingSlots",
-          slotToDelete.id
-        );
+        const slotRef = doc(firestore, databaseTable, slotToDelete.id);
         await deleteDoc(slotRef);
 
         const updatedSlots = parkingSlots.filter(
@@ -182,6 +227,8 @@ const ParkingLayout = () => {
             slot={slot}
             index={index}
             onPositionChange={handleSlotPositionChange}
+            onSizeChange={handleSlotSizeChange}
+            onRotationChange={handleSlotRotationChange}
             onEdit={handleEditSlot}
             role={userRole}
             selected={index === selectedSlotIndex}
@@ -189,18 +236,26 @@ const ParkingLayout = () => {
           />
         ))}
         <Image
-          alt="RTL Open Court"
-          src={RTLOpenCourtImage}
+          alt={altImage}
+          src={srcImage}
           layout="intrinsic"
-          width={1448 / 3.2}
-          height={2048 / 3.2}
+          width={imgWidth * imgScaleMultiplier}
+          height={imgHeight / imgScaleMultiplier}
           placeholder="blur"
           priority
         />
         {userRole === "admin" && (
           <div>
             <div className="absolute top-1 right-2 md:top-4 md:right-4 space-x-1 md:space-x-2">
-              <Publish />
+              <ShareURLButton />
+            </div>
+            <div className="absolute top-1 left-2 md:top-4 md:left-4 space-x-1 md:space-x-2">
+              <Button
+                className="text-xs md:text-base shadow-md"
+                onClick={handleDeselect}
+              >
+                Deselect
+              </Button>
             </div>
             <div className="absolute bottom-2 right-2 md:bottom-4 md:right-4 space-x-1 md:space-x-2">
               <Button
