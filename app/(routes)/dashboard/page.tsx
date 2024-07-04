@@ -81,7 +81,7 @@ const DashboardPage = () => {
     plugins: {
       datalabels: {
         display: true,
-        color: "white",
+        color: "orange",
         font: {
           weight: "bold" as const,
         },
@@ -112,13 +112,15 @@ const DashboardPage = () => {
         <div>
           <main className="flex flex-col items-center justify-center flex-grow mt-10">
             {userId && (
-              <h1 className="text-4xl font-bold mb-6 ml-10">
-                Welcome, {userFirstname} {userLastname}!
+              <h1 className="text-xl md:text-4xl font-bold mb-6 md:ml-10">
+                <span className="text-orange-500">Welcome,</span>{" "}
+                {userFirstname} {userLastname}!
               </h1>
             )}
-            <div className="w-full max-w-4xl p-4">
-              <h2 className="text-2xl font-bold mb-4">
-                Parking Slot Comparison
+            <div className="w-full max-w-7xl p-4">
+              <h2 className="text-xl md:text-2xl font-bold mb-4">
+                Parking Slot Status{" "}
+                <span className="text-orange-500">(Overview)</span>
               </h2>
               <Bar
                 data={chartData}
