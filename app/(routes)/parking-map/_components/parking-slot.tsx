@@ -123,6 +123,24 @@ const ParkingSlot: React.FC<ParkingSlotProps> = ({
             case "d":
               handleLeftChange(left + stepSize);
               break;
+            case "q":
+              handleRotationChange(rotation - stepSize);
+              break;
+            case "e":
+              handleRotationChange(rotation + stepSize);
+              break;
+            case "1":
+              handleWidthChange(width - stepSize);
+              break;
+            case "2":
+              handleWidthChange(width + stepSize);
+              break;
+            case "r":
+              handleHeightChange(width - stepSize);
+              break;
+            case "f":
+              handleHeightChange(height + stepSize);
+              break;
             default:
               break;
           }

@@ -1,4 +1,4 @@
-import { BellRing, Check, X } from "lucide-react";
+import { BellRing, Calendar, Check, X } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import { DateTimePicker } from "react-datetime-picker";
 import "react-datetime-picker/dist/DateTimePicker.css";
@@ -193,7 +193,12 @@ export function ParkingSlotInfoCard({
               <DateTimePicker
                 value={startTime}
                 onChange={setStartTime}
-                className="text-primary"
+                className="text-muted-foreground w-full"
+                calendarIcon={
+                  <Calendar className="w-6 h-6 text-muted-foreground" />
+                }
+                clearIcon={<X className="w-6 h-6 text-muted-foreground" />}
+                disableClock
               />
             </div>
             <p className="text-sm font-medium leading-none">End Time</p>
@@ -201,79 +206,92 @@ export function ParkingSlotInfoCard({
               <DateTimePicker
                 value={endTime}
                 onChange={setEndTime}
-                className="text-primary"
+                className="text-muted-foreground w-full"
+                calendarIcon={
+                  <Calendar className="w-6 h-6 text-muted-foreground" />
+                }
+                clearIcon={<X className="w-6 h-6 text-muted-foreground" />}
+                disableClock
               />
             </div>
             {!isMobile && (
               <>
                 <hr />
-                <div className="flex items-center space-x-2">
-                  <p className="text-sm font-medium leading-none">
-                    Properties:{" "}
-                  </p>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <p>Top:</p>
-                  <Input
-                    type="number"
-                    placeholder="Top (%)"
-                    value={editTop}
-                    min={0}
-                    max={100}
-                    onChange={(e) => setEditTop(parseFloat(e.target.value))}
-                    className="w-16"
-                  />
-                  <span>%</span>
-                  <p>Left:</p>
-                  <Input
-                    type="number"
-                    placeholder="Left (%)"
-                    value={editLeft}
-                    min={0}
-                    max={100}
-                    onChange={(e) => setEditLeft(parseFloat(e.target.value))}
-                    className="w-16"
-                  />
-                  <span>%</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <p>Width:</p>
-                  <Input
-                    type="number"
-                    placeholder="Width (%)"
-                    value={editWidth}
-                    min={0}
-                    max={100}
-                    onChange={(e) => setEditWidth(parseFloat(e.target.value))}
-                    className="w-16"
-                  />
-                  <span>%</span>
-                  <p>Height:</p>
-                  <Input
-                    type="number"
-                    placeholder="Height (%)"
-                    value={editHeight}
-                    min={0}
-                    max={100}
-                    onChange={(e) => setEditHeight(parseFloat(e.target.value))}
-                    className="w-16"
-                  />
-                  <span>%</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <p>Rotation:</p>
-                  <Input
-                    type="number"
-                    placeholder="Rotation (°)"
-                    value={editRotation}
-                    min={-90}
-                    max={90}
-                    onChange={(e) =>
-                      setEditRotation(parseFloat(e.target.value))
-                    }
-                    className="w-16"
-                  />
-                  <span>°</span>
+                <div className="grid grid-cols-2 gap-4 w-full">
+                  <div className="col-span-2 flex items-center space-x-2">
+                    <p className="text-sm font-medium leading-none">
+                      Properties:{" "}
+                    </p>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <p className="text-xs">Top:</p>
+                    <Input
+                      type="number"
+                      placeholder="Top (%)"
+                      value={editTop}
+                      min={0}
+                      max={100}
+                      onChange={(e) => setEditTop(parseFloat(e.target.value))}
+                      className="w-full h-10 text-xs"
+                    />
+                    <span className="text-xs">%</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <p className="text-xs">Left:</p>
+                    <Input
+                      type="number"
+                      placeholder="Left (%)"
+                      value={editLeft}
+                      min={0}
+                      max={100}
+                      onChange={(e) => setEditLeft(parseFloat(e.target.value))}
+                      className="w-full h-10 text-xs"
+                    />
+                    <span className="text-xs">%</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <p className="text-xs">Width:</p>
+                    <Input
+                      type="number"
+                      placeholder="Width (%)"
+                      value={editWidth}
+                      min={0}
+                      max={100}
+                      onChange={(e) => setEditWidth(parseFloat(e.target.value))}
+                      className="w-full h-10 text-xs"
+                    />
+                    <span className="text-xs">%</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <p className="text-xs">Height:</p>
+                    <Input
+                      type="number"
+                      placeholder="Height (%)"
+                      value={editHeight}
+                      min={0}
+                      max={100}
+                      onChange={(e) =>
+                        setEditHeight(parseFloat(e.target.value))
+                      }
+                      className="w-full h-10 text-xs"
+                    />
+                    <span className="text-xs">%</span>
+                  </div>
+                  <div className="col-span-1 flex items-center space-x-2 text-sm">
+                    <p className="text-xs">Rotation:</p>
+                    <Input
+                      type="number"
+                      placeholder="Rotation (°)"
+                      value={editRotation}
+                      min={-90}
+                      max={90}
+                      onChange={(e) =>
+                        setEditRotation(parseFloat(e.target.value))
+                      }
+                      className="w-full h-10 text-xs"
+                    />
+                    <span className="text-xs">°</span>
+                  </div>
                 </div>
               </>
             )}
