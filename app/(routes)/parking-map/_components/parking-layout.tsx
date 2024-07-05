@@ -138,7 +138,7 @@ const ParkingLayout = ({
                 onChange={(e) => setStepSize(parseFloat(e.target.value))}
                 step="0.1"
                 min="0.1"
-                className="border border-primary rounded w-28"
+                className="border border-primary rounded-br-none w-28"
               />
               <div className="absolute -bottom-9 -right-0  transform -translate-y-1/2">
                 <h1 className="text-xs text-background bg-primary rounded-b-lg  px-2 py-1 left-2">
