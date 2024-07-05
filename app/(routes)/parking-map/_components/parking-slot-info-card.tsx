@@ -220,7 +220,7 @@ export function ParkingSlotInfoCard({
                     value={editTop}
                     min={0}
                     max={100}
-                    onChange={(e) => setEditTop(parseInt(e.target.value))}
+                    onChange={(e) => setEditTop(parseFloat(e.target.value))}
                     className="w-16"
                   />
                   <span>%</span>
@@ -231,7 +231,7 @@ export function ParkingSlotInfoCard({
                     value={editLeft}
                     min={0}
                     max={100}
-                    onChange={(e) => setEditLeft(parseInt(e.target.value))}
+                    onChange={(e) => setEditLeft(parseFloat(e.target.value))}
                     className="w-16"
                   />
                   <span>%</span>
@@ -244,7 +244,7 @@ export function ParkingSlotInfoCard({
                     value={editWidth}
                     min={0}
                     max={100}
-                    onChange={(e) => setEditWidth(parseInt(e.target.value))}
+                    onChange={(e) => setEditWidth(parseFloat(e.target.value))}
                     className="w-16"
                   />
                   <span>%</span>
@@ -255,7 +255,7 @@ export function ParkingSlotInfoCard({
                     value={editHeight}
                     min={0}
                     max={100}
-                    onChange={(e) => setEditHeight(parseInt(e.target.value))}
+                    onChange={(e) => setEditHeight(parseFloat(e.target.value))}
                     className="w-16"
                   />
                   <span>%</span>
@@ -268,7 +268,9 @@ export function ParkingSlotInfoCard({
                     value={editRotation}
                     min={-90}
                     max={90}
-                    onChange={(e) => setEditRotation(parseInt(e.target.value))}
+                    onChange={(e) =>
+                      setEditRotation(parseFloat(e.target.value))
+                    }
                     className="w-16"
                   />
                   <span>°</span>
