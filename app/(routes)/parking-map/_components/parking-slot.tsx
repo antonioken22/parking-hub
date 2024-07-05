@@ -109,19 +109,19 @@ const ParkingSlot: React.FC<ParkingSlotProps> = ({
           switch (event.key) {
             case "ArrowUp":
             case "w":
-              handleTopChange(top - 1);
+              handleTopChange(top - stepSize);
               break;
             case "ArrowDown":
             case "s":
-              handleTopChange(top + 1);
+              handleTopChange(top + stepSize);
               break;
             case "ArrowLeft":
             case "a":
-              handleLeftChange(left - 1);
+              handleLeftChange(left - stepSize);
               break;
             case "ArrowRight":
             case "d":
-              handleLeftChange(left + 1);
+              handleLeftChange(left + stepSize);
               break;
             default:
               break;
@@ -139,6 +139,7 @@ const ParkingSlot: React.FC<ParkingSlotProps> = ({
     top,
     left,
     selected,
+    stepSize,
     handleLeftChange,
     handleTopChange,
     keyboardListenerActive,
