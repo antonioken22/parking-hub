@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import DataList from './dashboard-data-list-logs';
-
-
+import Link from 'next/link';
+import MobileFriendlyComponent from './dashboard-announcement';
 type Tab = 'logs' | 'vehicles' | 'delete' | 'configure';
 
 const DashboardLayout: React.FC = () => {
@@ -12,53 +12,41 @@ const DashboardLayout: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-center">
-      <div className="flex flex-col w-2/3 p-8 ">
-        <div className="flex space-x-4 mb-8">
-          <button
-            className={`p-4 rounded ${selectedTab === 'logs' ? 'bg-primary-foreground text-white' : "bg-primary text-black"}`}
-            onClick={() => setSelectedTab('logs')}
-          >
-            Logs
-          </button>
-          <button
-            className={`p-4 rounded ${selectedTab === 'vehicles' ? 'bg-primary-foreground text-white' : "bg-primary text-gray-700"}`}
-            onClick={() => setSelectedTab('vehicles')}
-          >
-            Vehicles
-          </button>
-          <button
-            className={`p-4 rounded ${selectedTab === 'delete' ? 'bg-primary-foreground text-white' : "bg-primary text-gray-700"}`}
-            onClick={() => setSelectedTab('delete')}
-          >
-            Delete
-          </button>
-          <button
-            className={`p-4 rounded ${selectedTab === 'configure' ? 'bg-primary-foreground text-white' : "bg-primary text-gray-700"}`}
-            onClick={() => setSelectedTab('configure')}
-          >
-            Configure
-          </button>
-        </div>
-        <div className="flex flex-col space-y-4 bg-main p-6 rounded">
-          {renderContent()}
-        </div>
+    <div className="flex flex-col lg:flex-row justify-center items-stretch lg:items-center h-full lg:h-screen p-4 lg:p-8">
+    <div className="flex flex-col w-full lg:w-2/3 bg-primary-foreground text-white rounded-lg mb-4 lg:mb-0 p-4 lg:p-8 mr-6 ml">
+      <div className="flex justify-between mb-8 space-x-1">
+        <button
+          className={`flex-1 p-4 rounded ${selectedTab === 'logs' ? 'bg-black text-white' : 'bg-primary text-black'}`}
+          onClick={() => setSelectedTab('logs')}
+        >
+          Logs
+        </button>
+        <button
+          className={`flex-1 p-4 rounded ${selectedTab === 'vehicles' ? 'bg-black text-white' : 'bg-primary text-black'}`}
+          onClick={() => setSelectedTab('vehicles')}
+        >
+          Vehicles
+        </button>
+        <button
+          className={`flex-1 p-4 rounded ${selectedTab === 'delete' ? 'bg-black text-white' : 'bg-primary text-black'}`}
+          onClick={() => setSelectedTab('delete')}
+        >
+          Delete
+        </button>
+        <button
+          className={`flex-1 p-4 rounded ${selectedTab === 'configure' ? 'bg-black text-white' : 'bg-primary text-black'}`}
+          onClick={() => setSelectedTab('configure')}
+        >
+          Configure
+        </button>
       </div>
-      <div className="flex flex-col w-1/3 p-8 rounded bg-primary text-black ">     
-        <div className="mb-8 p-6 bg-primary-foreground text-center rounded">ANNOUNCEMENT!</div>
-        <div className="p-6 bg-primary-foreground text-center rounded">
-          STATUS
-          <div className="mt-4">
-            <div className="relative w-24 h-24 mx-auto">
-              <svg className="absolute inset-0 w-full h-full">
-                <circle cx="50%" cy="50%" r="45%" stroke="black" strokeWidth="10" fill="none" />
-                <circle cx="50%" cy="50%" r="45%" stroke="orange" strokeWidth="10" strokeDasharray="calc(282.6 * 0.25) 282.6" fill="none" />
-              </svg>
-            </div>
-          </div>
-        </div>
+      <div className="flex flex-col space-y-4 bg-main p-6 rounded">
+        {renderContent()}
       </div>
     </div>
+    <MobileFriendlyComponent/>
+  </div>
+  
   );
 };
 
