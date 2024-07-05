@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import { Spinner } from "@/components/spinner";
 import useAuthState from "@/hooks/useAuthState";
 import useParkingSlotCount from "@/hooks/useParkingSlotCount";
+import DashboardLayout from "./components/dashboard-layout";
 
 const DashboardPage = () => {
   const { userId, userFirstname, userLastname, loading } = useAuthState();
@@ -127,8 +128,9 @@ const DashboardPage = () => {
                 options={chartOptions}
                 plugins={[ChartDataLabels]}
               />
+              <DashboardLayout/> 
             </div>
-            {/* <DashboardLayout /> */}
+            
           </main>
         </div>
       )}
