@@ -154,12 +154,18 @@ const ParkingSlot: React.FC<ParkingSlotProps> = ({
       };
     }
   }, [
-    top,
-    left,
     selected,
     stepSize,
+    top,
+    left,
+    width,
+    height,
+    rotation,
     handleLeftChange,
     handleTopChange,
+    handleWidthChange,
+    handleHeightChange,
+    handleRotationChange,
     keyboardListenerActive,
   ]);
 
