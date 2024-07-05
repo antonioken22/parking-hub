@@ -22,6 +22,7 @@ import { ParkingSlotInfoDrawer } from "./parking-slot-info-drawer";
 interface ParkingSlotProps {
   slot: ParkingSlotData;
   index: number;
+  stepSize: number;
   onPositionChange: (index: number, top: number, left: number) => void;
   onSizeChange: (index: number, width: number, height: number) => void;
   onRotationChange: (index: number, rotation: number) => void;
@@ -34,6 +35,7 @@ interface ParkingSlotProps {
 const ParkingSlot: React.FC<ParkingSlotProps> = ({
   slot,
   index,
+  stepSize,
   onPositionChange,
   onSizeChange,
   onRotationChange,
@@ -219,55 +221,55 @@ const ParkingSlot: React.FC<ParkingSlotProps> = ({
             <div className="absolute -top-8 -left-3 md:-left-2 transform -translate-x-1/2">
               <RotateCcwSquare
                 className="w-4 h-4 md:w-6 md:h-6 text-primary cursor-pointer"
-                onClick={() => handleRotationChange(rotation - 1)}
+                onClick={() => handleRotationChange(rotation - stepSize)}
               />
             </div>
             <div className="absolute -top-8 left-1/2 transform -translate-x-1/2">
               <ChevronUp
                 className="w-8 h-8 md:w-10 md:h-10 text-primary cursor-pointer"
-                onClick={() => handleTopChange(top - 1)}
+                onClick={() => handleTopChange(top - stepSize)}
               />
             </div>
             <div className="absolute -top-8 -right-7 md:-right-8 transform -translate-x-1/2">
               <RotateCwSquare
                 className="w-4 h-4 md:w-6 md:h-6 text-primary cursor-pointer"
-                onClick={() => handleRotationChange(rotation + 1)}
+                onClick={() => handleRotationChange(rotation + stepSize)}
               />
             </div>
             <div className="absolute -bottom-8 -left-3 md:-left-2 transform -translate-x-1/2">
               <ChevronsLeftRight
                 className="w-4 h-4 md:w-6 md:h-6 text-primary cursor-pointer"
-                onClick={() => handleWidthChange(width + 1)}
+                onClick={() => handleWidthChange(width + stepSize)}
               />
             </div>
             <div className="absolute -bottom-8 -left-8 transform -translate-x-1/2">
               <ChevronsRightLeft
                 className="w-4 h-4 md:w-6 md:h-6 text-primary cursor-pointer"
-                onClick={() => handleWidthChange(width - 1)}
+                onClick={() => handleWidthChange(width - stepSize)}
               />
             </div>
             <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2">
               <ChevronDown
                 className="w-8 h-8 md:w-10 md:h-10 text-primary cursor-pointer"
-                onClick={() => handleTopChange(top + 1)}
+                onClick={() => handleTopChange(top + stepSize)}
               />
             </div>
             <div className="absolute -bottom-8 -right-7 md:-right-8 transform -translate-x-1/2">
               <ChevronsUpDown
                 className="w-4 h-4 md:w-6 md:h-6 text-primary cursor-pointer"
-                onClick={() => handleHeightChange(height + 1)}
+                onClick={() => handleHeightChange(height + stepSize)}
               />
             </div>
             <div className="absolute -bottom-8 -right-12 transform -translate-x-1/2">
               <ChevronsDownUp
                 className="w-4 h-4 md:w-6 md:h-6 text-primary cursor-pointer"
-                onClick={() => handleHeightChange(height - 1)}
+                onClick={() => handleHeightChange(height - stepSize)}
               />
             </div>
             <div className="absolute top-1/2 -left-8 transform -translate-y-1/2">
               <ChevronLeft
                 className="w-8 h-8 md:w-10 md:h-10 text-primary cursor-pointer"
-                onClick={() => handleLeftChange(left - 1)}
+                onClick={() => handleLeftChange(left - stepSize)}
               />
             </div>
             <div className="absolute top-1/2 -right-11 md:-right-16 transform -translate-y-1/2">
@@ -279,7 +281,7 @@ const ParkingSlot: React.FC<ParkingSlotProps> = ({
             <div className="absolute top-1/2 -right-[70px] md:-right-24 transform -translate-y-1/2">
               <ChevronRight
                 className="w-8 h-8 md:w-10 md:h-10 text-primary cursor-pointer"
-                onClick={() => handleLeftChange(left + 1)}
+                onClick={() => handleLeftChange(left + stepSize)}
               />
             </div>
           </>
