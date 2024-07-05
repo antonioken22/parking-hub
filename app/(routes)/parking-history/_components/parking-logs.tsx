@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-import DataList from "./dashboard-data-list-logs";
-import Announcement from "./dashboard-announcement";
+import DataList from "./data-list-logs";
+import Announcement from "./announcement";
 
 type Tab = "logs" | "vehicles" | "delete" | "configure";
 
