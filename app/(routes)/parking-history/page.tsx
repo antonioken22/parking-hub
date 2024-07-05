@@ -5,6 +5,7 @@ import { FileClock } from "lucide-react";
 import { Spinner } from "@/components/spinner";
 import { Heading } from "@/app/(routes)/_components/heading";
 import useAuthState from "@/hooks/useAuthState";
+import ParkingLogs from "./_components/dashboard-layout";
 
 const ParkingHistoryPage = () => {
   const { userId, loading } = useAuthState();
@@ -30,7 +31,9 @@ const ParkingHistoryPage = () => {
               />
             </div>
           </div>
-          <div className="px-4 lg:px-8 space-y-4 pt-4"></div>
+          <div className="px-4 lg:px-8 space-y-4 pt-4">
+            <ParkingLogs />
+          </div>
         </div>
       )}
     </>

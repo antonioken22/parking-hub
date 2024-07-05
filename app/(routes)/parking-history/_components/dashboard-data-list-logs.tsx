@@ -1,6 +1,8 @@
-import { useEffect, useState, useCallback } from 'react';
-import { collection, getDocs, Timestamp } from 'firebase/firestore';
+import { useEffect, useState, useCallback } from "react";
+import { collection, getDocs, Timestamp } from "firebase/firestore";
+
 import { firestore } from "@/firebase/config";
+import { Spinner } from "@/components/spinner";
 
 type User = {
   id: string;
@@ -16,15 +18,15 @@ const DataList: React.FC<{ tab: string }> = ({ tab }) => {
 
   const fetchUsers = useCallback(async () => {
     setLoading(true);
-    const querySnapshot = await getDocs(collection(firestore, 'users'));
-    const usersData: User[] = querySnapshot.docs.map(doc => {
+    const querySnapshot = await getDocs(collection(firestore, "users"));
+    const usersData: User[] = querySnapshot.docs.map((doc) => {
       const data = doc.data();
       return {
         id: doc.id,
         firstName: data.firstName,
         email: data.email,
         vehicle: data.vehicle,
-        timeIn: data.timeIn instanceof Timestamp ? data.timeIn : null
+        timeIn: data.timeIn instanceof Timestamp ? data.timeIn : null,
       } as User;
     });
     setUsers(usersData);
@@ -36,15 +38,25 @@ const DataList: React.FC<{ tab: string }> = ({ tab }) => {
   }, [fetchUsers, tab]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center relative inset-y-0 h-full w-full z-50">
+        <Spinner size="lg" text="background" />
+      </div>
+    );
   }
 
   return (
     <div className="flex flex-col space-y-4">
-      {users.map(user => (
+      {users.map((user) => (
         <div key={user.id} className="p-4 bg-primary rounded-lg shadow">
-          {tab === 'logs' && <p>{user.timeIn ? user.timeIn.toDate().toLocaleString() : 'No time available'}</p>}
-          {tab === 'vehicles' && <p>{user.vehicle}</p>}
+          {tab === "logs" && (
+            <p>
+              {user.timeIn
+                ? user.timeIn.toDate().toLocaleString()
+                : "No time available"}
+            </p>
+          )}
+          {tab === "vehicles" && <p>{user.vehicle}</p>}
         </div>
       ))}
     </div>
