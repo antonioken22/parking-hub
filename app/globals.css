@@ -9,6 +9,8 @@
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
 
+    --tabs: 210 40% 98%;
+
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
 
@@ -42,6 +44,8 @@
 
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
+
+    --tabs: 215.4 16.3% 46.9%;
 
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
@@ -80,3 +84,4 @@
     @apply bg-background text-foreground;
   }
 }
+
