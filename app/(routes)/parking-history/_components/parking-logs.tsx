@@ -61,7 +61,6 @@ const ParkingLogs: React.FC = () => {
           {renderContent()}
         </div>
       </div>
-      <Announcement />
     </div>
   );
 };

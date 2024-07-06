@@ -8,6 +8,10 @@ import { useState, useEffect } from "react";
 import { Spinner } from "@/components/spinner";
 import useAuthState from "@/hooks/useAuthState";
 import useParkingSlotCount from "@/hooks/useParkingSlotCount";
+import DashboardLayout from "./components/dashboard-layout";
+import UserProfile from "../parking-history/_components/user-profile";
+import Notifications from "../parking-history/_components/notification";
+import MobileFriendlyComponent from "./components/dashboard-announcement";
 
 const DashboardPage = () => {
   const { userId, userFirstname, userLastname, loading } = useAuthState();
@@ -109,7 +113,7 @@ const DashboardPage = () => {
   return (
     <>
       {!loading && userId && (
-        <div>
+        <div className="flex flex-col md:flex-row">
           <main className="flex flex-col items-center justify-center flex-grow mt-10">
             {userId && (
               <h1 className="text-xl md:text-4xl font-bold mb-6 md:ml-10">
@@ -117,7 +121,7 @@ const DashboardPage = () => {
                 {userFirstname} {userLastname}!
               </h1>
             )}
-            <div className="w-full max-w-7xl p-4">
+            <div className="grid-cols-1 w-full max-w-7xl p-4">
               <h2 className="text-xl md:text-2xl font-bold mb-4">
                 Parking Slot Status{" "}
                 <span className="text-orange-500">(Overview)</span>
@@ -129,6 +133,13 @@ const DashboardPage = () => {
               />
             </div>
           </main>
+          <aside className="w-full md:w-1/3 p-4">
+          <UserProfile userId={userId} />
+          <div className="my-10" />
+          <Notifications userId={userId} />
+          <div className="my-10" />
+          <MobileFriendlyComponent />
+      </aside>
         </div>
       )}
     </>
