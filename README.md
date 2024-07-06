@@ -52,19 +52,19 @@ npm run dev
   </thead>
   <tbody>
     <tr>
-      <td><img src="https://cdn-icons-png.flaticon.com/128/11824/11824933.png" alt="Arrow Up" width="24"/> or <img src="https://cdn-icons-png.flaticon.com/128/9542/9542407.png" alt="W key" width="24"/></td>
+      <td><img src="https://cdn-icons-png.flaticon.com/128/11824/11824933.png" alt="Arrow Up" width="24"/> , <img src="https://cdn-icons-png.flaticon.com/128/9542/9542407.png" alt="W key" width="24"/></td>
       <td>Move Up</td>
     </tr>
     <tr>
-      <td><img src="https://cdn-icons-png.flaticon.com/128/11824/11824824.png" alt="Arrow Down" width="24"/> or <img src="https://cdn-icons-png.flaticon.com/128/9542/9542382.png" alt="S key" width="24"/></td>
-      <td>Move Down</td>
-    </tr>
-    <tr>
-      <td><img src="https://cdn-icons-png.flaticon.com/128/11824/11824822.png" alt="Arrow Left" width="24"/> or <img src="https://cdn-icons-png.flaticon.com/128/9542/9542279.png" alt="A key" width="24"/></td>
+      <td><img src="https://cdn-icons-png.flaticon.com/128/11824/11824822.png" alt="Arrow Left" width="24"/> , <img src="https://cdn-icons-png.flaticon.com/128/9542/9542279.png" alt="A key" width="24"/></td>
       <td>Move Left</td>
     </tr>
     <tr>
-      <td><img src="https://cdn-icons-png.flaticon.com/128/11824/11824805.png" alt="Arrow Right" width="24"/> or <img src="https://cdn-icons-png.flaticon.com/128/9542/9542297.png" alt="D key" width="24"/></td>
+    <tr>
+      <td><img src="https://cdn-icons-png.flaticon.com/128/11824/11824824.png" alt="Arrow Down" width="24"/> , <img src="https://cdn-icons-png.flaticon.com/128/9542/9542382.png" alt="S key" width="24"/></td>
+      <td>Move Down</td>
+    </tr>
+      <td><img src="https://cdn-icons-png.flaticon.com/128/11824/11824805.png" alt="Arrow Right" width="24"/> , <img src="https://cdn-icons-png.flaticon.com/128/9542/9542297.png" alt="D key" width="24"/></td>
       <td>Move Right</td>
     </tr>
     <tr>
