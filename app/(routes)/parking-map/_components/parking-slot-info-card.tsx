@@ -283,8 +283,8 @@ export function ParkingSlotInfoCard({
                       type="number"
                       placeholder="Rotation (°)"
                       value={editRotation}
-                      min={-90}
-                      max={90}
+                      min={-180}
+                      max={180}
                       onChange={(e) =>
                         setEditRotation(parseFloat(e.target.value))
                       }

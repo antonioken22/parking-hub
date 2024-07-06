@@ -19,6 +19,7 @@ const useParkingSlots = (databaseTable: string) => {
     null
   );
 
+  // Read from Firestore
   const fetchParkingSlots = useCallback(async () => {
     try {
       const slotsRef = collection(firestore, databaseTable);
@@ -53,6 +54,7 @@ const useParkingSlots = (databaseTable: string) => {
     });
   }, [fetchParkingSlots]);
 
+  // Create/Add from Firestore
   const addParkingSlot = useCallback(
     async (newSlot: Partial<ParkingSlotData>) => {
       try {
@@ -70,6 +72,7 @@ const useParkingSlots = (databaseTable: string) => {
     [databaseTable]
   );
 
+  // Update/Save to Firestore
   const saveParkingSlots = useCallback(async () => {
     try {
       const slotsRef = collection(firestore, databaseTable);
@@ -99,6 +102,7 @@ const useParkingSlots = (databaseTable: string) => {
     }
   }, [databaseTable, parkingSlots]);
 
+  // Delete from Firestore
   const deleteParkingSlot = useCallback(
     async (slotId: string) => {
       try {

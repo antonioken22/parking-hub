@@ -13,6 +13,9 @@ import {
   ChevronsLeftRight,
   ChevronsUpDown,
   ChevronsDownUp,
+  Check,
+  TicketCheck,
+  OctagonX,
 } from "lucide-react";
 
 import { ParkingSlotInfoCard } from "./parking-slot-info-card";
@@ -92,7 +95,7 @@ const ParkingSlot: React.FC<ParkingSlotProps> = ({
 
   const handleRotationChange = useCallback(
     (newRotation: number) => {
-      newRotation = Math.max(-90, Math.min(90, newRotation));
+      newRotation = Math.max(-180, Math.min(180, newRotation));
       setRotation(newRotation);
       onRotationChange(index, newRotation);
     },
@@ -136,10 +139,10 @@ const ParkingSlot: React.FC<ParkingSlotProps> = ({
               handleWidthChange(width + stepSize);
               break;
             case "r":
-              handleHeightChange(width - stepSize);
+              handleHeightChange(width + stepSize);
               break;
             case "f":
-              handleHeightChange(height + stepSize);
+              handleHeightChange(height - stepSize);
               break;
             default:
               break;
@@ -227,10 +230,30 @@ const ParkingSlot: React.FC<ParkingSlotProps> = ({
           style={{ backgroundColor: slot.color }}
         ></div>
         <div className="absolute inset-0 flex justify-center items-center">
-          <Car
-            className="w-6 h-6 md:w-8 md:h-8 absolute z-20"
-            style={{ color: slot.color }}
-          />
+          {slot.status === "Available" && (
+            <Check
+              className="w-4 h-4 md:w-6 md:h-6 absolute z-20"
+              style={{ color: slot.color }}
+            />
+          )}
+          {slot.status === "Occupied" && (
+            <Car
+              className="w-4 h-4 md:w-6 md:h-6 absolute z-20"
+              style={{ color: slot.color }}
+            />
+          )}
+          {slot.status === "Reserved" && (
+            <TicketCheck
+              className="w-4 h-4 md:w-6 md:h-6 absolute z-20"
+              style={{ color: slot.color }}
+            />
+          )}
+          {slot.status === "Unavailable" && (
+            <OctagonX
+              className="w-4 h-4 md:w-6 md:h-6 absolute z-20"
+              style={{ color: slot.color }}
+            />
+          )}
         </div>
         {selected && (
           <div className="absolute top-1/2 -right-6 md:-right-8 transform -translate-y-1/2">
