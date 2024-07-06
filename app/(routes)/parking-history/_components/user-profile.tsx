@@ -48,9 +48,9 @@ const UserProfile: React.FC<UserProfileProps> = ({ userId }) => {
 
   const handleUpload = async () => {
     if (!selectedFile) return;
-
+  
     setUploading(true);
-
+  
     try {
       const auth = getAuth();
       const currentUser = auth.currentUser;
@@ -58,13 +58,15 @@ const UserProfile: React.FC<UserProfileProps> = ({ userId }) => {
         const avatarStgRef = ref(storage, `Usuarios/${currentUser.uid}/avatar.jpg`);
         await uploadBytes(avatarStgRef, selectedFile);
         const downloadURL = await getDownloadURL(avatarStgRef);
-
-        await currentUser.updateProfile({ photoURL: downloadURL });
-
+  
+        // Update user profile in Firebase Authentication
+  
+        // Update user document in Firestore
         await updateDoc(doc(firestore, 'users', currentUser.uid), {
           photoUrl: downloadURL,
         });
-
+  
+        // Update state with new photo URL
         setUser((prev) => (prev ? { ...prev, photoUrl: downloadURL } : null));
       }
     } catch (error) {

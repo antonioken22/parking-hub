@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { firestore } from '@/firebase/config';
-import MobileFriendlyComponent from './dashboard-announcement';
+
 type NotificationsProps = {
   userId: string;
 };
