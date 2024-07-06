@@ -60,7 +60,7 @@ npm run dev
       <td>Move Down</td>
     </tr>
     <tr>
-      <td><img src="https://cdn-icons-png.flaticon.com/128/11824/11824822.png" alt="Arrow Left" width="24"/> or <img src="https://cdn-icons-png.flaticon.com/128/9542/9542379.png" alt="A key" width="24"/></td>
+      <td><img src="https://cdn-icons-png.flaticon.com/128/11824/11824822.png" alt="Arrow Left" width="24"/> or <img src="https://cdn-icons-png.flaticon.com/128/9542/9542279.png" alt="A key" width="24"/></td>
       <td>Move Left</td>
     </tr>
     <tr>
@@ -76,11 +76,11 @@ npm run dev
       <td>Rotate Clockwise</td>
     </tr>
     <tr>
-      <td><img src="https://cdn-icons-png.flaticon.com/128/9542/9542257.png" alt="1 key" width="24"/></td>
+      <td><img src="https://cdn-icons-png.flaticon.com/128/11863/11863923.png" alt="1 key" width="24"/></td>
       <td>Decrease Width</td>
     </tr>
     <tr>
-      <td><img src="https://cdn-icons-png.flaticon.com/128/9542/9542258.png" alt="2 key" width="24"/></td>
+      <td><img src="https://cdn-icons-png.flaticon.com/128/10231/10231834.png" alt="2 key" width="24"/></td>
       <td>Increase Width</td>
     </tr>
     <tr>
