@@ -52,27 +52,27 @@ npm run dev
   </thead>
   <tbody>
     <tr>
-      <td><img src="https://cdn-icons-png.flaticon.com/128/9542/9542246.png" alt="Arrow Up" width="24"/> or <img src="https://cdn-icons-png.flaticon.com/128/9542/9542275.png" alt="W key" width="24"/></td>
+      <td><img src="https://cdn-icons-png.flaticon.com/128/11824/11824933.png" alt="Arrow Up" width="24"/> or <img src="https://cdn-icons-png.flaticon.com/128/9542/9542407.png" alt="W key" width="24"/></td>
       <td>Move Up</td>
     </tr>
     <tr>
-      <td><img src="https://cdn-icons-png.flaticon.com/128/9542/9542250.png" alt="Arrow Down" width="24"/> or <img src="https://cdn-icons-png.flaticon.com/128/9542/9542269.png" alt="S key" width="24"/></td>
+      <td><img src="https://cdn-icons-png.flaticon.com/128/11824/11824824.png" alt="Arrow Down" width="24"/> or <img src="https://cdn-icons-png.flaticon.com/128/9542/9542382.png" alt="S key" width="24"/></td>
       <td>Move Down</td>
     </tr>
     <tr>
-      <td><img src="https://cdn-icons-png.flaticon.com/128/9542/9542248.png" alt="Arrow Left" width="24"/> or <img src="https://cdn-icons-png.flaticon.com/128/9542/9542279.png" alt="A key" width="24"/></td>
+      <td><img src="https://cdn-icons-png.flaticon.com/128/11824/11824822.png" alt="Arrow Left" width="24"/> or <img src="https://cdn-icons-png.flaticon.com/128/9542/9542379.png" alt="A key" width="24"/></td>
       <td>Move Left</td>
     </tr>
     <tr>
-      <td><img src="https://cdn-icons-png.flaticon.com/128/9542/9542252.png" alt="Arrow Right" width="24"/> or <img src="https://cdn-icons-png.flaticon.com/128/9542/9542272.png" alt="D key" width="24"/></td>
+      <td><img src="https://cdn-icons-png.flaticon.com/128/11824/11824805.png" alt="Arrow Right" width="24"/> or <img src="https://cdn-icons-png.flaticon.com/128/9542/9542297.png" alt="D key" width="24"/></td>
       <td>Move Right</td>
     </tr>
     <tr>
-      <td><img src="https://cdn-icons-png.flaticon.com/128/9542/9542267.png" alt="Q key" width="24"/></td>
+      <td><img src="https://cdn-icons-png.flaticon.com/128/9542/9542370.png" alt="Q key" width="24"/></td>
       <td>Rotate Counterclockwise</td>
     </tr>
     <tr>
-      <td><img src="https://cdn-icons-png.flaticon.com/128/9542/9542261.png" alt="E key" width="24"/></td>
+      <td><img src="https://cdn-icons-png.flaticon.com/128/9542/9542302.png" alt="E key" width="24"/></td>
       <td>Rotate Clockwise</td>
     </tr>
     <tr>
@@ -84,11 +84,11 @@ npm run dev
       <td>Increase Width</td>
     </tr>
     <tr>
-      <td><img src="https://cdn-icons-png.flaticon.com/128/9542/9542276.png" alt="R key" width="24"/></td>
+      <td><img src="https://cdn-icons-png.flaticon.com/128/9542/9542375.png" alt="R key" width="24"/></td>
       <td>Decrease Height</td>
     </tr>
     <tr>
-      <td><img src="https://cdn-icons-png.flaticon.com/128/9542/9542259.png" alt="F key" width="24"/></td>
+      <td><img src="https://cdn-icons-png.flaticon.com/128/9542/9542307.png" alt="F key" width="24"/></td>
       <td>Increase Height</td>
     </tr>
   </tbody>
