@@ -8,7 +8,6 @@ import { doc, getDoc } from "firebase/firestore";
 import { auth, firestore } from "@/firebase/config";
 import { Spinner } from "@/components/spinner";
 import { ModeToggle } from "@/components/mode-toggle";
-import DashboardLayout from "@/app/(landing)/_components/dashboard-layout";
 
 import DashboardLayout from "@/app/(landing)/_components/dashboard-layout";
 
@@ -51,15 +50,11 @@ const DashboardPage = () => {
       <main className="flex flex-col items-center justify-center flex-grow mt-10">
         {userName && (
           <h1 className="text-4xl font-bold mb-6 ml-10">
-            Welcome, {userName}!
+            Welcome, {userName}!  
           </h1>
           
         )}
-<<<<<<< HEAD
         <div className="flex-col items-center w-2/3">
-=======
-        <div className="items-center">
->>>>>>> 40747e5c2cadceabc7427188d1b760da293799bb
         <DashboardLayout />
         </div>
         
