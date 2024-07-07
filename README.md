@@ -19,9 +19,9 @@ By Team Wild Tech
 # FIREBASE APP (AUTH, DATABASE)
 # Can be obtained at: 
 # 1. https://console.firebase.google.com
-# 2. Click into your project or create new if you don't have one yet.
-# Project Overview > Project Settings > General
-# Your apps > SDK setup and configuration
+# 2. Click into your project or create new if you don't have one yet. Note: This configuration has Google Analytics turned on.
+# 3. Project Overview > Project Settings > General
+# 4. Your apps > SDK setup and configuration
 
 NEXT_PUBLIC_FIREBASE_API_KEY=
 NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
@@ -32,12 +32,21 @@ NEXT_PUBLIC_FIREBASE_APP_ID=
 NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=
 
 # FIREBASE CLOUD MESSAGING (FOR PUSH NOTIFS)
+# Can be obtained at: 
+# Steps 1-2 above.
+# 3. Project Overview > Project Settings > Cloud Messaging
+# 4. Web configuration > Generate a key pair
 
 NEXT_PUBLIC_FIREBASE_FCM_VAPID_KEY=
 #----------------------------------------------#
 
 # FIREBASE SERVICE KEYS 
 #----------------------------------------------#
+# Can be obtained at: 
+# Steps 1-2 above.
+# 3. Project Overview > Project Settings > Service Accounts
+# 4. Generate new private key (It shall let you download a .json file) > Extract the contents with their respective fields below
+
 FIREBASE_PROJECT_ID=
 FIREBASE_PRIVATE_KEY=
 FIREBASE_CLIENT_EMAIL=
