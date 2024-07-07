@@ -36,6 +36,7 @@ NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=
 # Steps 1-2 above.
 # 3. Project Overview > Project Settings > Cloud Messaging
 # 4. Web configuration > Generate a key pair
+# Note: Don't forget to edit the `@/public/firebase-messaging-sw.js` file with your actual setup and config keys from above.
 
 NEXT_PUBLIC_FIREBASE_FCM_VAPID_KEY=
 #----------------------------------------------#
@@ -77,8 +78,8 @@ npm install
 npm run dev
 ```
 
-## Admin Keyboard Controls
-### Parking Slot Component
+## Admin Only
+### Keyboard Keys for Editing a Parking Slot Component
 
 <table>
   <thead>
