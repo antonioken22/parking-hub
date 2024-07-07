@@ -4,8 +4,9 @@ By Team Wild Tech
 
 ## Services Used
 
-- User Authentication: [Firebase](https://firebase.google.com/docs/auth/)
-- Database Management: [Firestore](https://firebase.google.com/docs/firestore/)
+- User Authentication: [Firebase Authentication](https://firebase.google.com/docs/auth/)
+- Database Management: [Firebase Firestore](https://firebase.google.com/docs/firestore/)
+- Push Notification Service: [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging/)
 - User Interface Components: [shadcn-ui](https://ui.shadcn.com/), [sonner](https://sonner.emilkowal.ski/), & [react-datetime-picker](https://www.npmjs.com/package/react-datetime-picker)
 - User Interface Theme: [next-themes](https://www.npmjs.com/package/next-themes)
 - Icon Pack: [lucide-react](https://www.npmjs.com/package/lucide-react)
@@ -13,9 +14,15 @@ By Team Wild Tech
 ## .env.local
 
 ```env
-# LOCALHOST CONFIGS
+# LOCALHOST CONFIGS 
 #----------------------------------------------#
 # FIREBASE APP (AUTH, DATABASE)
+# Can be obtained at: 
+# 1. https://console.firebase.google.com
+# 2. Click into your project or create new if you don't have one yet.
+# Project Overview > Project Settings > General
+# Your apps > SDK setup and configuration
+
 NEXT_PUBLIC_FIREBASE_API_KEY=
 NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
 NEXT_PUBLIC_FIREBASE_PROJECT_ID=
@@ -25,21 +32,7 @@ NEXT_PUBLIC_FIREBASE_APP_ID=
 NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=
 
 # FIREBASE CLOUD MESSAGING (FOR PUSH NOTIFS)
-NEXT_PUBLIC_FIREBASE_FCM_VAPID_KEY=
-#----------------------------------------------#
 
-# PRODUCTION CONFIGS
-#----------------------------------------------#
-# FIREBASE APP (AUTH, DATABASE)
-NEXT_PUBLIC_FIREBASE_API_KEY=
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
-NEXT_PUBLIC_FIREBASE_PROJECT_ID=
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
-NEXT_PUBLIC_FIREBASE_APP_ID=
-NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=
-
-# FIREBASE CLOUD MESSAGING (FOR PUSH NOTIFS)
 NEXT_PUBLIC_FIREBASE_FCM_VAPID_KEY=
 #----------------------------------------------#
 
