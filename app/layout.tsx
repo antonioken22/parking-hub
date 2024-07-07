@@ -54,6 +54,7 @@ export default function RootLayout({
                 error: "bg-secondary text-red-500 border border-red-500",
                 warning:
                   "bg-secondary text-yellow-500 border border-yellow-500",
+                info: "bg-secondary text-primary border border-primary",
               },
             }}
           />

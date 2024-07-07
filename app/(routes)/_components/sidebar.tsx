@@ -9,6 +9,7 @@ import {
   LogOut,
   Settings,
   SquareParking,
+  Ticket,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { signOut } from "firebase/auth";
@@ -28,6 +29,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useUserRole } from "@/hooks/useUserRole";
 
 const routes = [
   {
@@ -62,7 +64,17 @@ const routes = [
   },
 ];
 
+const adminRoutes = [
+  {
+    label: "Set Booking",
+    icon: Ticket,
+    color: "text-primary",
+    href: "/booking-admin",
+  },
+];
+
 export const Sidebar = () => {
+  const userRole = useUserRole();
   const pathname = usePathname();
 
   const router = useRouter();
@@ -131,6 +143,30 @@ export const Sidebar = () => {
             </Link>
           ))}
         </div>
+        {userRole === "admin" && (
+          <>
+            <hr className="border border-primary my-2" />
+            <div className="space-y-1">
+              {adminRoutes.map((route) => (
+                <Link
+                  key={route.href}
+                  href={route.href}
+                  className={cn(
+                    "text-sm group flex p-3 w-full justify-start font-medium cursor-pointer hover:text-secondary-foreground hover:bg-secondary-foreground/10 rounded-lg transition",
+                    pathname === route.href
+                      ? "text-secondary-foreground bg-secondary-foreground/10"
+                      : "text-muted-foreground"
+                  )}
+                >
+                  <div className="flex items-center flex-1">
+                    <route.icon className={cn("h-5 w-5 mr-3", route.color)} />
+                    {route.label}
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </>
+        )}
       </div>
       <AlertDialog>
         <AlertDialogTrigger asChild>
