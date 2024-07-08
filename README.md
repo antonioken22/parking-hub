@@ -4,12 +4,17 @@ By Team Wild Tech
 
 ## Services Used
 
+### Backend
 - User Authentication: [Firebase Authentication](https://firebase.google.com/docs/auth/)
 - Database Management: [Firebase Firestore](https://firebase.google.com/docs/firestore/)
+- Media Storage: [Firebase Storage](https://firebase.google.com/docs/storage/)
 - Push Notification Service: [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging/)
-- User Interface Components: [shadcn-ui](https://ui.shadcn.com/), [sonner](https://sonner.emilkowal.ski/), & [react-datetime-picker](https://www.npmjs.com/package/react-datetime-picker)
+
+### Frontend
 - User Interface Theme: [next-themes](https://www.npmjs.com/package/next-themes)
+- User Interface Components: [shadcn-ui](https://ui.shadcn.com/), [sonner](https://sonner.emilkowal.ski/), & [react-datetime-picker](https://www.npmjs.com/package/react-datetime-picker)
 - Icon Pack: [lucide-react](https://www.npmjs.com/package/lucide-react)
+- Data Visualization: [chart.js](https://www.chartjs.org/)
 
 ## .env.local
 
@@ -78,59 +83,59 @@ npm install
 npm run dev
 ```
 
-## Admin Only
-### Keyboard Keys for Editing a Parking Slot Component
-
-<table>
-  <thead>
-    <tr>
-      <th>Key</th>
-      <th>Function</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><img src="https://cdn-icons-png.flaticon.com/128/11824/11824933.png" alt="Arrow Up" width="24"/> , <img src="https://cdn-icons-png.flaticon.com/128/9542/9542407.png" alt="W key" width="24"/></td>
-      <td>Move Up</td>
-    </tr>
-    <tr>
-      <td><img src="https://cdn-icons-png.flaticon.com/128/11824/11824822.png" alt="Arrow Left" width="24"/> , <img src="https://cdn-icons-png.flaticon.com/128/9542/9542279.png" alt="A key" width="24"/></td>
-      <td>Move Left</td>
-    </tr>
-    <tr>
-    <tr>
-      <td><img src="https://cdn-icons-png.flaticon.com/128/11824/11824824.png" alt="Arrow Down" width="24"/> , <img src="https://cdn-icons-png.flaticon.com/128/9542/9542382.png" alt="S key" width="24"/></td>
-      <td>Move Down</td>
-    </tr>
-      <td><img src="https://cdn-icons-png.flaticon.com/128/11824/11824805.png" alt="Arrow Right" width="24"/> , <img src="https://cdn-icons-png.flaticon.com/128/9542/9542297.png" alt="D key" width="24"/></td>
-      <td>Move Right</td>
-    </tr>
-    <tr>
-      <td><img src="https://cdn-icons-png.flaticon.com/128/9542/9542370.png" alt="Q key" width="24"/></td>
-      <td>Rotate Counterclockwise</td>
-    </tr>
-    <tr>
-      <td><img src="https://cdn-icons-png.flaticon.com/128/9542/9542302.png" alt="E key" width="24"/></td>
-      <td>Rotate Clockwise</td>
-    </tr>
-    <tr>
-      <td><img src="https://cdn-icons-png.flaticon.com/128/11863/11863923.png" alt="1 key" width="24"/></td>
-      <td>Decrease Width</td>
-    </tr>
-    <tr>
-      <td><img src="https://cdn-icons-png.flaticon.com/128/10231/10231834.png" alt="2 key" width="24"/></td>
-      <td>Increase Width</td>
-    </tr>
-    <tr>
-      <td><img src="https://cdn-icons-png.flaticon.com/128/9542/9542375.png" alt="R key" width="24"/></td>
-      <td>Decrease Height</td>
-    </tr>
-    <tr>
-      <td><img src="https://cdn-icons-png.flaticon.com/128/9542/9542307.png" alt="F key" width="24"/></td>
-      <td>Increase Height</td>
-    </tr>
-  </tbody>
-</table>
+> ## Admin Only
+> ### Keyboard Keys for Editing a Parking Slot Component
+> 
+> <table>
+>   <thead>
+>     <tr>
+>       <th>Key</th>
+>       <th>Function</th>
+>     </tr>
+>   </thead>
+>   <tbody>
+>     <tr>
+>       <td><img src="https://cdn-icons-png.flaticon.com/128/12221/12221835.png" alt="Arrow Up" width="32"/> , <img src="https://cdn-icons-png.flaticon.com/128/12222/12222203.png" alt="W key" width="32"/></td>
+>     <td>Move Up</td>
+>    </tr>
+>    <tr>
+>      <td><img src="https://cdn-icons-png.flaticon.com/128/12221/12221842.png" alt="Arrow Left" width="32"/> , <img src="https://cdn-icons-png.flaticon.com/128/12222/12222021.png" alt="A key" width="32"/></td>
+>      <td>Move Left</td>
+>    </tr>
+>    <tr>
+>      <td><img src="https://cdn-icons-png.flaticon.com/128/12221/12221829.png" alt="Arrow Down" width="32"/> , <img src="https://cdn-icons-png.flaticon.com/128/12222/12222164.png" alt="S key" width="32"/></td>
+>      <td>Move Down</td>
+>    </tr>
+>    <tr>
+>      <td><img src="https://cdn-icons-png.flaticon.com/128/12221/12221854.png" alt="Arrow Right" width="32"/> , <img src="https://cdn-icons-png.flaticon.com/128/12222/12222045.png" alt="D key" width="32"/></td>
+>      <td>Move Right</td>
+>    </tr>
+>    <tr>
+>      <td><img src="https://cdn-icons-png.flaticon.com/128/12222/12222147.png" alt="Q key" width="32"/></td>
+>      <td>Rotate Counterclockwise</td>
+>    </tr>
+>    <tr>
+>      <td><img src="https://cdn-icons-png.flaticon.com/128/12222/12222054.png" alt="E key" width="32"/></td>
+>      <td>Rotate Clockwise</td>
+>    </tr>
+>    <tr>
+>      <td><img src="https://cdn-icons-png.flaticon.com/128/12222/12222227.png" alt="Z key" width="32"/></td>
+>      <td>Decrease Width</td>
+>    </tr>
+>    <tr>
+>      <td><img src="https://cdn-icons-png.flaticon.com/128/12222/12222211.png" alt="X key" width="32"/></td>
+>      <td>Increase Width</td>
+>    </tr>
+>    <tr>
+>      <td><img src="https://cdn-icons-png.flaticon.com/128/12222/12222155.png" alt="R key" width="32"/></td>
+>      <td>Decrease Height</td>
+>    </tr>
+>    <tr>
+>      <td><img src="https://cdn-icons-png.flaticon.com/128/12222/12222061.png" alt="F key" width="32"/></td>
+>      <td>Increase Height</td>
+>    </tr>
+>  </tbody>
+> </table>
 
 ## References
 
