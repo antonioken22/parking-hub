@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { getAuth, updateProfile } from 'firebase/auth';
-import { firestore, storage } from '@/firebase/config';
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import { doc, getDoc } from "firebase/firestore";
+
+import { firestore } from "@/firebase/config";
 
 type UserProfileProps = {
   userId: string;
@@ -16,23 +16,21 @@ type User = {
   photoUrl: string | null;
 };
 
-const UserProfile2: React.FC<UserProfileProps> = ({ userId }) => {
+const UserProfileDisplay: React.FC<UserProfileProps> = ({ userId }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [uploading, setUploading] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        console.log('Fetching user data...');
-        const userDoc = await getDoc(doc(firestore, 'users', userId));
+        console.log("Fetching user data...");
+        const userDoc = await getDoc(doc(firestore, "users", userId));
         if (userDoc.exists()) {
           setUser(userDoc.data() as User);
-          console.log('User data fetched:', userDoc.data());
+          console.log("User data fetched:", userDoc.data());
         }
       } catch (error) {
-        console.error('Error fetching user:', error);
+        console.error("Error fetching user:", error);
       } finally {
         setLoading(false);
       }
@@ -40,51 +38,6 @@ const UserProfile2: React.FC<UserProfileProps> = ({ userId }) => {
 
     fetchUser();
   }, [userId]);
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setSelectedFile(e.target.files[0]);
-      console.log('File selected:', e.target.files[0]);
-    }
-  };
-
-  const handleUpload = async () => {
-    if (!selectedFile) {
-      console.error('No file selected for upload.');
-      return;
-    }
-
-    setUploading(true);
-
-    try {
-      const auth = getAuth();
-      const currentUser = auth.currentUser;
-      if (currentUser) {
-        const avatarStgRef = ref(storage, `Usuarios/${currentUser.uid}/avatar.jpg`);
-        console.log('Uploading file to storage...');
-        await uploadBytes(avatarStgRef, selectedFile);
-        console.log('File uploaded. Getting download URL...');
-        const downloadURL = await getDownloadURL(avatarStgRef);
-        console.log('Download URL obtained:', downloadURL);
-
-        console.log('Updating user profile...');
-        await updateProfile(currentUser, { photoURL: downloadURL });
-
-        console.log('Updating Firestore document...');
-        await updateDoc(doc(firestore, 'users', currentUser.uid), {
-          photoUrl: downloadURL,
-        });
-
-        console.log('User profile and Firestore document updated successfully.');
-        setUser((prev) => (prev ? { ...prev, photoUrl: downloadURL } : null));
-      }
-    } catch (error) {
-      console.error('Error uploading file:', error);
-    } finally {
-      setUploading(false);
-      setSelectedFile(null);
-    }
-  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -97,7 +50,7 @@ const UserProfile2: React.FC<UserProfileProps> = ({ userId }) => {
   return (
     <div className="bg-primary-foreground text-white p-4 rounded-lg mb-4 max-w-md mx-auto">
       {user.photoUrl && (
-        <img
+        <Image
           src={user.photoUrl}
           alt="Profile"
           className="w-24 h-24 rounded-full mx-auto mb-4"
@@ -111,4 +64,4 @@ const UserProfile2: React.FC<UserProfileProps> = ({ userId }) => {
   );
 };
 
-export default UserProfile2;
+export default UserProfileDisplay;

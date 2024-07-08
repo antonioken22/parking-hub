@@ -8,7 +8,6 @@ import { useState, useEffect } from "react";
 import { Spinner } from "@/components/spinner";
 import useAuthState from "@/hooks/useAuthState";
 import useParkingSlotCount from "@/hooks/useParkingSlotCount";
-import UserProfile2 from "./components/user-profile-no-upload";
 
 const DashboardPage = () => {
   const { userId, userFirstname, userLastname, loading } = useAuthState();
@@ -132,7 +131,7 @@ const DashboardPage = () => {
           </main>
           {/*TODO: Improve the layout and UI */}
           {/* <aside className="w-full md:w-1/3 p-4">
-          <UserProfile2 userId={userId} />
+          <UserProfileDisplay userId={userId} />
           </aside> */}
         </div>
       )}

@@ -108,6 +108,7 @@ const Navbar = () => {
                 <div className="flex flex-col items-center gap-4">
                   <Input
                     type="file"
+                    accept="image/*"
                     onChange={(e) => {
                       if (e.target.files && e.target.files[0]) {
                         setImageUpload(e.target.files[0]);
