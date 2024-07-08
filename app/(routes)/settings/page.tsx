@@ -1,107 +1,68 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { onAuthStateChanged, signOut } from "firebase/auth";
-import type { User } from "firebase/auth";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { Settings } from "lucide-react";
 import {
   reauthenticateWithCredential,
   EmailAuthProvider,
   updatePassword,
 } from "firebase/auth";
+import { doc, updateDoc } from "firebase/firestore";
 import { auth, firestore } from "@/firebase/config";
-import { Spinner } from "@/components/spinner";
+import { toast } from "sonner";
 import { Heading } from "@/app/(routes)/_components/heading";
+import { Spinner } from "@/components/spinner";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import Dropdown from "@/components/ui/dropdown";
+import { Checkbox } from "@/components/ui/checkbox";
 import UserProfile from "../dashboard/components/user-profile";
 import useAuthState from "@/hooks/useAuthState";
-import UserProfile2 from "../dashboard/components/user-profile-no-upload";
-
-interface LoginActivity {
-  device: string;
-  location: string;
-  date: string;
-  time: string;
-}
 
 const SettingsPage = () => {
-  const { userId, userFirstname, userLastname } = useAuthState();
-  const [user, setUser] = useState<User | null>(null);
-  const [userName, setUserName] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeSection, setActiveSection] = useState<
     "account" | "password" | "notifications" | "help"
   >("account");
-  const [dropdownExpanded, setDropdownExpanded] = useState<string | null>(null);
-  const [firstName, setFirstName] = useState<string>("");
-  const [lastName, setLastName] = useState<string>("");
-  const [loginActivity, setLoginActivity] = useState<LoginActivity[]>([]);
+  const { userId, userFirstname, userLastname } = useAuthState();
+  const [firstName, setFirstName] = useState(userFirstname || "");
+  const [lastName, setLastName] = useState(userLastname || "");
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
 
-  const router = useRouter();
-
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        setUser(user);
-        const userDoc = await getDoc(doc(firestore, "users", user.uid));
-        if (userDoc.exists()) {
-          const userData = userDoc.data();
-          setUserName(`${userData.firstName} ${userData.lastName}`);
-          setFirstName(userData.firstName);
-          setLastName(userData.lastName);
-        }
-      } else {
-        router.push("/sign-in");
-      }
+    if (userId) {
+      setFirstName(userFirstname || "");
+      setLastName(userLastname || "");
       setLoading(false);
-    });
-
-    // Simulated login activity data (replace with actual implementation)
-    setLoginActivity([
-      {
-        device: "Desktop",
-        location: "Cebu City, Philippines",
-        date: "July 1, 2024",
-        time: "10:30 AM",
-      },
-      {
-        device: "Mobile",
-        location: "Cebu City, Philippines",
-        date: "July 3, 2024",
-        time: "3:15 PM",
-      },
-    ]);
-
-    // Cleanup subscription on unmount
-    return () => unsubscribe();
-  }, [router]);
-
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-      router.push("/sign-in");
-    } catch (error) {
-      console.error("Logout error:", error);
     }
-  };
+  }, [userId]);
 
   const handleChangePassword = async (event: React.FormEvent) => {
     event.preventDefault();
     setError(null);
     setMessage(null);
-
     if (newPassword !== confirmNewPassword) {
       setError("New passwords do not match.");
       return;
     }
-
     try {
       const user = auth.currentUser;
       if (user && user.email) {
@@ -112,6 +73,9 @@ const SettingsPage = () => {
         await reauthenticateWithCredential(user, credential);
         await updatePassword(user, newPassword);
         setMessage("Password changed successfully!");
+        setTimeout(() => {
+          setMessage(null);
+        }, 2000);
         setCurrentPassword("");
         setNewPassword("");
         setConfirmNewPassword("");
@@ -134,25 +98,24 @@ const SettingsPage = () => {
   };
 
   const handleSaveChanges = async () => {
-    if (user) {
+    if (userId) {
       try {
-        const userRef = doc(firestore, "users", user.uid);
+        const userRef = doc(firestore, "users", userId);
         await updateDoc(userRef, {
-          firstName: firstName,
-          lastName: lastName,
+          firstName,
+          lastName,
         });
-        setUserName(`${firstName} ${lastName}`);
-        setDropdownExpanded(null);
+        toast.success("Profile updated successfully!");
       } catch (error) {
         console.error("Error updating profile:", error);
+        setError("Error updating profile.");
       }
     }
   };
 
   const handleCancelChanges = () => {
-    setFirstName(userName?.split(" ")[0] || "");
-    setLastName(userName?.split(" ")[1] || "");
-    setDropdownExpanded(null);
+    setFirstName(userFirstname || "");
+    setLastName(userLastname || "");
   };
 
   if (loading) {
@@ -165,177 +128,117 @@ const SettingsPage = () => {
 
   return (
     <>
-      {!loading && userName && (
+      {!loading && userId && (
         <div className="p-4 lg:px-16 space-y-4 pt-4">
-          
           <div className="flex items-center gap-x-2 mr-auto pl-4">
             <Settings className="w-10 h-10 text-primary" />
             <div>
               <Heading
                 title="Settings"
                 description="Manage account settings."
-                
               />
             </div>
-            <div className="flex justify-end">
-            <div className="ml-auto">
-              {userId && <UserProfile2 userId={userId} />}
-            </div>
-          </div>
-            
           </div>
 
           <div className="px-4 lg:px-16 space-y-4 pt-4">
             <nav className="flex space-x-4 border-b pb-2 flex-nowrap overflow-x-auto">
-              <button
-                className={`flex-1 px-3 py-2 rounded text-center ${
-                  activeSection === "account"
-                    ? "bg-primary text-white"
-                    : "bg-transparent text-gray-700"
-                }`}
+              <Button
+                variant={activeSection === "account" ? "clicked" : "notclicked"}
                 onClick={() => handleSectionChange("account")}
               >
                 Account
-              </button>
-              <button
-                className={`flex-1 px-3 py-2 rounded text-center ${
-                  activeSection === "password"
-                    ? "bg-primary text-white"
-                    : "bg-transparent text-gray-700"
-                }`}
+              </Button>
+              <Button
+                variant={
+                  activeSection === "password" ? "clicked" : "notclicked"
+                }
                 onClick={() => handleSectionChange("password")}
               >
                 Password
-              </button>
-              <button
-                className={`flex-1 px-3 py-2 rounded text-center ${
-                  activeSection === "notifications"
-                    ? "bg-primary text-white"
-                    : "bg-transparent text-gray-700"
-                }`}
+              </Button>
+              <Button
+                variant={
+                  activeSection === "notifications" ? "clicked" : "notclicked"
+                }
                 onClick={() => handleSectionChange("notifications")}
               >
                 Notifications
-              </button>
-              <button
-                className={`flex-1 px-3 py-2 rounded text-center ${
-                  activeSection === "help"
-                    ? "bg-primary text-white"
-                    : "bg-transparent text-gray-700"
-                }`}
+              </Button>
+              <Button
+                variant={activeSection === "help" ? "clicked" : "notclicked"}
                 onClick={() => handleSectionChange("help")}
               >
                 Help
-              </button>
+              </Button>
             </nav>
             {activeSection === "account" && (
               <div className="bg-transparent">
-                {/* Dropdowns */}
-                <Dropdown
-                  title="View Profile Information"
-                  expanded={dropdownExpanded === "View Profile Information"}
-                  onToggle={() =>
-                    setDropdownExpanded(
-                      dropdownExpanded === "View Profile Information"
-                        ? null
-                        : "View Profile Information"
-                    )
-                  }
-                >
-                  <div className="relative w-full flex">
-                    <div className="relative w-full max-w-md p-4 border border-primary bg-gray-300 bg-opacity-90 dark:bg-opacity-0">
-                      <div className="absolute top-4 right-4"></div>
-                      <h2 className="text-2xl font-thin text-center mt-2 mb-2 font-roboto text-primary">
-                        Profile Information
-                      </h2>
-                      <div className="grid grid-cols-1 gap-4">
-                        <div>
-                          <label className="text-sm font-medium block mb-2 text-primary">
-                            First Name
-                          </label>
-                          <input
-                            type="text"
-                            value={firstName}
-                            readOnly
-                            className="w-full border border-gray-300 p-2 rounded"
-                          />
-                        </div>
-                        <div>
-                          <label className="text-sm font-medium block mb-2 text-primary">
-                            Last Name
-                          </label>
-                          <input
-                            type="text"
-                            value={lastName}
-                            readOnly
-                            className="w-full border border-gray-300 p-2 rounded"
-                          />
-                        </div>
-                      </div>
+                <div className="relative w-full max-w-md mx-auto p-4 border border-primary bg-gray-300 bg-opacity-90 dark:bg-opacity-0">
+                  <h2 className="text-2xl font-thin text-center mt-2 mb-2 font-roboto text-primary">
+                    Profile Information
+                  </h2>
+                  <div className="grid grid-cols-1 gap-4">
+                    <div>
+                      <label className="text-sm font-medium block mb-2 text-primary">
+                        First Name
+                      </label>
+                      <input
+                        type="text"
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                        className="w-full border border-gray-300 p-2 rounded"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium block mb-2 text-primary">
+                        Last Name
+                      </label>
+                      <input
+                        type="text"
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                        className="w-full border border-gray-300 p-2 rounded"
+                      />
+                      <aside className="mt-10">
+                        {userId && <UserProfile userId={userId} />}
+                      </aside>
                     </div>
                   </div>
-                </Dropdown>
-                <Dropdown
-                  title="Edit Profile Information"
-                  expanded={dropdownExpanded === "Edit Profile Information"}
-                  onToggle={() =>
-                    setDropdownExpanded(
-                      dropdownExpanded === "Edit Profile Information"
-                        ? null
-                        : "Edit Profile Information"
-                    )
-                  }
-                >
-                  <div className="relative w-full flex">
-                    <div className="relative w-full max-w-md p-4 border border-primary bg-gray-300 bg-opacity-90 dark:bg-opacity-0">
-                      <div className="absolute top-4 right-4"></div>
-                      <h2 className="text-2xl font-thin text-center mt-2 mb-2 font-roboto text-primary">
-                        Profile Information
-                      </h2>
-                      <div className="grid grid-cols-1 gap-4">
-                        <div>
-                          <label className="text-sm font-medium block mb-2 text-primary">
-                            First Name
-                          </label>
-                          <input
-                            type="text"
-                            value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
-                            className="w-full border border-gray-300 p-2 rounded"
-                          />
+                  <div className="mt-4 flex justify-end space-x-2">
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <div
+                          role="button"
+                          className="mt-auto flex items-center justify-start px-6 py-2 "
+                        >
+                          <Button type="button">Save Changes</Button>
                         </div>
-                        <div>
-                          <label className="text-sm font-medium block mb-2 text-primary">
-                            Last Name
-                          </label>
-                          <input
-                            type="text"
-                            value={lastName}
-                            onChange={(e) => setLastName(e.target.value)}
-                            className="w-full border border-gray-300 p-2 rounded"
-                          />
-                          <aside className="mt-10">
-                          {userId && <UserProfile userId={userId} />}
-                          </aside>
-                        </div>
-                      </div>
-                      <div className="mt-4 flex justify-end space-x-2">
-                        <Button onClick={handleCancelChanges} type="button">
-                          Cancel
-                        </Button>
-                        <Button onClick={handleSaveChanges} type="button">
-                          Save Changes
-                        </Button>
-                      </div>
-                    </div>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Update Profile</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Are you sure you want to save these changes?
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel onClick={handleCancelChanges}>
+                            Cancel
+                          </AlertDialogCancel>
+                          <AlertDialogAction onClick={handleSaveChanges}>
+                            Continue
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </div>
-                </Dropdown>
+                </div>
               </div>
             )}
             {activeSection === "password" && (
               <div className="bg-transparent">
                 <form
-                  className="max-w-md mx-auto bg-gray-300 p-4 rounded shadow"
+                  className="relative w-full max-w-md mx-auto p-4 border border-primary bg-gray-300 bg-opacity-90 dark:bg-opacity-0"
                   onSubmit={handleChangePassword}
                 >
                   <h2 className="text-2xl font-thin text-center mt-2 mb-2 font-roboto text-primary">
@@ -375,7 +278,9 @@ const SettingsPage = () => {
                     />
                   </div>
                   {error && <div className="text-red-500 mb-4">{error}</div>}
-                  {message && <div className="text-green-500 mb-4">{message}</div>}
+                  {message && (
+                    <div className="text-green-500 mb-4">{message}</div>
+                  )}
                   <div className="mt-4 flex justify-end space-x-2">
                     <Button onClick={handleCancelChanges} type="button">
                       Cancel
@@ -387,28 +292,36 @@ const SettingsPage = () => {
             )}
             {activeSection === "notifications" && (
               <div className="bg-transparent">
-                <div className="max-w-md mx-auto bg-gray-300 p-4 rounded shadow">
+                <div className="relative w-full max-w-md mx-auto p-4 border border-primary bg-gray-300 bg-opacity-90 dark:bg-opacity-0">
                   <h2 className="text-2xl font-thin text-center mt-2 mb-2 font-roboto text-primary">
                     Notification Settings
                   </h2>
-                  <div className="grid grid-cols-1 gap-4">
-                    <div>
-                      <label className="text-sm font-medium block mb-2 text-primary">
-                        Email Notifications
+                  <div className="items-top flex space-x-2">
+                    <Checkbox id="terms1" />
+                    <div className="grid gap-1.5 leading-none">
+                      <label
+                        htmlFor="terms1"
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-primary"
+                      >
+                        Receive email notifications
                       </label>
-                      <input
-                        type="checkbox"
-                        className="form-checkbox text-primary"
-                      />
+                      <p className="text-sm text-muted-foreground mb-4">
+                        Important updates and alerts via email.
+                      </p>
                     </div>
-                    <div>
-                      <label className="text-sm font-medium block mb-2 text-primary">
-                        SMS Notifications
+                  </div>
+                  <div className="items-top flex space-x-2">
+                    <Checkbox id="terms2" />
+                    <div className="grid gap-1.5 leading-none">
+                      <label
+                        htmlFor="terms2"
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-primary"
+                      >
+                        Receive SMS notifications
                       </label>
-                      <input
-                        type="checkbox"
-                        className="form-checkbox text-primary"
-                      />
+                      <p className="text-sm text-muted-foreground mb-4">
+                        Updates and alerts directly to your phone via SMS.
+                      </p>
                     </div>
                   </div>
                   <div className="mt-4 flex justify-end space-x-2">
@@ -419,7 +332,7 @@ const SettingsPage = () => {
             )}
             {activeSection === "help" && (
               <div className="bg-transparent">
-                <div className="max-w-md mx-auto bg-gray-300 p-4 rounded shadow">
+                <div className="relative w-full max-w-md mx-auto p-4 border border-primary bg-gray-300 bg-opacity-90 dark:bg-opacity-0">
                   <h2 className="text-2xl font-thin text-center mt-2 mb-2 font-roboto text-primary">
                     Help & Support
                   </h2>
@@ -428,55 +341,42 @@ const SettingsPage = () => {
                       <label className="text-sm font-medium block mb-2 text-primary">
                         Frequently Asked Questions
                       </label>
-                      <ul>
-                        <li>
-                          <a
-                            href="#"
-                            className="text-primary hover:underline"
-                          >
+                      <Accordion type="single" collapsible>
+                        <AccordionItem value="item-1">
+                          <AccordionTrigger>
                             How to change password?
-                          </a>
-                        </li>
-                        <li>
-                          <a
-                            href="#"
-                            className="text-primary hover:underline"
-                          >
+                          </AccordionTrigger>
+                          <AccordionContent>
+                            Go to Password tab in settings.
+                          </AccordionContent>
+                        </AccordionItem>
+                        <AccordionItem value="item-2">
+                          <AccordionTrigger>
                             How to update profile information?
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium block mb-2 text-primary">
-                        Contact Support
-                      </label>
-                      <p>
-                        If you need further assistance, please{" "}
-                        <a
-                          href="#"
-                          className="text-primary hover:underline"
-                        >
-                          contact support
-                        </a>
-                        .
-                      </p>
+                          </AccordionTrigger>
+                          <AccordionContent>
+                            Go to Account tab in settings.
+                          </AccordionContent>
+                        </AccordionItem>
+                        <AccordionItem value="item-3">
+                          <AccordionTrigger>
+                            How to know available parking spaces?
+                          </AccordionTrigger>
+                          <AccordionContent>
+                            Go to Parking Map and click the area you want to
+                            view.
+                          </AccordionContent>
+                        </AccordionItem>
+                      </Accordion>
                     </div>
                   </div>
                 </div>
               </div>
             )}
-            <div className="mt-4 flex justify-end space-x-2">
-              <Button onClick={handleLogout} type="button">
-                Logout
-              </Button>
-            </div>
           </div>
-          
         </div>
       )}
     </>
   );
 };
-
 export default SettingsPage;
