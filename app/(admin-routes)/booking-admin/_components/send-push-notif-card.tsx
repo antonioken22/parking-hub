@@ -18,7 +18,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"; // Adjust this import according to your library
+} from "@/components/ui/select";
 import { toast } from "sonner";
 
 interface SendPushNotificationCardProps {
@@ -83,7 +83,7 @@ const SendPushNotificationCard: React.FC<SendPushNotificationCardProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <Card className="w-[300px]">
+      <Card className="w-[300px] md:w-[400px]">
         <CardHeader>
           <CardTitle>Send Notification</CardTitle>
           <CardDescription>

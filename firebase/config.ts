@@ -16,8 +16,7 @@ const firebaseConfig = {
 
 // Spinning up Firebase
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-//Firebase Storage
-const storage = getStorage(app);
+
 // Firebase Authentication
 const auth = getAuth(app);
 
@@ -46,4 +45,7 @@ export const fetchToken = async () => {
   }
 };
 
-export { app, auth, firestore,storage, messaging };
+//Firebase Storage
+const storage = getStorage(app);
+
+export { app, auth, firestore, storage, messaging };

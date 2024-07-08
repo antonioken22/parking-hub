@@ -10,8 +10,10 @@ import {
 
 import { firestore } from "@/firebase/config";
 import { UserData } from "@/types/UserData";
+import { useUserRole } from "./useUserRole";
 
 const useUsers = () => {
+  const userRole = useUserRole();
   const [users, setUsers] = useState<UserData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -25,14 +27,19 @@ const useUsers = () => {
         id: doc.id,
         ...doc.data(),
       })) as UserData[];
-      setUsers(usersList);
-      toast.success("Users fetched successfully.");
+      // Only save data and show toast if admin
+      if (userRole === "admin") {
+        setUsers(usersList);
+        toast.success("Users fetched successfully.");
+      }
     } catch (error) {
-      toast.error("Failed to fetch users");
+      if (userRole === "admin") {
+        toast.error("Failed to fetch users.");
+      }
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [userRole]);
 
   useEffect(() => {
     fetchUsers();

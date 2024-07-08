@@ -1,4 +1,4 @@
-import { initializeApp, cert, getApps, getApp } from "firebase-admin/app";
+import { initializeApp, cert, getApps } from "firebase-admin/app";
 import { getMessaging } from "firebase-admin/messaging";
 import { NextRequest, NextResponse } from "next/server";
 
