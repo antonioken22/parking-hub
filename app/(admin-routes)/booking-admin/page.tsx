@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Ticket, ChevronDown, ArrowUpDown } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -8,7 +8,6 @@ import { Spinner } from "@/components/spinner";
 import { Heading } from "@/app/(routes)/_components/heading";
 import useAuthState from "@/hooks/useAuthState";
 import useUsers from "@/hooks/useUsers";
-
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -21,7 +20,6 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
 } from "@tanstack/react-table";
-
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -39,42 +37,36 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
 import SendPushNotificationCard from "./_components/send-push-notif-card";
 
 const BookingAdminPage = () => {
   const { loading: authLoading, userRole } = useAuthState();
-  const { users, updateBookingStatuses } = useUsers();
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = React.useState<{
-    [key: string]: boolean;
-  }>({});
-  const [localUsers, setLocalUsers] = React.useState(users);
-  const [showNotificationCard, setShowNotificationCard] = React.useState(false);
-  const [selectedFcmToken, setSelectedFcmToken] = React.useState<string | null>(
-    null
-  );
-  const [selectedEmail, setSelectedEmail] = React.useState<string | null>(null);
-  const [selectedFirstName, setSelectedFirstName] = React.useState<
-    string | null
-  >(null);
-  const [selectedLastName, setSelectedLastName] = React.useState<string | null>(
-    null
-  );
-
   const router = useRouter();
 
   // Push to /dashboard if not admin
-  if (userRole === "user") {
-    router.push("/dashboard");
-  }
+  useEffect(() => {
+    if (!authLoading && userRole !== "admin") {
+      router.push("/dashboard");
+    }
+  }, [authLoading, userRole, router]);
 
-  React.useEffect(() => {
+  const { users, updateBookingStatuses } = useUsers();
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState<{
+    [key: string]: boolean;
+  }>({});
+  const [localUsers, setLocalUsers] = useState(users);
+  const [showNotificationCard, setShowNotificationCard] = useState(false);
+  const [selectedFcmToken, setSelectedFcmToken] = useState<string | null>(null);
+  const [selectedEmail, setSelectedEmail] = useState<string | null>(null);
+  const [selectedFirstName, setSelectedFirstName] = useState<string | null>(
+    null
+  );
+  const [selectedLastName, setSelectedLastName] = useState<string | null>(null);
+
+  useEffect(() => {
     setLocalUsers(users);
   }, [users]);
 
@@ -202,7 +194,7 @@ const BookingAdminPage = () => {
     getPaginationRowModel: getPaginationRowModel(),
   });
 
-  if (authLoading) {
+  if (authLoading || userRole !== "admin") {
     return (
       <div className="flex items-center justify-center absolute inset-y-0 h-full w-full bg-background/80 z-50 md:pr-56">
         <Spinner size="lg" />
@@ -218,7 +210,7 @@ const BookingAdminPage = () => {
             <Ticket className="w-10 h-10 text-primary" />
             <div>
               <Heading
-                title="Booking (Admin)"
+                title="Booking (Admin Only)"
                 description="Modify booking status here."
               />
             </div>
@@ -326,7 +318,7 @@ const BookingAdminPage = () => {
             </Table>
             <Button
               onClick={handleSaveChanges}
-              className="flex flex-col mt-4 ml-auto"
+              className="flex flex-col mt-4 ml-auto text-xs md:text-base"
             >
               Save Changes
             </Button>

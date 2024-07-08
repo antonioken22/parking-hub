@@ -11,7 +11,7 @@ export const useUserRole = () => {
       if (user) {
         const userDoc = await getDoc(doc(firestore, "users", user.uid));
         if (userDoc.exists()) {
-          setUserRole(userDoc.data().role as string);
+          setUserRole(userDoc.data().role);
         }
       }
     });

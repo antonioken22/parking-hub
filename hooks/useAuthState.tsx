@@ -43,6 +43,7 @@ const useAuthState = () => {
     userId,
     userEmail,
     userPhotoUrl,
+    setUserPhotoUrl,
     userFirstname,
     userLastname,
     userRole,

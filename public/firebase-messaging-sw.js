@@ -18,27 +18,27 @@ firebase.initializeApp(firebaseConfig);
 
 const messaging = firebase.messaging();
 
+/*
 messaging.onBackgroundMessage((payload) => {
   console.log(
     "[firebase-messaging-sw.js] Received background message ",
     payload
   );
-
   // payload.fcmOptions?.link comes from our backend API route handle
   // payload.data.link comes from the Firebase Console where link is the 'key'
-  //   const link = payload.fcmOptions?.link || payload.data?.link;
-
-  //   const notificationTitle = payload.notification.title;
-  //   const notificationOptions = {
-  //     body: payload.notification.body,
-  //     icon: "./logo-dark.png",
-  //     data: { url: link },
-  //   };
-  //   self.registration.showNotification(notificationTitle, notificationOptions);
+    const link = payload.fcmOptions?.link || payload.data?.link;
+    const notificationTitle = payload.notification.title;
+    const notificationOptions = {
+      body: payload.notification.body,
+      icon: "./logo-dark.png",
+      data: { url: link },
+    };
+    self.registration.showNotification(notificationTitle, notificationOptions);
 });
+*/
 
 self.addEventListener("notificationclick", function (event) {
-  console.log("[firebase-messaging-sw.js] Notification click received.");
+  // console.log("[firebase-messaging-sw.js] Notification click received.");
 
   event.notification.close();
 
@@ -60,7 +60,7 @@ self.addEventListener("notificationclick", function (event) {
         }
 
         if (clients.openWindow) {
-          console.log("OPENWINDOW ON CLIENT");
+          // console.log("OPENWINDOW ON CLIENT");
           return clients.openWindow(url);
         }
       })

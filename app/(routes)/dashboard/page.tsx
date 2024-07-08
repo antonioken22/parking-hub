@@ -112,7 +112,7 @@ const DashboardPage = () => {
       {!loading && userId && (
         <div className="flex flex-col md:flex-row">
           <main className="flex flex-col items-center justify-center flex-grow mt-10">
-            {userId && (  
+            {userId && (
               <h1 className="text-xl md:text-4xl font-bold mb-6 md:ml-10">
                 <span className="text-orange-500">Welcome,</span>{" "}
                 {userFirstname} {userLastname}!
@@ -130,9 +130,10 @@ const DashboardPage = () => {
               />
             </div>
           </main>
-          <aside className="w-full md:w-1/3 p-4">
+          {/*TODO: Improve the layout and UI */}
+          {/* <aside className="w-full md:w-1/3 p-4">
           <UserProfile2 userId={userId} />
-          </aside>
+          </aside> */}
         </div>
       )}
     </>
