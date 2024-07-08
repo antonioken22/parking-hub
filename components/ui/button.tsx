@@ -20,6 +20,8 @@ const buttonVariants = cva(
         ghost:
           "border border-primary text-primary bg-background hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
+        clicked: "bg-primary text-white flex-1",
+        notclicked: "bg-transparent text-gray-700 flex-1",
       },
       size: {
         default: "h-10 px-4 py-2",
