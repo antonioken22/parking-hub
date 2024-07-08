@@ -1,0 +1,21 @@
+[debug] [2024-07-08T00:57:23.341Z] ----------------------------------------------------------------------
+[debug] [2024-07-08T00:57:23.352Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\NAS\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2024-07-08T00:57:23.353Z] CLI Version:   13.13.0
+[debug] [2024-07-08T00:57:23.353Z] Platform:      win32
+[debug] [2024-07-08T00:57:23.353Z] Node Version:  v20.15.0
+[debug] [2024-07-08T00:57:23.353Z] Time:          Mon Jul 08 2024 08:57:23 GMT+0800 (China Standard Time)
+[debug] [2024-07-08T00:57:23.353Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-07-08T00:57:23.360Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-07-08T00:57:23.360Z] > authorizing via signed-in user (ryangwapo321321321@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\NAS\Desktop\add comp\sds\parking-hub
+

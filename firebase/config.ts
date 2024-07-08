@@ -2,6 +2,7 @@ import { getApp, getApps, initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getMessaging, getToken, isSupported } from "firebase/messaging";
+import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -15,7 +16,8 @@ const firebaseConfig = {
 
 // Spinning up Firebase
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-
+//Firebase Storage
+const storage = getStorage(app);
 // Firebase Authentication
 const auth = getAuth(app);
 
@@ -44,4 +46,4 @@ export const fetchToken = async () => {
   }
 };
 
-export { app, auth, firestore, messaging };
+export { app, auth, firestore,storage, messaging };
