@@ -24,7 +24,7 @@ const MyVehiclesPage = () => {
           <div className="flex items-center gap-x-3 mr-auto pl-4">
             <Car className="w-10 h-10 text-primary" />
             <div>
-              <Heading title="My Vehicles" description="View your cars." />
+              <Heading title="My Vehicles" description="Viewing your cars." />
             </div>
           </div>
           <div className="px-4 lg:px-8 space-y-4 pt-4"></div>
