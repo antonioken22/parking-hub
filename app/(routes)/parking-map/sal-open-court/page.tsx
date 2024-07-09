@@ -5,12 +5,12 @@ import { SquareParking, Undo2 } from "lucide-react";
 
 import { Heading } from "@/app/(routes)/_components/heading";
 import ParkingLayout from "../_components/parking-layout";
-import useAuthState from "@/hooks/useAuthState";
+import useUserState from "@/hooks/useUserState";
 import { Spinner } from "@/components/spinner";
 import SALOpenCourtImage from "@/public/sal-open-court-zoomed.png";
 
 const SALOpenCourtPage = () => {
-  const { userId, loading } = useAuthState();
+  const { userId, loading } = useUserState();
 
   if (loading) {
     return (

@@ -58,7 +58,7 @@ const useParkingSlotCount = () => {
     };
 
     toast.promise(fetchAllParkingSlots(), {
-      loading: "Loading status of parking slots",
+      loading: "Loading status of parking slots...",
       success: "Successfully loaded status of parking slots.",
       error: "Failed to load status of parking slots.",
     });

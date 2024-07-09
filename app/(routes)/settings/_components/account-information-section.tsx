@@ -15,11 +15,11 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import useAuthState from "@/hooks/useAuthState";
+import useUserState from "@/hooks/useUserState";
 import UserProfileUpdatePhoto from "./user-profile-update-photo";
 
 const AccountInformation = () => {
-  const { userId, userFirstname, userLastname } = useAuthState();
+  const { userId, userFirstname, userLastname } = useUserState();
   const [firstName, setFirstName] = useState(userFirstname || "");
   const [lastName, setLastName] = useState(userLastname || "");
 

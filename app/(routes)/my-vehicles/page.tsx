@@ -4,10 +4,10 @@ import { Car } from "lucide-react";
 
 import { Spinner } from "@/components/spinner";
 import { Heading } from "@/app/(routes)/_components/heading";
-import useAuthState from "@/hooks/useAuthState";
+import useUserState from "@/hooks/useUserState";
 
 const MyVehiclesPage = () => {
-  const { userId, loading } = useAuthState();
+  const { userId, loading } = useUserState();
 
   if (loading) {
     return (

@@ -6,11 +6,11 @@ import { Bar } from "react-chartjs-2";
 import { useState, useEffect } from "react";
 
 import { Spinner } from "@/components/spinner";
-import useAuthState from "@/hooks/useAuthState";
+import useUserState from "@/hooks/useUserState";
 import useParkingSlotCount from "@/hooks/useParkingSlotCount";
 
 const DashboardPage = () => {
-  const { userId, userFirstname, userLastname, loading } = useAuthState();
+  const { userId, userFirstname, userLastname, loading } = useUserState();
   const [chartData, setChartData] = useState<any>({});
   const { GLE, NGE, RTL, SAL } = useParkingSlotCount();
 

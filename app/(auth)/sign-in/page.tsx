@@ -47,6 +47,7 @@ const SignInPage = () => {
             email: user.email,
             photoUrl: user.photoURL,
             role: "user",
+            isBooked: false,
           });
         }
         router.push("/dashboard");

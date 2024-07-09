@@ -6,14 +6,14 @@ import { Heading } from "@/app/(routes)/_components/heading";
 import { Spinner } from "@/components/spinner";
 
 import { Button } from "@/components/ui/button";
-import useAuthState from "@/hooks/useAuthState";
+import useUserState from "@/hooks/useUserState";
 import AccountInformation from "./_components/account-information-section";
 import ChangePassword from "./_components/change-password-section";
 import NotificationSection from "./_components/notifications-section";
 import HelpSection from "./_components/help-section";
 
 const SettingsPage = () => {
-  const { userId, loading } = useAuthState();
+  const { userId, loading } = useUserState();
   const [activeSection, setActiveSection] = useState<
     "account" | "password" | "notifications" | "help"
   >("account");

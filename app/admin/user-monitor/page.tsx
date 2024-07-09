@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { Ticket, ChevronDown, ArrowUpDown } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 import { Spinner } from "@/components/spinner";
 import { Heading } from "@/app/(routes)/_components/heading";
-import useAuthState from "@/hooks/useAuthState";
+import useUserState from "@/hooks/useUserState";
 import useUsers from "@/hooks/useUsers";
 import {
   ColumnDef,
@@ -40,7 +40,7 @@ import {
 import SendPushNotificationCard from "./_components/send-push-notif-card";
 
 const BookingAdminPage = () => {
-  const { loading: authLoading, userRole } = useAuthState();
+  const { loading: authLoading, userRole } = useUserState();
   const router = useRouter();
 
   // Push to /dashboard if not admin

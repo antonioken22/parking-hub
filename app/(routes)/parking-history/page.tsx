@@ -4,11 +4,11 @@ import { FileClock } from "lucide-react";
 
 import { Spinner } from "@/components/spinner";
 import { Heading } from "@/app/(routes)/_components/heading";
-import useAuthState from "@/hooks/useAuthState";
+import useUserState from "@/hooks/useUserState";
 import ParkingLogs from "./_components/parking-logs";
 
 const ParkingHistoryPage = () => {
-  const { userId, loading } = useAuthState();
+  const { userId, loading } = useUserState();
 
   if (loading) {
     return (

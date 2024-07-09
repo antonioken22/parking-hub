@@ -5,12 +5,12 @@ import { SquareParking, Undo2 } from "lucide-react";
 
 import { Heading } from "@/app/(routes)/_components/heading";
 import ParkingLayout from "../_components/parking-layout";
-import useAuthState from "@/hooks/useAuthState";
+import useUserState from "@/hooks/useUserState";
 import { Spinner } from "@/components/spinner";
-import GLEOpenAreatImage from "@/public/gle-open-area-zoomed.png";
+import GLEOpenAreaImage from "@/public/gle-open-area-zoomed.png";
 
 const GLEOpenAreaPage = () => {
-  const { userId, loading } = useAuthState();
+  const { userId, loading } = useUserState();
 
   if (loading) {
     return (
@@ -43,7 +43,7 @@ const GLEOpenAreaPage = () => {
             parkingSlotDefaultWidth={11}
             parkingSlotDefaultHeight={3}
             parkingSlotDefaultRotation={-22}
-            srcImage={GLEOpenAreatImage}
+            srcImage={GLEOpenAreaImage}
             altImage="Gle Parking Area"
             imgWidth={2400}
             imgHeight={3854}

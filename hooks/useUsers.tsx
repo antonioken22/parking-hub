@@ -61,6 +61,7 @@ const useUsers = () => {
         setUsers(updatedUsers);
         toast.success("Users updated successfully.");
       } catch (error) {
+        console.log(error);
         toast.error("Failed to update users.");
       }
     },

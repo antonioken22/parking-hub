@@ -6,7 +6,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { auth, firestore } from "@/firebase/config";
 import { UserData } from "@/types/UserData";
 
-const useAuthState = () => {
+const useUserState = () => {
   const [userId, setUserId] = useState<string | null>(null);
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [userPhotoUrl, setUserPhotoUrl] = useState<string | null>(null);
@@ -51,4 +51,4 @@ const useAuthState = () => {
   };
 };
 
-export default useAuthState;
+export default useUserState;
