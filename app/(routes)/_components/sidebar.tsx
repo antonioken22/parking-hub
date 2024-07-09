@@ -11,7 +11,6 @@ import {
   Settings,
   Shield,
   SquareParking,
-  Ticket,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { signOut } from "firebase/auth";

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Ticket, ChevronDown, ArrowUpDown } from "lucide-react";
+import { ChevronDown, ArrowUpDown, Monitor } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 import { Spinner } from "@/components/spinner";
@@ -207,11 +207,11 @@ const BookingAdminPage = () => {
       {!authLoading && userRole === "admin" && (
         <div>
           <div className="flex items-center gap-x-3 mr-auto pl-4">
-            <Ticket className="w-10 h-10 text-primary" />
+            <Monitor className="w-10 h-10 text-primary" />
             <div>
               <Heading
-                title="Booking (Admin Only)"
-                description="Modify booking status here."
+                title="User Monitor"
+                description="Viewing all user data."
               />
             </div>
           </div>
