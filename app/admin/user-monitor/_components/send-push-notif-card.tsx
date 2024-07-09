@@ -40,7 +40,7 @@ const SendPushNotificationCard: React.FC<SendPushNotificationCardProps> = ({
   const [message, setMessage] = React.useState(
     "You've successfully booked a parking slot."
   );
-  const [link, setLink] = React.useState("/dashboard");
+  const [link, setLink] = React.useState("/booking");
 
   const defaultMessages = [
     "You've successfully booked a parking slot.",
