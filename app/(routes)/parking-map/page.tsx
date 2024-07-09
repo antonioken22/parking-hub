@@ -6,11 +6,11 @@ import { MapPin, SquareParking } from "lucide-react";
 
 import { Heading } from "@/app/(routes)/_components/heading";
 import CITUVicinityMap from "@/public/citu-vicinity-map.png";
-import useAuthState from "@/hooks/useAuthState";
+import useUserState from "@/hooks/useUserState";
 import { Spinner } from "@/components/spinner";
 
 const ParkingMapPage = () => {
-  const { userId, loading } = useAuthState();
+  const { userId, loading } = useUserState();
 
   if (loading) {
     return (

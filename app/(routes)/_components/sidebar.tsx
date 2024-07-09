@@ -7,7 +7,9 @@ import {
   FileClock,
   LayoutDashboard,
   LogOut,
+  Monitor,
   Settings,
+  Shield,
   SquareParking,
   Ticket,
 } from "lucide-react";
@@ -66,10 +68,10 @@ const routes = [
 
 const adminRoutes = [
   {
-    label: "Set Booking",
-    icon: Ticket,
+    label: "User Monitor",
+    icon: Monitor,
     color: "text-primary",
-    href: "/booking-admin",
+    href: "/admin/user-monitor",
   },
 ];
 
@@ -146,6 +148,10 @@ export const Sidebar = () => {
         {userRole === "admin" && (
           <>
             <hr className="border border-primary my-2" />
+            <div className="text-sm flex p-3 w-full justify-start font-medium">
+              <Shield className="h-5 w-5 mx-3" />
+              <h1>Admin</h1>
+            </div>
             <div className="space-y-1">
               {adminRoutes.map((route) => (
                 <Link

@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { firestore, storage } from "@/firebase/config";
 import { Spinner } from "@/components/spinner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import useAuthState from "@/hooks/useAuthState";
+import useAuthState from "@/hooks/useUserState";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 

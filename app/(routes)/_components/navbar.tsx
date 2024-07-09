@@ -15,7 +15,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import useAuthState from "@/hooks/useAuthState";
+import useAuthState from "@/hooks/useUserState";
 import { Input } from "@/components/ui/input";
 import { firestore, storage } from "@/firebase/config";
 
@@ -108,7 +108,7 @@ const Navbar = () => {
                 <div className="flex flex-col items-center gap-4">
                   <Input
                     type="file"
-                    accept="image/*"
+                    accept=".jpg,.jpeg,.png"
                     onChange={(e) => {
                       if (e.target.files && e.target.files[0]) {
                         setImageUpload(e.target.files[0]);
