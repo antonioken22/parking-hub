@@ -6,7 +6,7 @@ import { firestore, storage } from "@/firebase/config";
 import useUserState from "@/hooks/useUserState";
 
 const useProfilePhotoUpdate = () => {
-  const { userId, userFirstname, userLastname, setUserPhotoUrl } =
+  const { userId, userFirstName, userLastName, setUserPhotoUrl } =
     useUserState();
   const [selectedImageUpload, setSelectedImageUpload] = useState<File | null>(
     null
@@ -47,7 +47,7 @@ const useProfilePhotoUpdate = () => {
 
     const imageRef = ref(
       storage,
-      `profile-pictures/${userFirstname} ${userLastname} ${timestamp}`
+      `profile-pictures/${userFirstName} ${userLastName} ${timestamp}`
     );
 
     toast.promise(

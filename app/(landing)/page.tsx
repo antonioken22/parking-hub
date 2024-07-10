@@ -1,7 +1,8 @@
-'use client';
+"use client";
 
 import Image from "next/image";
 import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 import { LandingNavbar } from "./_components/landing-navbar";
 import { LandingHero } from "./_components/landing-hero";
@@ -28,22 +29,32 @@ const LandingPage = () => {
 
   return (
     <div className="h-screen">
-      <Image
-        alt="Landing Page"
-        src={currentImage}
-        fill
-        className="absolute inset-0 object-cover dark:hidden opacity-20"
-        placeholder="blur"
-        priority
-      />
-      <Image
-        alt="Landing Page"
-        src={currentImage}
-        fill
-        className="absolute inset-0 object-cover hidden dark:block opacity-20"
-        placeholder="blur"
-        priority
-      />
+      <AnimatePresence>
+        <motion.div
+          key={currentImage.src}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 1 }}
+        >
+          <Image
+            alt="Landing Page"
+            src={currentImage}
+            fill
+            className="absolute inset-0 object-cover dark:hidden opacity-20"
+            placeholder="blur"
+            priority
+          />
+          <Image
+            alt="Landing Page"
+            src={currentImage}
+            fill
+            className="absolute inset-0 object-cover hidden dark:block opacity-20"
+            placeholder="blur"
+            priority
+          />
+        </motion.div>
+      </AnimatePresence>
       <div className="relative z-10">
         <LandingNavbar />
         <LandingHero />

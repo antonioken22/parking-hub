@@ -14,8 +14,8 @@ const UserProfileUpdatePhoto = () => {
   const {
     userId,
     loading,
-    userFirstname,
-    userLastname,
+    userFirstName,
+    userLastName,
     userEmail,
     userPhotoUrl,
     setUserPhotoUrl,
@@ -52,7 +52,7 @@ const UserProfileUpdatePhoto = () => {
 
     const imageRef = ref(
       storage,
-      `profile-pictures/${userFirstname} ${userLastname} ${timestamp}`
+      `profile-pictures/${userFirstName} ${userLastName} ${timestamp}`
     );
 
     toast.promise(
@@ -93,13 +93,13 @@ const UserProfileUpdatePhoto = () => {
               src={userPhotoUrl ? userPhotoUrl : ""}
             />
             <AvatarFallback>
-              {getInitials(userFirstname, userLastname)}
+              {getInitials(userFirstName, userLastName)}
             </AvatarFallback>
           </Avatar>
         </div>
       )}
       <h2 className="text-md md:text-xl font-bold text-center break-words mt-2">
-        {userFirstname} {userLastname}
+        {userFirstName} {userLastName}
       </h2>
       <p className="text-muted-foreground text-xs md:text-base mb-2 text-center break-words ">
         {userEmail}

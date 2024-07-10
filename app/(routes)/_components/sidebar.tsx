@@ -3,7 +3,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import {
-  Car,
   FileClock,
   LayoutDashboard,
   LogOut,
@@ -11,6 +10,7 @@ import {
   Settings,
   Shield,
   SquareParking,
+  Ticket,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { signOut } from "firebase/auth";
@@ -40,10 +40,10 @@ const routes = [
     href: "/dashboard",
   },
   {
-    label: "My Vehicles",
-    icon: Car,
+    label: "Booking",
+    icon: Ticket,
     color: "text-primary",
-    href: "/my-vehicles",
+    href: "/booking",
   },
   {
     label: "Parking Map",

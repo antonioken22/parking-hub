@@ -17,6 +17,7 @@ By Team Wild Tech
 - User Interface Components: [shadcn-ui](https://ui.shadcn.com/), [sonner](https://sonner.emilkowal.ski/), & [react-datetime-picker](https://www.npmjs.com/package/react-datetime-picker)
 - Icon Pack: [lucide-react](https://www.npmjs.com/package/lucide-react)
 - Data Visualization: [chart.js](https://www.chartjs.org/)
+- Animations: [framer-motion](https://www.framer.com/motion/)
 
 ## .env.local
 

@@ -39,7 +39,7 @@ import {
 } from "@/components/ui/table";
 import SendPushNotificationCard from "./_components/send-push-notif-card";
 
-const BookingAdminPage = () => {
+const UserMonitorPage = () => {
   const { loading: authLoading, userRole } = useUserState();
   const router = useRouter();
 
@@ -344,4 +344,4 @@ const BookingAdminPage = () => {
   );
 };
 
-export default BookingAdminPage;
+export default UserMonitorPage;

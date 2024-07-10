@@ -19,20 +19,20 @@ import useUserState from "@/hooks/useUserState";
 import UserProfileUpdatePhoto from "./user-profile-update-photo";
 
 const AccountInformation = () => {
-  const { userId, userFirstname, userLastname } = useUserState();
-  const [firstName, setFirstName] = useState(userFirstname || "");
-  const [lastName, setLastName] = useState(userLastname || "");
+  const { userId, userFirstName, userLastName } = useUserState();
+  const [firstName, setFirstName] = useState(userFirstName || "");
+  const [lastName, setLastName] = useState(userLastName || "");
 
   useEffect(() => {
     if (userId) {
-      setFirstName(userFirstname || "");
-      setLastName(userLastname || "");
+      setFirstName(userFirstName || "");
+      setLastName(userLastName || "");
     }
-  }, [userId, userFirstname, userLastname]);
+  }, [userId, userFirstName, userLastName]);
 
   const handleCancelChanges = () => {
-    setFirstName(userFirstname || "");
-    setLastName(userLastname || "");
+    setFirstName(userFirstName || "");
+    setLastName(userLastName || "");
   };
 
   const handleSaveChanges = async () => {
