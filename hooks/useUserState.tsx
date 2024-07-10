@@ -10,8 +10,8 @@ const useUserState = () => {
   const [userId, setUserId] = useState<string | null>(null);
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [userPhotoUrl, setUserPhotoUrl] = useState<string | null>(null);
-  const [userFirstname, setUserFirstname] = useState<string | null>(null);
-  const [userLastname, setUserLastname] = useState<string | null>(null);
+  const [userFirstName, setUserFirstName] = useState<string | null>(null);
+  const [userLastName, setUserLastName] = useState<string | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
@@ -25,8 +25,8 @@ const useUserState = () => {
           setUserId(user.uid);
           setUserEmail(userData.email);
           setUserPhotoUrl(userData.photoUrl);
-          setUserFirstname(userData.firstName);
-          setUserLastname(userData.lastName);
+          setUserFirstName(userData.firstName);
+          setUserLastName(userData.lastName);
           setUserRole(userData.role);
         }
       } else {
@@ -44,8 +44,8 @@ const useUserState = () => {
     userEmail,
     userPhotoUrl,
     setUserPhotoUrl,
-    userFirstname,
-    userLastname,
+    userFirstName,
+    userLastName,
     userRole,
     loading,
   };

@@ -10,7 +10,7 @@ import useUserState from "@/hooks/useUserState";
 import useParkingSlotCount from "@/hooks/useParkingSlotCount";
 
 const DashboardPage = () => {
-  const { userId, userFirstname, userLastname, loading } = useUserState();
+  const { userId, userFirstName, userLastName, loading } = useUserState();
   const [chartData, setChartData] = useState<any>({});
   const { GLE, NGE, RTL, SAL } = useParkingSlotCount();
 
@@ -114,7 +114,7 @@ const DashboardPage = () => {
             {userId && (
               <h1 className="text-xl md:text-4xl font-bold mb-6 md:ml-10">
                 <span className="text-orange-500">Welcome,</span>{" "}
-                {userFirstname} {userLastname}!
+                {userFirstName} {userLastName}!
               </h1>
             )}
             <div className="grid-cols-1 w-full max-w-7xl p-4">

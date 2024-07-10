@@ -1,10 +1,10 @@
 export interface UserData {
   id: string;
-  email: string | null;
+  email: string;
   photoUrl: string | null;
-  firstName: string | null;
-  lastName: string | null;
-  role: string | null;
+  firstName: string;
+  lastName: string;
+  role: string;
   fcmSwToken: string | null;
-  isBooked: boolean | null;
+  isBooked: boolean;
 }

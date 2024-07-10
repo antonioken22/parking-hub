@@ -20,7 +20,7 @@ import { Input } from "@/components/ui/input";
 import { firestore, storage } from "@/firebase/config";
 
 const Navbar = () => {
-  const { userId, userFirstname, userLastname, userPhotoUrl, setUserPhotoUrl } =
+  const { userId, userFirstName, userLastName, userPhotoUrl, setUserPhotoUrl } =
     useAuthState();
   const [imageUpload, setImageUpload] = useState<File | null>(null);
 
@@ -52,7 +52,7 @@ const Navbar = () => {
 
     const imageRef = ref(
       storage,
-      `profile-pictures/${userFirstname} ${userLastname} ${timestamp}`
+      `profile-pictures/${userFirstName} ${userLastName} ${timestamp}`
     );
 
     toast.promise(
@@ -90,7 +90,7 @@ const Navbar = () => {
                 alt="Parking Hub"
               />
               <AvatarFallback>
-                {getInitials(userFirstname, userLastname)}
+                {getInitials(userFirstName, userLastName)}
               </AvatarFallback>
             </Avatar>
           </PopoverTrigger>

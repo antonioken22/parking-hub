@@ -7,7 +7,9 @@ export interface ParkingSlotData {
   rotation: number;
   color: string;
   status: string;
-  name: string | null;
+  occupantEmail: string | null;
+  occupantFirstName: string | null;
+  occupantLastName: string | null;
   startTime: Date | null;
   endTime: Date | null;
   description: string | null;
