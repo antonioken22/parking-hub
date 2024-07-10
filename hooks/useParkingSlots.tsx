@@ -88,11 +88,12 @@ const useParkingSlots = (databaseTable: string) => {
             rotation: slot.rotation,
             color: slot.color,
             status: slot.status,
-            name: slot.name || null,
+            occupantEmail: slot.occupantEmail || null,
+            occupantFirstName: slot.occupantFirstName || null,
+            occupantLastName: slot.occupantLastName || null,
             startTime: slot.startTime || null,
             endTime: slot.endTime || null,
             description: slot.description || null,
-            pushNotification: slot.pushNotification || null,
           });
         })
       );

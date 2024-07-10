@@ -13,6 +13,8 @@ const useUserState = () => {
   const [userFirstName, setUserFirstName] = useState<string | null>(null);
   const [userLastName, setUserLastName] = useState<string | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
+  const [userPushNotificationStatus, setUserPushNotificationStatus] =
+    useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
 
@@ -28,6 +30,7 @@ const useUserState = () => {
           setUserFirstName(userData.firstName);
           setUserLastName(userData.lastName);
           setUserRole(userData.role);
+          setUserPushNotificationStatus(userData.pushNotificationStatus);
         }
       } else {
         router.push("/sign-in");
@@ -47,6 +50,8 @@ const useUserState = () => {
     userFirstName,
     userLastName,
     userRole,
+    userPushNotificationStatus,
+    setUserPushNotificationStatus,
     loading,
   };
 };

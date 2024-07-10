@@ -25,6 +25,7 @@
     "chartjs-plugin-datalabels": "^2.2.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "cmdk": "^1.0.0",
     "firebase": "^10.12.2",
     "firebase-admin": "^12.2.0",
     "framer-motion": "^11.3.0",

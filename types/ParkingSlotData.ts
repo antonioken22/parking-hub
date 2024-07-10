@@ -13,5 +13,4 @@ export interface ParkingSlotData {
   startTime: Date | null;
   endTime: Date | null;
   description: string | null;
-  pushNotification: boolean;
 }

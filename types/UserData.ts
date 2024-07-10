@@ -5,6 +5,7 @@ export interface UserData {
   firstName: string;
   lastName: string;
   role: string;
+  pushNotificationStatus: boolean;
   fcmSwToken: string | null;
   isBooked: boolean;
 }

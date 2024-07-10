@@ -9,7 +9,7 @@ import { toast } from "sonner";
 async function getNotificationPermissionAndToken() {
   // Step 1: Check if Notifications are supported in the browser.
   if (!("Notification" in window)) {
-    console.info("This browser does not support desktop notification");
+    toast.error("This browser does not support desktop notification.");
     return null;
   }
 
@@ -18,6 +18,7 @@ async function getNotificationPermissionAndToken() {
     return await fetchToken();
   }
 
+  /* Disabled as it is to be handled on the page itself.
   // Step 3: If permission is not denied, request permission from the user.
   if (Notification.permission !== "denied") {
     const permission = await Notification.requestPermission();
@@ -25,8 +26,9 @@ async function getNotificationPermissionAndToken() {
       return await fetchToken();
     }
   }
+    */
 
-  console.log("Notification permission not granted.");
+  toast.error("Notification permission not granted.");
   return null;
 }
 
@@ -60,7 +62,7 @@ const useFcmToken = () => {
     // This step is typical initially as the service worker may not be ready/installed yet.
     if (!token) {
       if (retryLoadToken.current >= 3) {
-        alert("Unable to load token, refresh the browser");
+        // alert("Unable to load token, refresh the browser");
         console.info(
           "%cPush Notifications issue - unable to load token after 3 retries",
           "color: green; background: #c7c7c7; padding: 8px; font-size: 20px"
@@ -93,7 +95,7 @@ const useFcmToken = () => {
     const setupListener = async () => {
       if (!token) return; // Exit if no token is available.
 
-      console.log(`onMessage registered with token ${token}`);
+      // console.log(`onMessage registered with token ${token}`);
       const m = await messaging();
       if (!m) return;
 
