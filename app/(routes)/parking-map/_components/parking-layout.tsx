@@ -158,11 +158,12 @@ const ParkingLayout = ({
                     rotation: parkingSlotDefaultRotation,
                     color: "green",
                     status: "Available",
-                    name: null,
+                    occupantEmail: null,
+                    occupantFirstName: null,
+                    occupantLastName: null,
                     startTime: null,
                     endTime: null,
                     description: null,
-                    pushNotification: false,
                   })
                 }
               >

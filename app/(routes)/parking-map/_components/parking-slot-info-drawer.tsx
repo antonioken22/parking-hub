@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -38,6 +38,19 @@ export function ParkingSlotInfoDrawer({
   isOpen,
   onClose,
 }: ParkingSlotInfoDrawerProps) {
+  const [occupantFirstName, setOccupantFirstName] = useState(
+    slot.occupantFirstName
+  );
+  const [occupantLastName, setOccupantLastName] = useState(
+    slot.occupantLastName
+  );
+
+  let slotOccupantName = "N/A";
+  // Combining occupant's first and last names to display as Occupant if it exists
+  if (slot.occupantFirstName && slot.occupantLastName) {
+    slotOccupantName = `${slot.occupantFirstName} ${slot.occupantLastName}`;
+  }
+
   const handleOpenChange = (open: boolean) => {
     if (!open) {
       onClose();
@@ -83,7 +96,7 @@ export function ParkingSlotInfoDrawer({
               <strong>Status:</strong> {slot.status}
             </div>
             <div className="text-sm md:text-base mb-4">
-              <strong>Name:</strong> {slot.name || "N/A"}
+              <strong>Occupant:</strong> {slotOccupantName || "N/A"}
             </div>
             <div className="text-sm md:text-base mb-4">
               <strong>Description:</strong> {slot.description || "N/A"}
