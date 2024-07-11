@@ -2,17 +2,33 @@
 
 import "chart.js/auto";
 import ChartDataLabels from "chartjs-plugin-datalabels";
-import { Bar } from "react-chartjs-2";
+import { Bar, Line } from "react-chartjs-2";
 import { useState, useEffect } from "react";
 
 import { Spinner } from "@/components/spinner";
 import useUserState from "@/hooks/useUserState";
 import useParkingSlotCount from "@/hooks/useParkingSlotCount";
+import useActiveUsers from "@/hooks/useActiveUsers";
+
+interface ActiveUser {
+  time: string;
+  count: number;
+}
+
+const formatDate = (date: Date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
 
 const DashboardPage = () => {
   const { userId, userFirstName, userLastName, loading } = useUserState();
   const [chartData, setChartData] = useState<any>({});
+  const [activeUsersData, setActiveUsersData] = useState<any>({});
   const { GLE, NGE, RTL, SAL } = useParkingSlotCount();
+  const { activeUsers } = useActiveUsers();
+  const currentDate = formatDate(new Date());
 
   useEffect(() => {
     const fetchParkingSlots = async () => {
@@ -77,11 +93,56 @@ const DashboardPage = () => {
     fetchParkingSlots();
   }, [GLE, NGE, RTL, SAL]);
 
+  useEffect(() => {
+    const fetchActiveUsers = async () => {
+      const data = activeUsers.map((entry: ActiveUser) => ({
+        time: entry.time, // e.g., "06:00", "07:00", etc.
+        count: entry.count, // Number of active users
+      }));
+
+      setActiveUsersData({
+        labels: data.map((entry: ActiveUser) => entry.time),
+        datasets: [
+          {
+            label: "Active Users",
+            data: data.map((entry: ActiveUser) => entry.count),
+            borderColor: "Red",
+            backgroundColor: "Red",
+            fill: false,
+          },
+        ],
+      });
+    };
+
+    fetchActiveUsers();
+  }, [activeUsers]);
+
   const chartOptions = {
     plugins: {
       datalabels: {
         display: true,
         color: "orange",
+        font: {
+          weight: "bold" as const,
+        },
+      },
+    },
+    responsive: true,
+    scales: {
+      x: {
+        beginAtZero: true,
+      },
+      y: {
+        beginAtZero: true,
+      },
+    },
+  };
+
+  const lineChartOptions = {
+    plugins: {
+      datalabels: {
+        display: true,
+        color: "Orange",
         font: {
           weight: "bold" as const,
         },
@@ -125,6 +186,19 @@ const DashboardPage = () => {
               <Bar
                 data={chartData}
                 options={chartOptions}
+                plugins={[ChartDataLabels]}
+              />
+            </div>
+            <div className="grid-cols-1 w-full max-w-7xl p-4 mt-8">
+              <h2 className="text-xl md:text-2xl font-bold mb-4">
+                Slot Used{" "}
+                <span className="text-orange-500">
+                  (24 hours - {currentDate})
+                </span>
+              </h2>
+              <Line
+                data={activeUsersData}
+                options={lineChartOptions}
                 plugins={[ChartDataLabels]}
               />
             </div>
