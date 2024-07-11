@@ -106,7 +106,7 @@ const ParkingSlot: React.FC<ParkingSlotProps> = ({
   useEffect(() => {
     if (!selected) {
       setZIndex(10); // Reset zIndex to 10 when not selected
-    } else {
+    } else if (role === "admin") {
       const handleKeyDown = (event: KeyboardEvent) => {
         if (keyboardListenerActive) {
           switch (event.key) {
@@ -157,6 +157,7 @@ const ParkingSlot: React.FC<ParkingSlotProps> = ({
       };
     }
   }, [
+    role,
     selected,
     stepSize,
     top,
@@ -263,6 +264,14 @@ const ParkingSlot: React.FC<ParkingSlotProps> = ({
             />
           </div>
         )}
+        {(role === "admin" || "manager") && selected && (
+          <div className="absolute top-1/2 -right-11 md:-right-16 transform -translate-y-1/2">
+            <SquarePen
+              className="w-5 h-5 md:w-7 md:h-7 p-1 bg-secondary text-primary cursor-pointer border border-primary"
+              onClick={handleEdit}
+            />
+          </div>
+        )}
 
         {role === "admin" && selected && (
           <>
@@ -320,12 +329,7 @@ const ParkingSlot: React.FC<ParkingSlotProps> = ({
                 onClick={() => handleLeftChange(left - stepSize)}
               />
             </div>
-            <div className="absolute top-1/2 -right-11 md:-right-16 transform -translate-y-1/2">
-              <SquarePen
-                className="w-5 h-5 md:w-7 md:h-7 p-1 bg-secondary text-primary cursor-pointer border border-primary"
-                onClick={handleEdit}
-              />
-            </div>
+
             <div className="absolute top-1/2 -right-[70px] md:-right-24 transform -translate-y-1/2">
               <ChevronRight
                 className="w-8 h-8 md:w-10 md:h-10 text-primary cursor-pointer"
@@ -340,6 +344,7 @@ const ParkingSlot: React.FC<ParkingSlotProps> = ({
           <div className="bg-white p-4 rounded shadow-lg">
             <ParkingSlotInfoCard
               slot={slot}
+              role={role}
               onSave={handleSave}
               onClose={handleClose}
             />
