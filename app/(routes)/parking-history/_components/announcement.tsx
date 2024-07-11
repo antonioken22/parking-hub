@@ -1,40 +1,50 @@
 import Link from "next/link";
+import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
+
+
 
 const Announcement: React.FC = () => {
   return (
-    <div className="flex flex-col items-stretch bg-primary-foreground text-black rounded-lg p-4  ">
-      <div className="mb-4 px-10 p-4 bg-primary text-center rounded">
-        <Link href="" className="text-black hover:underline ">
-          ANNOUNCEMENT!
-        </Link>
-      </div>
-      <div className="px-10 p-4 bg-primary text-center rounded ">
+    <Card className="flex flex-col items-stretch p-4 bg-primary text-white rounded-lg">
+      <CardHeader className="mb-4 text-center">
+        <CardTitle className="bg-primary-foreground p-4 rounded">
+          <Link href="" className="text-black hover:underline">
+            ANNOUNCEMENT!
+          </Link>
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="text-center bg-primary-foreground p-4 rounded">
         STATUS
-        <div className="mt-4">
-          <div className="relative w-[100px] h-[100px] mx-auto">
-            <svg className="absolute inset-0 w-[100px] h-[100px]">
+        <div className="mt-4 flex justify-center">
+          <div className="relative w-[100px] h-[100px]">
+            <svg
+              className="absolute inset-0 w-[100px] h-[100px] animate-spin"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 50 50"
+            >
               <circle
-                cx="50%"
-                cy="50%"
-                r="45%"
+                cx="25"
+                cy="25"
+                r="20"
                 stroke="black"
-                strokeWidth="10"
+                strokeWidth="4"
                 fill="none"
               />
               <circle
-                cx="50%"
-                cy="50%"
-                r="45%"
+                cx="25"
+                cy="25"
+                r="20"
                 stroke="orange"
-                strokeWidth="10"
-                strokeDasharray="calc(282.6 * 0.25) 282.6"
+                strokeWidth="4"
+                strokeDasharray="31.4 31.4"
                 fill="none"
+                strokeDashoffset="0"
               />
             </svg>
           </div>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 
