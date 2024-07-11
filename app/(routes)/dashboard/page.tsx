@@ -23,11 +23,19 @@ const formatDate = (date: Date) => {
 };
 
 const DashboardPage = () => {
-  const { userId, userFirstName, userLastName, loading } = useUserState();
-  const [chartData, setChartData] = useState<any>({});
-  const [activeUsersData, setActiveUsersData] = useState<any>({});
+  const { userId, userEmail, userFirstName, userLastName, loading } =
+    useUserState();
+  // Parking Slot Status Hooks
   const { GLE, NGE, RTL, SAL } = useParkingSlotCount();
-  const { activeUsers } = useActiveUsers();
+  const [chartData, setChartData] = useState<any>({});
+  // Active Users Hooks
+  const { activeUsers, logActiveUser } = useActiveUsers();
+  useEffect(() => {
+    if (userId && userEmail && userFirstName && userLastName) {
+      logActiveUser(userId, userEmail, userFirstName, userLastName);
+    }
+  }, [userId, userEmail, userFirstName, userLastName, logActiveUser]);
+  const [activeUsersData, setActiveUsersData] = useState<any>({});
   const currentDate = formatDate(new Date());
 
   useEffect(() => {
@@ -191,7 +199,7 @@ const DashboardPage = () => {
             </div>
             <div className="grid-cols-1 w-full max-w-7xl p-4 mt-8">
               <h2 className="text-xl md:text-2xl font-bold mb-4">
-                Active User{" "}
+                Active Users{" "}
                 <span className="text-orange-500">
                   (24 hours - {currentDate})
                 </span>
@@ -203,10 +211,6 @@ const DashboardPage = () => {
               />
             </div>
           </main>
-          {/*TODO: Improve the layout and UI */}
-          {/* <aside className="w-full md:w-1/3 p-4">
-          <UserProfileDisplay userId={userId} />
-          </aside> */}
         </div>
       )}
     </>

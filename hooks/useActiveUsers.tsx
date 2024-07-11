@@ -1,41 +1,42 @@
-// File: hooks/useActiveUsers.ts
-
 import { useState, useEffect } from "react";
+import { firestore } from "@/firebase/config";
+import {
+  collection,
+  onSnapshot,
+  updateDoc,
+  doc,
+  setDoc,
+  getDoc,
+} from "firebase/firestore";
 
 interface ActiveUser {
   time: string;
   count: number;
+  users: Array<{
+    userId: string;
+    userEmail: string;
+    userFirstName: string;
+    userLastName: string;
+  }>;
 }
 
-// Simulating fetching data from an API
-const fetchActiveUsersData = async (): Promise<ActiveUser[]> => {
-  return [
-    { time: "1 AM", count: 50 },
-    { time: "2 AM", count: 7 },
-    { time: "3 AM", count: 100 },
-    { time: "4 AM", count: 50 },
-    { time: "5 AM", count: 755 },
-    { time: "6 AM", count: 1500 },
-    { time: "7 AM", count: 504 },
-    { time: "8 AM", count: 754 },
-    { time: "9 AM", count: 1400 },
-    { time: "10 AM", count: 540 },
-    { time: "11 AM", count: 755},
-    { time: "12 AM", count: 1060 },
-    { time: "1 PM", count: 50 },
-    { time: "2 PM", count: 755 },
-    { time: "3 PM", count: 100 },
-    { time: "4 PM", count: 5 },
-    { time: "5 PM", count: 7 },
-    { time: "6 PM", count: 1 },
-    { time: "7 PM", count: 0 },
-    { time: "8 PM", count: 0 },
-    { time: "9 PM", count: 1 },
-    { time: "10 PM", count: 9 },
-    { time: "11 PM", count: 5 },
-    { time: "12 PM", count: 10 },
-    // Add more data points as needed
-  ];
+const getCurrentHour = () => {
+  const date = new Date();
+  const hours = date.getHours();
+  const period = hours < 12 ? "AM" : "PM";
+  const adjustedHours = hours % 12 || 12;
+  return `${adjustedHours} ${period}`;
+};
+
+const getFullDateTimeRange = () => {
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  const hours = date.getHours();
+  const period = hours < 12 ? "AM" : "PM";
+  const adjustedHours = hours % 12 || 12;
+  return `${month}-${day}-${year} @ ${adjustedHours}:00 - ${adjustedHours}:59 ${period}`;
 };
 
 const useActiveUsers = () => {
@@ -43,16 +44,62 @@ const useActiveUsers = () => {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const data = await fetchActiveUsersData();
-      setActiveUsers(data);
-      setLoading(false);
-    };
+    const unsubscribe = onSnapshot(
+      collection(firestore, "activeUsers"),
+      (snapshot) => {
+        const data = snapshot.docs.map((doc) => ({
+          time: doc.id.split(" @ ")[1], // Extract the time part for the chart
+          ...doc.data(),
+        })) as ActiveUser[];
+        setActiveUsers(data);
+        setLoading(false);
+      }
+    );
 
-    fetchData();
+    return () => unsubscribe();
   }, []);
 
-  return { activeUsers, loading };
+  const logActiveUser = async (
+    userId: string,
+    userEmail: string,
+    userFirstName: string,
+    userLastName: string
+  ) => {
+    const currentHour = getCurrentHour();
+    const fullDateTimeRange = getFullDateTimeRange();
+    const docRef = doc(firestore, "activeUsers", fullDateTimeRange);
+    const docSnap = await getDoc(docRef);
+
+    const userData = {
+      userId,
+      userEmail,
+      userFirstName,
+      userLastName,
+    };
+
+    if (docSnap.exists()) {
+      const existingData = docSnap.data();
+      const existingUsers = existingData.users || [];
+
+      const userAlreadyLogged = existingUsers.some(
+        (user: any) => user.userId === userId
+      );
+
+      if (!userAlreadyLogged) {
+        await updateDoc(docRef, {
+          count: existingData.count + 1,
+          users: [...existingUsers, userData],
+        });
+      }
+    } else {
+      await setDoc(docRef, {
+        count: 1,
+        users: [userData],
+      });
+    }
+  };
+
+  return { activeUsers, loading, logActiveUser };
 };
 
 export default useActiveUsers;
