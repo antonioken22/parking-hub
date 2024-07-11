@@ -30,6 +30,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { ModeToggle } from "@/components/mode-toggle";
 import { useUserRole } from "@/hooks/useUserRole";
 
 const routes = [
@@ -183,6 +184,9 @@ export const Sidebar = () => {
             <span className="text-sm font-medium text-muted-foreground ml-3">
               Sign Out
             </span>
+            <div className="ml-auto">
+              <ModeToggle />
+            </div>
           </div>
         </AlertDialogTrigger>
         <AlertDialogContent>
