@@ -4,6 +4,14 @@ import { collection, getDocs, Timestamp } from "firebase/firestore";
 import { firestore } from "@/firebase/config";
 import { Spinner } from "@/components/spinner";
 
+import { Card } from "@/components/ui/card";
+import {
+  CardHeader,
+  CardTitle,
+  CardContent,
+} from "@/components/ui/card"
+import { Button } from "@/components/ui/button";
+
 type User = {
   id: string;
   firstName: string;
@@ -40,7 +48,7 @@ const DataList: React.FC<{ tab: string }> = ({ tab }) => {
   if (loading) {
     return (
       <div className="flex items-center justify-center relative inset-y-0 h-full w-full z-50">
-        <Spinner size="lg" text="background" />
+        <Spinner size="lg" text="default" />
       </div>
     );
   }
@@ -48,16 +56,24 @@ const DataList: React.FC<{ tab: string }> = ({ tab }) => {
   return (
     <div className="flex flex-col space-y-4">
       {users.map((user) => (
-        <div key={user.id} className="p-4 bg-primary rounded-lg shadow">
-          {tab === "logs" && (
-            <p>
-              {user.timeIn
-                ? user.timeIn.toDate().toLocaleString()
-                : "No time available"}
-            </p>
-          )}
-          {tab === "vehicles" && <p>{user.vehicle}</p>}
-        </div>
+        <Card key={user.id}>
+          <CardHeader>
+            <CardTitle>{user.firstName}</CardTitle>
+          </CardHeader>
+          <CardContent>
+          <p>Vehicle: {user.vehicle}</p>
+            {tab === "logs" && (
+              <p>
+                {user.timeIn
+                  ? user.timeIn.toDate().toLocaleString()
+                  : "No time available"}
+              </p>
+              
+            )}
+            
+            {tab === "vehicles" && <p>{user.vehicle}</p>}
+          </CardContent>
+        </Card>
       ))}
     </div>
   );

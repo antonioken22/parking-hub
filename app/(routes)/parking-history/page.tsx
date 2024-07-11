@@ -7,6 +7,8 @@ import { Heading } from "@/app/(routes)/_components/heading";
 import useUserState from "@/hooks/useUserState";
 import ParkingLogs from "./_components/parking-logs";
 
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+
 const ParkingHistoryPage = () => {
   const { userId, loading } = useUserState();
 
@@ -21,20 +23,22 @@ const ParkingHistoryPage = () => {
   return (
     <>
       {!loading && userId && (
-        <div>
-          <div className="flex items-center gap-x-3 mr-auto pl-4">
-            <FileClock className="w-10 h-10 text-primary" />
-            <div>
-              <Heading
-                title="Parking History"
-                description="Viewing your parking history."
-              />
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-x-3">
+              <FileClock className="w-10 h-10 text-primary" />
+              <div>
+                <Heading
+                  title="Parking History"
+                  description="Viewing your parking history."
+                />
+              </div>
             </div>
-          </div>
-          <div className="px-4 lg:px-8 space-y-4 pt-4">
+          </CardHeader>
+          <CardContent className="px-4 lg:px-8 space-y-4 pt-4">
             <ParkingLogs />
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       )}
     </>
   );
