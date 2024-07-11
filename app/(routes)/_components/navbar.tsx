@@ -18,6 +18,7 @@ import {
 import useAuthState from "@/hooks/useUserState";
 import { Input } from "@/components/ui/input";
 import { firestore, storage } from "@/firebase/config";
+import NotificationDropdown from "./notification-dropdown";
 
 const Navbar = () => {
   const { userId, userFirstName, userLastName, userPhotoUrl, setUserPhotoUrl } =
@@ -82,6 +83,7 @@ const Navbar = () => {
         <Link href="/booking">
           <Button className="text-xs md:text-base">Book a Parking Slot</Button>
         </Link>
+        <NotificationDropdown /> {/* Add NotificationDropdown component here */}
         <Popover>
           <PopoverTrigger asChild>
             <Avatar role="button" className="border border-primary">
