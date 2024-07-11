@@ -1,9 +1,11 @@
 import Image, { StaticImageData } from "next/image";
+import { Ticket } from "lucide-react";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
 import { ShareURLButton } from "./share-url-button";
 import { ParkingSlotData } from "@/types/ParkingSlotData";
 import { useUserRole } from "@/hooks/useUserRole";
@@ -45,6 +47,21 @@ const ParkingLayout = ({
   } = useParkingSlots(databaseTable);
 
   const [stepSize, setStepSize] = useState<number>(1);
+  const [tempUserRole, setTempUserRole] = useState(userRole);
+
+  useEffect(() => {
+    if (userRole) {
+      setTempUserRole(userRole);
+    }
+  }, [userRole]);
+
+  const handleTempUserRoleChange = (value: boolean) => {
+    if (value) {
+      setTempUserRole("manager");
+    } else {
+      setTempUserRole(userRole);
+    }
+  };
 
   const handleSlotPositionChange = (
     index: number,
@@ -92,8 +109,23 @@ const ParkingLayout = ({
   };
 
   return (
-    <div className="pt-4 flex justify-center items-center">
-      <div className="relative">
+    <div className="pt-4 flex flex-col items-center">
+      {userRole === "admin" && (
+        <div className="flex items-center space-x-4 rounded-md border p-4 w-full">
+          <Ticket />
+          <div className="flex-1 space-y-1">
+            <p className="text-sm font-medium leading-none">Manager View</p>
+            <p className="text-sm text-muted-foreground">
+              Toggle manager view.
+            </p>
+          </div>
+          <Switch
+            checked={tempUserRole === "manager"}
+            onCheckedChange={handleTempUserRoleChange}
+          />
+        </div>
+      )}
+      <div className="relative mt-4">
         {parkingSlots.map((slot, index) => (
           <ParkingSlot
             key={slot.id}
@@ -104,7 +136,7 @@ const ParkingLayout = ({
             onSizeChange={handleSlotSizeChange}
             onRotationChange={handleSlotRotationChange}
             onEdit={handleEditSlot}
-            role={userRole}
+            role={tempUserRole}
             selected={index === selectedSlotIndex}
             onSelect={() => setSelectedSlotIndex(index)}
           />
@@ -118,7 +150,7 @@ const ParkingLayout = ({
           placeholder="blur"
           priority
         />
-        {userRole === "admin" && (
+        {tempUserRole === "admin" && (
           <div>
             <div className="absolute top-1 right-2 md:top-4 md:right-4 space-x-1 md:space-x-2">
               <ShareURLButton />
@@ -175,6 +207,21 @@ const ParkingLayout = ({
               >
                 Delete Slot
               </Button>
+              <Button
+                className="text-xs md:text-base shadow-md"
+                onClick={saveParkingSlots}
+              >
+                Save Changes
+              </Button>
+            </div>
+          </div>
+        )}
+        {tempUserRole === "manager" && (
+          <div>
+            <div className="absolute top-1 right-2 md:top-4 md:right-4 space-x-1 md:space-x-2">
+              <ShareURLButton />
+            </div>
+            <div className="absolute bottom-2 right-2 md:bottom-4 md:right-4 space-x-1 md:space-x-2">
               <Button
                 className="text-xs md:text-base shadow-md"
                 onClick={saveParkingSlots}

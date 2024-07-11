@@ -22,8 +22,6 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-  CommandSeparator,
-  CommandShortcut,
 } from "@/components/ui/command";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -32,6 +30,7 @@ import useUsersEmailFirstNameLastName from "@/hooks/useUsersEmailFirstNameLastNa
 
 type ParkingSlotInfoCardProps = {
   slot: ParkingSlotData;
+  role: string | null;
   className?: string;
   onSave: (updatedSlot: ParkingSlotData) => void;
   onClose: () => void;
@@ -53,12 +52,13 @@ const statusColorMap: Record<string, string> = {
 
 export function ParkingSlotInfoCard({
   slot,
+  role,
   className,
   onSave,
   onClose,
   ...props
 }: ParkingSlotInfoCardProps) {
-  const { users, loading } = useUsersEmailFirstNameLastName();
+  const { users } = useUsersEmailFirstNameLastName();
   const [slotId, setSlotId] = useState(slot.id);
   const [editTop, setEditTop] = useState(slot.top);
   const [editLeft, setEditLeft] = useState(slot.left);
@@ -257,7 +257,7 @@ export function ParkingSlotInfoCard({
                 disableClock
               />
             </div>
-            {!isMobile && (
+            {role === "admin" && !isMobile && (
               <>
                 <hr />
                 <div className="grid grid-cols-5 gap-4 w-full">
