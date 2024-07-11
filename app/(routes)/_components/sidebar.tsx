@@ -174,36 +174,35 @@ export const Sidebar = () => {
           </>
         )}
       </div>
-      <AlertDialog>
-        <AlertDialogTrigger asChild>
-          <div
-            role="button"
-            className="mt-auto flex items-center justify-start px-6 py-2 "
-          >
-            <LogOut className="text-primary" />
-            <span className="text-sm font-medium text-muted-foreground ml-3">
-              Sign Out
-            </span>
-            <div className="ml-auto">
-              <ModeToggle />
+      <div className="mt-auto flex items-center justify-start px-6 py-2">
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <div role="button" className="flex items-center">
+              <LogOut className="text-primary" />
+              <span className="text-sm font-medium text-muted-foreground ml-3">
+                Sign Out
+              </span>
             </div>
-          </div>
-        </AlertDialogTrigger>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Sign Out</AlertDialogTitle>
-            <AlertDialogDescription>
-              Are you sure you want to continue signing out?
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleLogout}>
-              Continue
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Sign Out</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure you want to continue signing out?
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={handleLogout}>
+                Continue
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+        <div className="ml-auto">
+          <ModeToggle />
+        </div>
+      </div>
     </div>
   );
 };
