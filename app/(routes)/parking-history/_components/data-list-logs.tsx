@@ -1,17 +1,19 @@
 import { useEffect, useState, useCallback } from "react";
 import { doc, getDoc, Timestamp } from "firebase/firestore";
+
 import { firestore } from "@/firebase/config";
 import { Spinner } from "@/components/spinner";
 import { Card } from "@/components/ui/card";
-import {
-  CardHeader,
-  CardTitle,
-  CardContent,
-} from "@/components/ui/card";
-import useUserState from "@/hooks/useUserState"; 
+import { CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import useUserState from "@/hooks/useUserState";
 
 const DataList: React.FC<{ tab: string }> = ({ tab }) => {
-  const { userFirstName, userLastName, userId, loading: userLoading } = useUserState();
+  const {
+    userFirstName,
+    userLastName,
+    userId,
+    loading: userLoading,
+  } = useUserState();
   const [userVehicle, setUserVehicle] = useState<string | null>(null);
   const [userTimeIn, setUserTimeIn] = useState<Timestamp | null>(null);
   const [userTimeOut, setUserTimeOut] = useState<Timestamp | null>(null);
