@@ -6,8 +6,7 @@ import { firestore, storage } from "@/firebase/config";
 import useUserState from "@/hooks/useUserState";
 
 const useProfilePhotoUpdate = () => {
-  const { userId, userFirstName, userLastName, setUserPhotoUrl } =
-    useUserState();
+  const { userId, userFirstName, userLastName } = useUserState();
   const [selectedImageUpload, setSelectedImageUpload] = useState<File | null>(
     null
   );

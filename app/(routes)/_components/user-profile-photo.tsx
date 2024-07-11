@@ -1,9 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { doc, updateDoc } from "firebase/firestore";
-import { toast } from "sonner";
+import { useEffect } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -14,62 +11,24 @@ import {
 } from "@/components/ui/popover";
 import useAuthState from "@/hooks/useUserState";
 import { Input } from "@/components/ui/input";
-import { firestore, storage } from "@/firebase/config";
+import useProfilePhotoUpdate from "@/hooks/useProfilePhotoUpdate";
 
 const UserProfilePhoto = () => {
-  const { userId, userFirstName, userLastName, userPhotoUrl, setUserPhotoUrl } =
+  const { userFirstName, userLastName, userPhotoUrl, setUserPhotoUrl } =
     useAuthState();
-  const [imageUpload, setImageUpload] = useState<File | null>(null);
+  const { setSelectedImageUpload, updateProfilePicture, newPhotoUrl } =
+    useProfilePhotoUpdate();
+
+  useEffect(() => {
+    if (newPhotoUrl) {
+      setUserPhotoUrl(newPhotoUrl);
+    }
+  }, [newPhotoUrl, setUserPhotoUrl]);
 
   // String initial parser (for string | null datatypes)
   const getInitials = (...names: (string | null)[]): string => {
     const initials = names.map((name) => (name ? name.trim()[0] : "")).join("");
     return initials;
-  };
-
-  const updateProfilePicture = () => {
-    if (imageUpload == null) {
-      toast.error("No image chosen. Please select an image to upload.");
-      return;
-    }
-
-    // Timestamp parser for unique file naming
-    const timestamp = new Date()
-      .toLocaleString("en-US", {
-        month: "2-digit",
-        day: "2-digit",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: false,
-      })
-      .replace(",", " @")
-      .replace(/\//g, "-");
-
-    const imageRef = ref(
-      storage,
-      `profile-pictures/${userFirstName} ${userLastName} ${timestamp}`
-    );
-
-    toast.promise(
-      uploadBytes(imageRef, imageUpload).then((snapshot) =>
-        getDownloadURL(snapshot.ref).then(async (url) => {
-          // Update the Firestore with the new photoUrl of the user
-          if (userId) {
-            const userDocRef = doc(firestore, "users", userId);
-            await updateDoc(userDocRef, { photoUrl: url });
-            setUserPhotoUrl(url); // Update the local state
-          }
-          setImageUpload(null); // Reset the image upload state
-        })
-      ),
-      {
-        loading: "Uploading your profile picture...",
-        success: "Profile photo updated.",
-        error: "Failed to upload profile picture.",
-      }
-    );
   };
 
   return (
@@ -100,9 +59,9 @@ const UserProfilePhoto = () => {
                 accept=".jpg,.jpeg,.png"
                 onChange={(e) => {
                   if (e.target.files && e.target.files[0]) {
-                    setImageUpload(e.target.files[0]);
+                    setSelectedImageUpload(e.target.files[0]);
                   } else {
-                    setImageUpload(null);
+                    setSelectedImageUpload(null);
                   }
                 }}
               />

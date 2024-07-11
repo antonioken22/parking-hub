@@ -26,7 +26,10 @@ const NotificationDropdown = () => {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="ghost" className="relative w-10 h-10 p-2">
+        <Button
+          variant="ghost"
+          className="relative w-10 h-10 md:w-14 p-2 md:p-4"
+        >
           <Bell className="w-8 h-8" />
           {unreadCount > 0 && (
             <span className="absolute top-0 right-0 inline-flex items-center justify-center w-3 h-3 p-2 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">
