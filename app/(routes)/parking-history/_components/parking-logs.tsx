@@ -11,8 +11,12 @@ const ParkingLogs: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<TabType>("logs");
 
   return (
-    <div className="flex flex-col justify-center items-stretch h-full p-2">
-      <Tabs value={selectedTab} onValueChange={(tab) => setSelectedTab(tab as TabType)}>
+    <div className="flex flex-col h-full p-2">
+      <Tabs
+        value={selectedTab}
+        onValueChange={(tab) => setSelectedTab(tab as TabType)}
+        className="flex flex-col w-full"
+      >
         <TabsList>
           <TabsTrigger value="logs">Logs</TabsTrigger>
           <TabsTrigger value="vehicles">Vehicles</TabsTrigger>
