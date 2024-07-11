@@ -192,6 +192,7 @@ const DashboardPage = () => {
             <div className="grid-cols-1 w-full max-w-7xl p-4 mt-8">
               <h2 className="text-xl md:text-2xl font-bold mb-4">
                 Slot Used{" "}
+                Active User{" "}
                 <span className="text-orange-500">
                   (24 hours - {currentDate})
                 </span>
