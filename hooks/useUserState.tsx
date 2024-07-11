@@ -24,6 +24,7 @@ const useUserState = () => {
         const userDoc = await getDoc(doc(firestore, "users", user.uid));
         if (userDoc.exists()) {
           const userData = userDoc.data() as UserData;
+          // Store locally
           setUserId(user.uid);
           setUserEmail(userData.email);
           setUserPhotoUrl(userData.photoUrl);
