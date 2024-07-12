@@ -78,7 +78,8 @@ const useNotifications = () => {
   const addNotification = useCallback(async (newNotification: Notification) => {
     const notificationWithDateCreated = {
       ...newNotification,
-      dateCreated: new Date(), // Set dateCreated to the current date and time
+      // Set dateCreated to the current date and time
+      dateCreated: { seconds: Math.floor(Date.now() / 1000) },
     };
     try {
       await addDoc(
@@ -87,6 +88,7 @@ const useNotifications = () => {
       );
       setNotifications((prevNotifications) => [
         ...prevNotifications,
+
         notificationWithDateCreated,
       ]);
       toast.success("Notification added successfully");
