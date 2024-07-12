@@ -7,6 +7,7 @@ import { Spinner } from "@/components/spinner";
 import { Heading } from "@/app/(routes)/_components/heading";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Switch } from "@/components/ui/switch";
+import { useUserNotificationStatus } from "@/hooks/useUserNotificationStatus";
 import useUserState from "@/hooks/useUserState";
 import useFcmToken from "@/hooks/useFcmToken";
 import useStoreFcmToken from "@/hooks/useStoreFcmToken";
@@ -14,10 +15,11 @@ import useStoreFcmToken from "@/hooks/useStoreFcmToken";
 const BookingPage = () => {
   const {
     userId,
-    loading,
+    loading: userLoading,
     userPushNotificationStatus,
     setUserPushNotificationStatus,
   } = useUserState();
+  const { updatePushNotificationStatus } = useUserNotificationStatus();
   const [pushNotification, setPushNotification] = useState(
     userPushNotificationStatus
   );
@@ -35,18 +37,29 @@ const BookingPage = () => {
     }
   }, [setUserPushNotificationStatus]);
 
+  useEffect(() => {
+    if (Notification.permission === "granted") {
+      updatePushNotificationStatus(true);
+    } else {
+      updatePushNotificationStatus(false);
+    }
+  }, [updatePushNotificationStatus]);
+
   const handlePushNotificationChange = (checked: boolean) => {
     if (checked && Notification.permission !== "granted") {
       Notification.requestPermission().then((permission) => {
         if (permission === "granted") {
           setPushNotification(true);
           setUserPushNotificationStatus(true);
+          updatePushNotificationStatus(false);
           setDescription(
             "Push notification is now turned on. Please refresh the page to save the changes."
           );
+          updatePushNotificationStatus(true);
         } else {
           setPushNotification(false);
           setUserPushNotificationStatus(false);
+          updatePushNotificationStatus(false);
           setDescription("Push notification is currently off.");
         }
       });
@@ -64,7 +77,7 @@ const BookingPage = () => {
   const { token, notificationPermissionStatus } = useFcmToken();
   const isBooked = useStoreFcmToken(token);
 
-  if (loading) {
+  if (userLoading) {
     return (
       <div className="flex items-center justify-center absolute inset-y-0 h-full w-full bg-background/80 z-50 md:pr-56">
         <Spinner size="lg" />
@@ -74,7 +87,7 @@ const BookingPage = () => {
 
   return (
     <>
-      {!loading && userId && (
+      {!userLoading && userId && (
         <div>
           <div className="flex items-center gap-x-3 mr-auto pl-4">
             <Ticket className="w-10 h-10 text-primary" />

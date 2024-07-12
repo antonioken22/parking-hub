@@ -45,12 +45,12 @@ const UserMonitorPage = () => {
 
   // Push to /dashboard if not admin
   useEffect(() => {
-    if (!authLoading && userRole !== "admin") {
+    if (!authLoading && userRole !== "admin" && userRole !== "manager") {
       router.push("/dashboard");
     }
   }, [authLoading, userRole, router]);
 
-  const { users, updateBookingStatuses } = useUsers();
+  const { users } = useUsers();
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -78,9 +78,9 @@ const UserMonitorPage = () => {
     );
   };
 
-  const handleSaveChanges = async () => {
-    await updateBookingStatuses(localUsers);
-  };
+  // const handleSaveChanges = async () => {
+  //   await updateBookingStatuses(localUsers);
+  // };
 
   const handleNotifyClick = (
     fcmToken: string | null,
@@ -148,6 +148,10 @@ const UserMonitorPage = () => {
       header: "Role",
     },
     {
+      accessorKey: "pushNotificationStatus",
+      header: "Push Notification Status",
+    },
+    {
       accessorKey: "isBooked",
       header: "Booking Status",
       cell: ({ row }) => (
@@ -194,7 +198,7 @@ const UserMonitorPage = () => {
     getPaginationRowModel: getPaginationRowModel(),
   });
 
-  if (authLoading || userRole !== "admin") {
+  if (authLoading || (userRole !== "admin" && userRole !== "manager")) {
     return (
       <div className="flex items-center justify-center absolute inset-y-0 h-full w-full bg-background/80 z-50 md:pr-56">
         <Spinner size="lg" />
@@ -204,7 +208,7 @@ const UserMonitorPage = () => {
 
   return (
     <>
-      {!authLoading && userRole === "admin" && (
+      {!authLoading && (userRole === "admin" || userRole === "manager") && (
         <div>
           <div className="flex items-center gap-x-3 mr-auto pl-4">
             <Monitor className="w-10 h-10 text-primary" />
@@ -316,12 +320,12 @@ const UserMonitorPage = () => {
                 )}
               </TableBody>
             </Table>
-            <Button
+            {/* <Button
               onClick={handleSaveChanges}
               className="flex flex-col mt-4 ml-auto text-xs md:text-base"
             >
               Save Changes
-            </Button>
+            </Button> */}
           </div>
           {showNotificationCard &&
             selectedFcmToken &&

@@ -28,12 +28,12 @@ const useUsers = () => {
         ...doc.data(),
       })) as UserData[];
       // Only save data and show toast if admin
-      if (userRole === "admin") {
+      if (userRole === "admin" || userRole === "manager") {
         setUsers(usersList);
         toast.success("Users fetched successfully.");
       }
     } catch (error) {
-      if (userRole === "admin") {
+      if (userRole === "admin" || userRole === "manager") {
         toast.error("Failed to fetch users.");
       }
     } finally {
@@ -46,6 +46,7 @@ const useUsers = () => {
   }, [fetchUsers]);
 
   // Update users' booking status in Firestore
+  /* Disabled to make it read-only
   const updateBookingStatuses = useCallback(
     async (updatedUsers: UserData[]) => {
       try {
@@ -67,8 +68,9 @@ const useUsers = () => {
     },
     []
   );
+  */
 
-  return { users, loading, updateBookingStatuses };
+  return { users, loading };
 };
 
 export default useUsers;

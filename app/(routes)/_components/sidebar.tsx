@@ -145,12 +145,13 @@ export const Sidebar = () => {
             </Link>
           ))}
         </div>
-        {userRole === "admin" && (
+        {(userRole === "admin" || userRole === "manager") && (
           <>
             <hr className="border border-primary my-2" />
             <div className="text-sm flex p-3 w-full justify-start font-medium">
               <Shield className="h-5 w-5 mx-3" />
-              <h1>Admin</h1>
+              {userRole === "admin" && <h1>Admin</h1>}
+              {userRole === "manager" && <h1>Manager</h1>}
             </div>
             <div className="space-y-1">
               {adminRoutes.map((route) => (
