@@ -4,7 +4,6 @@ import Link from "next/link";
 
 import { MobileSidebar } from "./mobile-sidebar";
 import { Button } from "@/components/ui/button";
-import { ModeToggle } from "@/components/mode-toggle";
 import NotificationDropdown from "./notification-dropdown";
 import UserProfilePhoto from "./user-profile-photo";
 

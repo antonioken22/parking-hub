@@ -1,27 +1,66 @@
 "use client";
 
-import { useState } from "react";
-import { Bell } from "lucide-react";
-
+import { useState, useEffect } from "react";
+import { Bell, Trash2, CheckCircle } from "lucide-react";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-
-const notifications = [
-  { id: 1, message: "New booking confirmed!" },
-  { id: 2, message: "Your profile has been updated." },
-  // Add more notifications here
-];
+import useUserState from "@/hooks/useUserState";
+import useNotifications from "@/hooks/useNotifications";
+import { Notification } from "@/types/Notification";
 
 const NotificationDropdown = () => {
-  const [unreadCount, setUnreadCount] = useState(notifications.length);
+  const { userId } = useUserState();
+  const { notifications, markAsRead, removeFromView } = useNotifications();
+  const [unreadCount, setUnreadCount] = useState(0);
+  const maxNotificationsToShow = 10; // Limit number of notifications to show
 
-  const markAllAsRead = () => {
+  useEffect(() => {
+    const userNotifications = notifications.filter((notification) =>
+      notification.recipient.some((recipient) => recipient.userId === userId)
+    );
+    const count = userNotifications.filter(
+      (notification) => !notification.isRead
+    ).length;
+    setUnreadCount(count);
+  }, [notifications, userId]);
+
+  const markAllAsRead = async () => {
+    const unreadNotifications = notifications.filter(
+      (notification) => !notification.isRead
+    );
+    for (const notification of unreadNotifications) {
+      await markAsRead(notification.id || "");
+    }
     setUnreadCount(0);
   };
+
+  const handleMarkAsViewed = async (notificationId: string) => {
+    await removeFromView(notificationId);
+  };
+
+  const handleMarkAsRead = async (notificationId: string) => {
+    await markAsRead(notificationId);
+  };
+
+  const userNotifications = notifications
+    .filter(
+      (notification) =>
+        notification.recipient.some(
+          (recipient) => recipient.userId === userId
+        ) && notification.isView
+    )
+    // Sort notifications from newest to oldest using dateCreated
+    .sort((a, b) => {
+      const dateA = new Date(a.dateCreated ?? 0).getTime();
+      const dateB = new Date(b.dateCreated ?? 0).getTime();
+      return dateB - dateA;
+    })
+    // Limit the number of notifications displayed
+    .slice(0, maxNotificationsToShow);
 
   return (
     <Popover>
@@ -45,12 +84,45 @@ const NotificationDropdown = () => {
             Mark all as read
           </Button>
         </div>
-        <div className="divide-y divide-muted">
-          {notifications.map((notification) => (
-            <div key={notification.id} className="py-2 text-sm md:text-base">
-              {notification.message}
+        <div className="divide-y divide-muted max-h-80 overflow-y-auto">
+          {userNotifications.length > 0 ? (
+            userNotifications.map((notification: Notification) => (
+              <div
+                key={notification.id}
+                className={`flex justify-between items-center py-2 text-xs md:text-sm ${
+                  notification.isRead ? "text-muted-foreground" : "font-normal"
+                }`}
+              >
+                <span>{notification.body || ""}</span>
+                <div className="flex flex-col items-center space-y-1 ml-1">
+                  <div className="flex flex-col items-center">
+                    <div
+                      role="button"
+                      onClick={() => handleMarkAsRead(notification.id || "")}
+                      className="p-2"
+                    >
+                      <CheckCircle className="w-4 h-4" />
+                    </div>
+                    <span className="text-xs text-muted">Read</span>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <div
+                      role="button"
+                      onClick={() => handleMarkAsViewed(notification.id || "")}
+                      className="p-2"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </div>
+                    <span className="text-xs text-muted">Delete</span>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="py-2 text-xs md:text-sm text-muted-foreground italic">
+              No notifications.
             </div>
-          ))}
+          )}
         </div>
       </PopoverContent>
     </Popover>

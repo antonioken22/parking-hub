@@ -6,7 +6,7 @@ import { firestore } from "@/firebase/config";
 import { UserData } from "@/types/UserData";
 import { useUserRole } from "./useUserRole";
 
-const useUsersEmailFirstNameLastName = () => {
+const useUsersParkingSlotInfoCard = () => {
   const userRole = useUserRole();
   const [users, setUsers] = useState<UserData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -25,6 +25,7 @@ const useUsersEmailFirstNameLastName = () => {
           email: data.email,
           firstName: data.firstName,
           lastName: data.lastName,
+          fcmSwToken: data.fcmSwToken,
         };
       }) as UserData[];
       // Only save data and show toast if admin
@@ -48,4 +49,4 @@ const useUsersEmailFirstNameLastName = () => {
   return { users, loading };
 };
 
-export default useUsersEmailFirstNameLastName;
+export default useUsersParkingSlotInfoCard;
