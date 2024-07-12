@@ -1,5 +1,7 @@
 export interface ParkingSlotData {
   id: string;
+  parkingArea: string;
+  parkingSlotNumber: number;
   top: number;
   left: number;
   width: number;

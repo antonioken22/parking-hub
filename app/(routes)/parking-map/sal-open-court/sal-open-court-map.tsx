@@ -23,6 +23,7 @@ const SALOpenCourtMap = () => {
       </div>
       <ParkingLayout
         databaseTable="SALOpenCourtParkingSlots"
+        parkingArea="SAL-OC"
         parkingSlotDefaultWidth={9}
         parkingSlotDefaultHeight={3}
         parkingSlotDefaultRotation={0}

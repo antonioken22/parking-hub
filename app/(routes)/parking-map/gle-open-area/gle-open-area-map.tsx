@@ -23,6 +23,7 @@ const GLEOpenAreaMap = () => {
       </div>
       <ParkingLayout
         databaseTable="GLEOpenAreaParkingSlots"
+        parkingArea="GLE-OA"
         parkingSlotDefaultWidth={11}
         parkingSlotDefaultHeight={3}
         parkingSlotDefaultRotation={-22}

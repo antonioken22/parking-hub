@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { firestore } from "@/firebase/config";
 import {
   collection,
   onSnapshot,
@@ -9,16 +8,8 @@ import {
   getDoc,
 } from "firebase/firestore";
 
-interface ActiveUser {
-  time: string;
-  count: number;
-  users: Array<{
-    userId: string;
-    userEmail: string;
-    userFirstName: string;
-    userLastName: string;
-  }>;
-}
+import { firestore } from "@/firebase/config";
+import { ActiveUser } from "@/types/ActiveUser";
 
 const getCurrentHour = () => {
   const date = new Date();
@@ -51,6 +42,26 @@ const useActiveUsers = () => {
           time: doc.id.split(" @ ")[1], // Extract the time part for the chart
           ...doc.data(),
         })) as ActiveUser[];
+
+        // Convert time strings to total minutes from the start of the day
+        const convertToMinutes = (time: string) => {
+          const [hourPart, minutePart] = time.split(/[: ]/);
+          let [hours, minutes] = [parseInt(hourPart), parseInt(minutePart)];
+          if (time.includes("PM") && hours !== 12) {
+            hours += 12;
+          } else if (time.includes("AM") && hours === 12) {
+            hours = 0;
+          }
+          return hours * 60 + minutes;
+        };
+
+        // Sort the data by time
+        data.sort((a, b) => {
+          const timeA = convertToMinutes(a.time);
+          const timeB = convertToMinutes(b.time);
+          return timeA - timeB;
+        });
+
         setActiveUsers(data);
         setLoading(false);
       }

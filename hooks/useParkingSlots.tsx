@@ -81,6 +81,8 @@ const useParkingSlots = (databaseTable: string) => {
           if (!slot.id)
             throw new Error("Missing document ID for one or more slots.");
           await updateDoc(doc(slotsRef, slot.id), {
+            parkingArea: slot.parkingArea,
+            parkingSlotNumber: slot.parkingSlotNumber,
             top: slot.top,
             left: slot.left,
             width: slot.width,

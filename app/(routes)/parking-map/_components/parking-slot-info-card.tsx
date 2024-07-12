@@ -60,6 +60,10 @@ export function ParkingSlotInfoCard({
 }: ParkingSlotInfoCardProps) {
   const { users } = useUsersEmailFirstNameLastName();
   const [slotId, setSlotId] = useState(slot.id);
+  const [editParkingArea, setEditParkingArea] = useState(slot.parkingArea);
+  const [editParkingSlotNumber, setEditParkingSlotNumber] = useState(
+    slot.parkingSlotNumber
+  );
   const [editTop, setEditTop] = useState(slot.top);
   const [editLeft, setEditLeft] = useState(slot.left);
   const [editWidth, setEditWidth] = useState(slot.width);
@@ -74,12 +78,14 @@ export function ParkingSlotInfoCard({
   const [occupantLastName, setOccupantLastName] = useState(
     slot.occupantFirstName
   );
+  const [editDescription, setEditDescription] = useState(slot.description);
   const [startTime, setStartTime] = useState<Date | null>(slot.startTime);
   const [endTime, setEndTime] = useState<Date | null>(slot.endTime);
-  const [editDescription, setEditDescription] = useState(slot.description);
 
   useEffect(() => {
     setSlotId(slot.id);
+    setEditParkingArea(slot.parkingArea);
+    setEditParkingSlotNumber(slot.parkingSlotNumber);
     setEditTop(slot.top);
     setEditLeft(slot.left);
     setEditWidth(slot.width);
@@ -94,6 +100,8 @@ export function ParkingSlotInfoCard({
   const handleSave = () => {
     onSave({
       id: slotId,
+      parkingArea: editParkingArea,
+      parkingSlotNumber: editParkingSlotNumber,
       top: editTop,
       left: editLeft,
       width: editWidth,
@@ -163,7 +171,7 @@ export function ParkingSlotInfoCard({
             </Button>
           </div>
           <CardDescription className="hidden md:block text-sm">
-            Edit the details of the parking slot.
+            {editParkingArea} #{editParkingSlotNumber}
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-1 md:gap-4">
@@ -257,6 +265,31 @@ export function ParkingSlotInfoCard({
                 disableClock
               />
             </div>
+            <div className="flex flex-col col-span-5">
+              <div className="flex flex-row space-x-4">
+                <div className="flex-1 space-y-2">
+                  <p className="text-xs ">Parking Area:</p>
+                  <Input
+                    placeholder="Parking Area"
+                    value={editParkingArea}
+                    onChange={(e) => setEditParkingArea(e.target.value)}
+                    className="w-full h-10 text-xs md:text-sm"
+                  />
+                </div>
+                <div className="flex-1 space-y-2">
+                  <p className="text-xs ">Parking Slot Number:</p>
+                  <Input
+                    type="number"
+                    placeholder="Parking Slot Number"
+                    value={editParkingSlotNumber}
+                    onChange={(e) =>
+                      setEditParkingSlotNumber(parseInt(e.target.value))
+                    }
+                    className="w-full h-10 text-xs md:text-sm"
+                  />
+                </div>
+              </div>
+            </div>
             {role === "admin" && !isMobile && (
               <>
                 <hr />
@@ -266,6 +299,31 @@ export function ParkingSlotInfoCard({
                       Properties:
                     </p>
                   </div>
+                  {/* <div className="flex flex-col col-span-5">
+                    <div className="flex flex-row space-x-4">
+                      <div className="flex-1 space-y-2">
+                        <p className="text-xs ">Parking Area:</p>
+                        <Input
+                          placeholder="Parking Area"
+                          value={editParkingArea}
+                          onChange={(e) => setEditParkingArea(e.target.value)}
+                          className="w-full h-10 text-xs md:text-sm"
+                        />
+                      </div>
+                      <div className="flex-1 space-y-2">
+                        <p className="text-xs ">Parking Slot Number:</p>
+                        <Input
+                          type="number"
+                          placeholder="Parking Slot Number"
+                          value={editParkingSlotNumber}
+                          onChange={(e) =>
+                            setEditParkingSlotNumber(parseInt(e.target.value))
+                          }
+                          className="w-full h-10 text-xs md:text-sm"
+                        />
+                      </div>
+                    </div>
+                  </div> */}
                   <div className="flex flex-col space-y-2">
                     <p className="text-xs">Top (%):</p>
                     <Input

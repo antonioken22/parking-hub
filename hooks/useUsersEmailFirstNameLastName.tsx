@@ -28,12 +28,12 @@ const useUsersEmailFirstNameLastName = () => {
         };
       }) as UserData[];
       // Only save data and show toast if admin
-      if (userRole === "admin") {
+      if (userRole === "admin" || userRole === "manager") {
         setUsers(usersList);
         toast.success("Users fetched successfully.");
       }
     } catch (error) {
-      if (userRole === "admin") {
+      if (userRole === "admin" || userRole === "manager") {
         toast.error("Failed to fetch users.");
       }
     } finally {
