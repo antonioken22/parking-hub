@@ -27,9 +27,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { ParkingSlotData } from "@/types/ParkingSlotData";
-import { Notification } from "@/types/Notification";
 import useUsersParkingSlotInfoCard from "@/hooks/useUsersParkingSlotInfoCard";
 import useNotifications from "@/hooks/useNotifications";
+import { useRemoteUserIsBooked } from "@/hooks/useRemoteUserIsBooked";
 
 type ParkingSlotInfoCardProps = {
   slot: ParkingSlotData;
@@ -63,6 +63,7 @@ export function ParkingSlotInfoCard({
 }: ParkingSlotInfoCardProps) {
   const { users } = useUsersParkingSlotInfoCard();
   const { addNotification } = useNotifications();
+  const { updateRemoteUserIsBooked } = useRemoteUserIsBooked();
   const [slotId, setSlotId] = useState(slot.id);
   const [editParkingArea, setEditParkingArea] = useState(slot.parkingArea);
   const [editParkingSlotNumber, setEditParkingSlotNumber] = useState(
@@ -164,7 +165,7 @@ export function ParkingSlotInfoCard({
       });
 
       if (startNotificationTime > 0) {
-        setTimeout(() => {
+        setTimeout(async () => {
           const notification = createNotification(startMessage);
           addNotification(notification);
           sendNotification(
@@ -173,6 +174,7 @@ export function ParkingSlotInfoCard({
             startMessage,
             "/booking"
           );
+          await updateRemoteUserIsBooked(occupant.id, true);
         }, startNotificationTime);
       }
 
@@ -190,7 +192,7 @@ export function ParkingSlotInfoCard({
       }
 
       if (endNotificationTime > 0) {
-        setTimeout(() => {
+        setTimeout(async () => {
           const notification = createNotification(endMessage);
           addNotification(notification);
           sendNotification(
@@ -199,6 +201,7 @@ export function ParkingSlotInfoCard({
             endMessage,
             "/booking"
           );
+          await updateRemoteUserIsBooked(occupant.id, false);
         }, endNotificationTime);
       }
       toast.info("Notification timers set.");

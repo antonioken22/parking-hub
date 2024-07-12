@@ -96,6 +96,7 @@ const UserMonitorPage = () => {
   };
 
   const columns: ColumnDef<any>[] = [
+    /* Disabled as it is not used
     {
       id: "select",
       header: ({ table }) => (
@@ -117,7 +118,7 @@ const UserMonitorPage = () => {
       ),
       enableSorting: false,
       enableHiding: false,
-    },
+    }, */
     {
       accessorKey: "firstName",
       header: "First Name",
@@ -150,21 +151,15 @@ const UserMonitorPage = () => {
     {
       accessorKey: "pushNotificationStatus",
       header: "Push Notification Status",
+      cell: ({ cell }) => <div>{cell.getValue() ? "Allowed" : "Disabled"}</div>,
     },
+
     {
       accessorKey: "isBooked",
       header: "Booking Status",
       cell: ({ row }) => (
         <div className="flex items-center">
-          <select
-            value={row.original.isBooked ? "true" : "false"}
-            onChange={(e) =>
-              handleDropdownChange(row.original.id, e.target.value === "true")
-            }
-          >
-            <option value="true">Booked</option>
-            <option value="false">Not Booked</option>
-          </select>
+          <span>{row.original.isBooked ? "Booked" : "Not Booked"}</span>
           <Button
             variant="outline"
             className="ml-2"
