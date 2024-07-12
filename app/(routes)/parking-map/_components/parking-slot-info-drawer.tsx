@@ -38,13 +38,6 @@ export function ParkingSlotInfoDrawer({
   isOpen,
   onClose,
 }: ParkingSlotInfoDrawerProps) {
-  const [occupantFirstName, setOccupantFirstName] = useState(
-    slot.occupantFirstName
-  );
-  const [occupantLastName, setOccupantLastName] = useState(
-    slot.occupantLastName
-  );
-
   let slotOccupantName = "N/A";
   // Combining occupant's first and last names to display as Occupant if it exists
   if (slot.occupantFirstName && slot.occupantLastName) {
@@ -81,7 +74,7 @@ export function ParkingSlotInfoDrawer({
                 Parking Slot Info
               </DrawerTitle>
               <DrawerDescription className="text-xs md:text-sm mr-auto text-wrap">
-                Viewing selected parking slot status.
+                {slot.parkingArea} #{slot.parkingSlotNumber}
               </DrawerDescription>
             </div>
             <div
