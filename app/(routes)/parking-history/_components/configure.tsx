@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { doc, updateDoc, addDoc, collection } from "firebase/firestore";
+import { doc, updateDoc, addDoc, deleteDoc, collection } from "firebase/firestore";
 import { firestore } from "@/firebase/config";
 import { toast } from "sonner";
 import useVehicles from "@/hooks/useUserVehicles";
+import useUserState from "@/hooks/useUserState"; // Import useUserState hook
 import { VehicleData } from "@/types/UserVehicle";
 
 import { Button } from "@/components/ui/button";
@@ -23,7 +24,15 @@ import { AccordionTrigger } from "@/components/ui/accordion";
 import { AccordionContent } from "@/components/ui/accordion";
 
 const VehicleConfiguration: React.FC = () => {
-  const { vehicles } = useVehicles();
+  const { vehicles, loading, refetchVehicles } = useVehicles(); // Destructure refetchVehicles function
+  const {
+    userId,
+    userFirstName,
+    userLastName,
+    userEmail,
+    loading: userLoading,
+  } = useUserState(); // Destructure user data from useUserState
+
   const [selectedVehicle, setSelectedVehicle] = useState<VehicleData | null>(null);
   const [color, setColor] = useState<string>("");
   const [licensePlate, setLicensePlate] = useState<string>("");
@@ -36,7 +45,7 @@ const VehicleConfiguration: React.FC = () => {
   const [newVehicleType, setNewVehicleType] = useState<string>("");
 
   const handleVehicleSelect = (vehicleId: string) => {
-    const vehicle = vehicles.find(v => v.id === vehicleId) || null;
+    const vehicle = vehicles.find((v) => v.id === vehicleId) || null;
     setSelectedVehicle(vehicle);
 
     if (vehicle) {
@@ -57,13 +66,7 @@ const VehicleConfiguration: React.FC = () => {
     if (!selectedVehicle) return;
 
     try {
-      const vehicleDocRef = doc(
-        firestore,
-        "users",
-        selectedVehicle.userId,
-        "vehicles",
-        selectedVehicle.id
-      );
+      const vehicleDocRef = doc(firestore, "vehicles", selectedVehicle.id);
 
       await updateDoc(vehicleDocRef, {
         color,
@@ -82,12 +85,23 @@ const VehicleConfiguration: React.FC = () => {
   const handleAddSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const userId = selectedVehicle ? selectedVehicle.userId : ""; // Adjust this based on how you retrieve userId
-      await addDoc(collection(firestore, "users", userId, "vehicles"), {
+      if (!userId || !userFirstName || !userLastName || !userEmail) {
+        throw new Error("User data incomplete. Cannot add vehicle.");
+      }
+
+      if (!newColor || !newLicensePlate || !newModel || !newVehicleType) {
+        throw new Error("Please fill out all fields before adding a vehicle.");
+      }
+
+      await addDoc(collection(firestore, "vehicles"), {
         color: newColor,
         licensePlate: newLicensePlate,
         model: newModel,
         vehicleType: newVehicleType,
+        userId: userId,
+        ownerEmail: userEmail,
+        ownerFirstName: userFirstName,
+        ownerLastName: userLastName,
       });
 
       toast.success("Vehicle added successfully");
@@ -103,13 +117,38 @@ const VehicleConfiguration: React.FC = () => {
     }
   };
 
+  const handleDeleteVehicle = async () => {
+    if (!selectedVehicle) return;
+
+    try {
+      const vehicleDocRef = doc(firestore, "vehicles", selectedVehicle.id);
+      await deleteDoc(vehicleDocRef);
+      toast.success("Vehicle deleted successfully");
+
+      // Refresh the list of vehicles after deletion
+      refetchVehicles();
+      
+      // Clear selected vehicle and form fields
+      setSelectedVehicle(null);
+      setColor("");
+      setLicensePlate("");
+      setModel("");
+      setVehicleType("");
+    } catch (error) {
+      toast.error("Failed to delete vehicle");
+      console.error("Error deleting vehicle:", error);
+    }
+  };
+
   return (
     <Card className="p-4">
       <Accordion type="single" collapsible>
         <AccordionItem value="edit-vehicle">
           <AccordionTrigger>Edit Vehicle</AccordionTrigger>
           <AccordionContent>
-            {vehicles.length > 0 ? (
+            {loading ? (
+              <p>Loading...</p>
+            ) : vehicles.length > 0 ? (
               <div>
                 <Label>Select a vehicle</Label>
                 <Select onValueChange={(value) => handleVehicleSelect(value)}>
@@ -160,6 +199,9 @@ const VehicleConfiguration: React.FC = () => {
                       />
                     </div>
                     <Button type="submit">Update Vehicle</Button>
+                    <Button type="button" onClick={handleDeleteVehicle} className="ml-2 bg-red-500 text-white">
+                      Delete Vehicle
+                    </Button>
                   </form>
                 )}
               </div>
@@ -204,7 +246,9 @@ const VehicleConfiguration: React.FC = () => {
                   onChange={(e) => setNewVehicleType(e.target.value)}
                 />
               </div>
-              <Button type="submit">Add Vehicle</Button>
+              <Button type="submit" disabled={!newColor || !newLicensePlate || !newModel || !newVehicleType}>
+                Add Vehicle
+              </Button>
             </form>
           </AccordionContent>
         </AccordionItem>

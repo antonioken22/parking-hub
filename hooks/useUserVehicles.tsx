@@ -1,44 +1,49 @@
-// hooks/useUserVehicles.ts
-import { useState, useEffect } from "react";
-import { onAuthStateChanged } from "firebase/auth";
-import { collection, getDocs } from "firebase/firestore";
-import { toast } from "sonner";
-import { auth, firestore } from "@/firebase/config";
+import { useEffect, useState } from "react";
+import { collection, query, where, getDocs } from "firebase/firestore";
 import { VehicleData } from "@/types/UserVehicle";
+import { firestore } from "@/firebase/config";
+import useUserState from "./useUserState";
 
-const useVehicles = () => {
+const useUserVehicles = (userId?: string | null) => {
   const [vehicles, setVehicles] = useState<VehicleData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const { userRole } = useUserState();
+
+  const fetchVehicles = async () => {
+    setLoading(true);
+    try {
+      let vehiclesQuery;
+
+      if (userId) {
+        vehiclesQuery = query(collection(firestore, "vehicles"), where("userId", "==", userId));
+      } else if (userRole === "admin") {
+        vehiclesQuery = query(collection(firestore, "vehicles"));
+      } else {
+        throw new Error("Unauthorized access");
+      }
+
+      const querySnapshot = await getDocs(vehiclesQuery);
+      const fetchedVehicles: VehicleData[] = [];
+      querySnapshot.forEach((doc) => {
+        fetchedVehicles.push({ id: doc.id, ...doc.data() } as VehicleData);
+      });
+      setVehicles(fetchedVehicles);
+    } catch (error) {
+      console.error("Error fetching vehicles:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        try {
-          const vehiclesCollectionRef = collection(firestore, "users", user.uid, "vehicles");
-          const vehiclesSnapshot = await getDocs(vehiclesCollectionRef);
+    fetchVehicles();
+  }, [userId, userRole]); // Include userId and userRole in dependencies
 
-          const vehiclesData = vehiclesSnapshot.docs.map((doc) => ({
-            id: doc.id,
-            userId: user.uid,
-            ...doc.data(),
-          })) as VehicleData[];
+  const refetchVehicles = () => {
+    fetchVehicles(); // Function to refetch vehicles
+  };
 
-          setVehicles(vehiclesData);
-        } catch (error) {
-          toast.error("Failed to fetch vehicle data");
-          console.error("Error fetching vehicle data:", error);
-        }
-      } else {
-        toast.error("User is not authenticated");
-      }
-      setLoading(false);
-    });
-
-    // Cleanup subscription on unmount
-    return () => unsubscribe();
-  }, []);
-
-  return { vehicles, loading };
+  return { vehicles, loading, refetchVehicles };
 };
 
-export default useVehicles;
+export default useUserVehicles;

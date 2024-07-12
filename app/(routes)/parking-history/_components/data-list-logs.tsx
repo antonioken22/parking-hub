@@ -1,24 +1,29 @@
-import { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import { doc, getDoc, Timestamp } from "firebase/firestore";
 
 import { firestore } from "@/firebase/config";
 import { Spinner } from "@/components/spinner";
-import { Card } from "@/components/ui/card";
-import { CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import useUserState from "@/hooks/useUserState";
-import useVehicles from "@/hooks/useUserVehicles";
+import { useUserRole } from "@/hooks/useUserRole";
+import useUserVehicles from "@/hooks/useUserVehicles";
 import { Toaster } from "sonner";
 
 const DataList: React.FC<{ tab: string }> = ({ tab }) => {
-  const { userFirstName, userLastName, userId, loading: userLoading } = useUserState();
+  const { userId, loading: userLoading } = useUserState();
+  const { vehicles, loading: vehiclesLoading, refetchVehicles } = useUserVehicles(userId);
+  const userRole = useUserRole(); // Use useUserRole hook to get user role
 
   const [userVehicle, setUserVehicle] = useState<string | null>(null);
   const [userTimeIn, setUserTimeIn] = useState<Timestamp | null>(null);
   const [userTimeOut, setUserTimeOut] = useState<Timestamp | null>(null);
 
-  const { vehicles, loading: vehiclesLoading } = useVehicles();
+  useEffect(() => {
+    refetchVehicles(); // Refetch vehicles whenever userId changes
+    fetchUserData(); // Fetch user-specific data whenever userId changes
+  }, [userId]);
 
-  const fetchUserData = useCallback(async () => {
+  const fetchUserData = async () => {
     if (!userId) return;
     try {
       const userDataDoc = await getDoc(doc(firestore, "users", userId));
@@ -33,61 +38,61 @@ const DataList: React.FC<{ tab: string }> = ({ tab }) => {
     } catch (error) {
       console.error("Error fetching user data:", error);
     }
-  }, [userId]);
+  };
 
-  useEffect(() => {
-    fetchUserData();
-  }, [fetchUserData, tab, userId]);
-
-  if (userLoading || (tab === "vehicles" && vehiclesLoading)) {
-    return (
-      <div className="flex items-center justify-center relative inset-y-0 h-full w-full z-50">
-        <Spinner size="lg" text="default" />
-      </div>
-    );
-  }
+  if (userLoading || vehiclesLoading || userRole === null) return <Spinner />;
 
   return (
-    <div className="flex flex-col space-y-4">
-      <Toaster />
-      <Card>
-        <CardHeader>
-          <CardTitle>{`${userFirstName} ${userLastName}`}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {tab === "logs" && (
-            <>
-              <p>Vehicle: {userVehicle}</p>
+    <Card className="mt-4">
+      <CardHeader>
+        <CardTitle>{tab === "vehicles" ? "Vehicles" : "User Data"}</CardTitle>
+      </CardHeader>
+      <CardContent>
+        {tab === "vehicles" ? (
+          vehicles.map((vehicle) => (
+            <div key={vehicle.id} className="mb-4">
               <p>
-                Time In:{" "}
-                {userTimeIn ? userTimeIn.toDate().toLocaleString() : "No time in available"}
+                <strong>License Plate:</strong> {vehicle.licensePlate}
               </p>
               <p>
-                Time Out:{" "}
-                {userTimeOut ? userTimeOut.toDate().toLocaleString() : "No time out available"}
+                <strong>Model:</strong> {vehicle.model}
               </p>
-            </>
-          )}
-          {tab === "vehicles" && (
-            <>
-              {vehicles.length > 0 ? (
-                vehicles.map((vehicle, index) => (
-                  <div key={index} className="mb-4">
-                    <h3 className="font-bold">{`Vehicle ${index + 1} details`}</h3>
-                    <p>Color: {vehicle.color}</p>
-                    <p>License Plate: {vehicle.licensePlate}</p>
-                    <p>Model: {vehicle.model}</p>
-                    <p>Vehicle Type: {vehicle.vehicleType}</p>
-                  </div>
-                ))
-              ) : (
-                <p>No vehicles available</p>
+              <p>
+                <strong>Color:</strong> {vehicle.color}
+              </p>
+              <p>
+                <strong>Type:</strong> {vehicle.vehicleType}
+              </p>
+              {userRole === "admin" && (
+                <>
+                  <p>
+                    <strong>Owner Email:</strong> {vehicle.ownerEmail}
+                  </p>
+                  <p>
+                    <strong>Owner First Name:</strong> {vehicle.ownerFirstName}
+                  </p>
+                  <p>
+                    <strong>Owner Last Name:</strong> {vehicle.ownerLastName}
+                  </p>
+                </>
               )}
-            </>
-          )}
-        </CardContent>
-      </Card>
-    </div>
+            </div>
+          ))
+        ) : (
+          <div>
+            <p>
+              <strong>Vehicle:</strong> {userVehicle}
+            </p>
+            <p>
+              <strong>Time In:</strong> {userTimeIn?.toDate().toString()}
+            </p>
+            <p>
+              <strong>Time Out:</strong> {userTimeOut?.toDate().toString()}
+            </p>
+          </div>
+        )}
+      </CardContent>
+    </Card>
   );
 };
 
