@@ -102,16 +102,8 @@ export function ParkingSlotInfoCard({
     setEditDescription(slot.description);
   }, [slot]);
 
-  // TODO: Refactor this component.
-  const handleSaveAndNotify = () => {
-    const occupant = users.find((user) => user.email === occupantEmail);
-
-    if (!occupant) {
-      toast.error("Occupant not found.");
-      return;
-    }
-
-    onSave({
+const handleSave = () => {
+ onSave({
       id: slotId,
       parkingArea: editParkingArea,
       parkingSlotNumber: editParkingSlotNumber,
@@ -129,6 +121,16 @@ export function ParkingSlotInfoCard({
       endTime: endTime,
       description: editDescription,
     });
+};
+
+  // TODO: Refactor this component.
+  const handleNotify = () => {
+    const occupant = users.find((user) => user.email === occupantEmail);
+
+    if (!occupant) {
+      toast.error("Occupant not found.");
+      return;
+    }
 
     const formatTime = (date: Date) => date.toLocaleString();
 
@@ -521,7 +523,10 @@ export function ParkingSlotInfoCard({
           >
             Cancel
           </Button>
-          <Button onClick={handleSaveAndNotify} className="text-xs md:text-sm">
+ <Button onClick={handleSave} className="text-xs md:text-sm">
+            <Check className="mr-2 h-4 w-4" /> Save Details
+          </Button>
+          <Button onClick={handleNotify} className="text-xs md:text-sm">
             <Check className="mr-2 h-4 w-4" /> Notify
           </Button>
         </CardFooter>
