@@ -524,7 +524,7 @@ const handleSave = () => {
             Cancel
           </Button>
  <Button onClick={handleSave} className="text-xs md:text-sm">
-            <Check className="mr-2 h-4 w-4" /> Save Details
+           Save Details
           </Button>
           <Button onClick={handleNotify} className="text-xs md:text-sm">
             <Check className="mr-2 h-4 w-4" /> Notify
