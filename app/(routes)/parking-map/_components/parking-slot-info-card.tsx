@@ -168,13 +168,13 @@ export function ParkingSlotInfoCard({
         setTimeout(async () => {
           const notification = createNotification(startMessage);
           addNotification(notification);
+          updateRemoteUserIsBooked(occupant.id, true);
           sendNotification(
             occupant.fcmSwToken || "",
             "Parking Hub",
             startMessage,
             "/booking"
           );
-          await updateRemoteUserIsBooked(occupant.id, true);
         }, startNotificationTime);
       }
 
@@ -195,13 +195,13 @@ export function ParkingSlotInfoCard({
         setTimeout(async () => {
           const notification = createNotification(endMessage);
           addNotification(notification);
+          updateRemoteUserIsBooked(occupant.id, false);
           sendNotification(
             occupant.fcmSwToken || "",
             "Parking Hub",
             endMessage,
             "/booking"
           );
-          await updateRemoteUserIsBooked(occupant.id, false);
         }, endNotificationTime);
       }
       toast.info("Notification timers set.");
