@@ -30,18 +30,36 @@ const getFullDateTimeRange = () => {
   return `${month}-${day}-${year} @ ${adjustedHours}:00 - ${adjustedHours}:59 ${period}`;
 };
 
+const getTodayDate = () => {
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${month}-${day}-${year}`;
+};
+
 const useActiveUsers = () => {
   const [activeUsers, setActiveUsers] = useState<ActiveUser[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
+    const todayDate = getTodayDate();
     const unsubscribe = onSnapshot(
       collection(firestore, "activeUsers"),
       (snapshot) => {
-        const data = snapshot.docs.map((doc) => ({
-          time: doc.id.split(" @ ")[1], // Extract the time part for the chart
-          ...doc.data(),
-        })) as ActiveUser[];
+        const data = snapshot.docs
+          .map((doc) => {
+            const id = doc.id;
+            if (id.startsWith(todayDate)) {
+              return {
+                // Extract the time part for the chart
+                time: id.split(" @ ")[1],
+                ...doc.data(),
+              } as ActiveUser;
+            }
+            return null;
+          })
+          .filter((doc) => doc !== null);
 
         // Convert time strings to total minutes from the start of the day
         const convertToMinutes = (time: string) => {

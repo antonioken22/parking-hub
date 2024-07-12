@@ -7,7 +7,7 @@ export interface Notification {
   timeEnd: Date;
   isRead: boolean;
   isView: boolean;
-  dateCreated?: Date;
+  dateCreated?: { seconds: number }; // For sorting notifications only
   recipient: Array<{
     userId: string;
     userEmail: string;
