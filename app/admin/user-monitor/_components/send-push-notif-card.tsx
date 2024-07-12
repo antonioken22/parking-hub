@@ -63,7 +63,7 @@ const SendPushNotificationCard: React.FC<SendPushNotificationCardProps> = ({
     });
 
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
 
     if (data.success === true) {
       toast.success("Successfully sent a notification.");

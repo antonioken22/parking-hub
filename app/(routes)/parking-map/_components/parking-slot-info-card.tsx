@@ -1,6 +1,7 @@
 import { Calendar, Check, X } from "lucide-react";
 import React, { useState, useEffect, useMemo } from "react";
 import { DateTimePicker } from "react-datetime-picker";
+import { toast } from "sonner";
 import "react-datetime-picker/dist/DateTimePicker.css";
 import "react-calendar/dist/Calendar.css";
 import "react-clock/dist/Clock.css";
@@ -26,7 +27,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { ParkingSlotData } from "@/types/ParkingSlotData";
-import useUsersEmailFirstNameLastName from "@/hooks/useUsersEmailFirstNameLastName";
+import { Notification } from "@/types/Notification";
+import useUsersParkingSlotInfoCard from "@/hooks/useUsersParkingSlotInfoCard";
+import useNotifications from "@/hooks/useNotifications";
 
 type ParkingSlotInfoCardProps = {
   slot: ParkingSlotData;
@@ -58,7 +61,8 @@ export function ParkingSlotInfoCard({
   onClose,
   ...props
 }: ParkingSlotInfoCardProps) {
-  const { users } = useUsersEmailFirstNameLastName();
+  const { users } = useUsersParkingSlotInfoCard();
+  const { addNotification } = useNotifications();
   const [slotId, setSlotId] = useState(slot.id);
   const [editParkingArea, setEditParkingArea] = useState(slot.parkingArea);
   const [editParkingSlotNumber, setEditParkingSlotNumber] = useState(
@@ -76,7 +80,7 @@ export function ParkingSlotInfoCard({
     slot.occupantFirstName
   );
   const [occupantLastName, setOccupantLastName] = useState(
-    slot.occupantFirstName
+    slot.occupantLastName
   );
   const [editDescription, setEditDescription] = useState(slot.description);
   const [startTime, setStartTime] = useState<Date | null>(slot.startTime);
@@ -97,7 +101,15 @@ export function ParkingSlotInfoCard({
     setEditDescription(slot.description);
   }, [slot]);
 
-  const handleSave = () => {
+  // TODO: Refactor this component.
+  const handleSaveAndNotify = () => {
+    const occupant = users.find((user) => user.email === occupantEmail);
+
+    if (!occupant) {
+      toast.error("Occupant not found.");
+      return;
+    }
+
     onSave({
       id: slotId,
       parkingArea: editParkingArea,
@@ -116,6 +128,109 @@ export function ParkingSlotInfoCard({
       endTime: endTime,
       description: editDescription,
     });
+
+    const formatTime = (date: Date) => date.toLocaleString();
+
+    if (startTime && endTime) {
+      const now = new Date();
+      const startNotificationTime = startTime.getTime() - now.getTime();
+      const endNotificationTime = endTime.getTime() - now.getTime();
+      const oneMinuteBeforeEndNotificationTime = endNotificationTime - 60000;
+
+      const startFormatted = formatTime(startTime);
+      const endFormatted = formatTime(endTime);
+
+      const startMessage = `You've successfully booked a parking slot.\nStart Time: ${startFormatted}\nEnd Time: ${endFormatted}\nAt: ${slot.parkingArea} #${slot.parkingSlotNumber}`;
+      const beforeEndMessage = `Your booked parking slot will expire soon.\nStart Time: ${startFormatted}\nEnd Time: ${endFormatted}\nAt: ${slot.parkingArea} #${slot.parkingSlotNumber}`;
+      const endMessage = `Your booked parking slot has expired.\nStart Time: ${startFormatted}\nEnd Time: ${endFormatted}\nAt: ${slot.parkingArea} #${slot.parkingSlotNumber}`;
+
+      const createNotification = (message: string) => ({
+        title: "Parking Slot Booking",
+        body: message,
+        link: "/booking",
+        timeStart: startTime,
+        timeEnd: endTime,
+        isRead: false,
+        isView: true,
+        recipient: [
+          {
+            userId: occupant.id,
+            userEmail: occupantEmail,
+            userFirstName: occupantFirstName || "",
+            userLastName: occupantLastName || "",
+            userFcmSwToken: occupant.fcmSwToken || "",
+          },
+        ],
+      });
+
+      if (startNotificationTime > 0) {
+        setTimeout(() => {
+          const notification = createNotification(startMessage);
+          addNotification(notification);
+          sendNotification(
+            occupant.fcmSwToken || "",
+            "Parking Hub",
+            startMessage,
+            "/booking"
+          );
+        }, startNotificationTime);
+      }
+
+      if (oneMinuteBeforeEndNotificationTime > 0) {
+        setTimeout(() => {
+          const notification = createNotification(beforeEndMessage);
+          addNotification(notification);
+          sendNotification(
+            occupant.fcmSwToken || "",
+            "Parking Hub",
+            beforeEndMessage,
+            "/booking"
+          );
+        }, oneMinuteBeforeEndNotificationTime);
+      }
+
+      if (endNotificationTime > 0) {
+        setTimeout(() => {
+          const notification = createNotification(endMessage);
+          addNotification(notification);
+          sendNotification(
+            occupant.fcmSwToken || "",
+            "Parking Hub",
+            endMessage,
+            "/booking"
+          );
+        }, endNotificationTime);
+      }
+      toast.info("Notification timers set.");
+    }
+  };
+
+  const sendNotification = async (
+    token: string,
+    title: string,
+    message: string,
+    link: string
+  ) => {
+    const response = await fetch("/send-push-notification", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        token: token,
+        title: title,
+        message: message,
+        link: link,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (data.success === true) {
+      toast.success("Successfully sent a notification.");
+    } else {
+      toast.error("Notification sent unsuccessfully.");
+    }
   };
 
   // Local operations
@@ -265,31 +380,33 @@ export function ParkingSlotInfoCard({
                 disableClock
               />
             </div>
-            <div className="flex flex-col col-span-5">
-              <div className="flex flex-row space-x-4">
-                <div className="flex-1 space-y-2">
-                  <p className="text-xs ">Parking Area:</p>
-                  <Input
-                    placeholder="Parking Area"
-                    value={editParkingArea}
-                    onChange={(e) => setEditParkingArea(e.target.value)}
-                    className="w-full h-10 text-xs md:text-sm"
-                  />
-                </div>
-                <div className="flex-1 space-y-2">
-                  <p className="text-xs ">Parking Slot Number:</p>
-                  <Input
-                    type="number"
-                    placeholder="Parking Slot Number"
-                    value={editParkingSlotNumber}
-                    onChange={(e) =>
-                      setEditParkingSlotNumber(parseInt(e.target.value))
-                    }
-                    className="w-full h-10 text-xs md:text-sm"
-                  />
+            {!isMobile && (
+              <div className="flex flex-col col-span-5">
+                <div className="flex flex-row space-x-4">
+                  <div className="flex-1 space-y-2">
+                    <p className="text-xs ">Parking Area:</p>
+                    <Input
+                      placeholder="Parking Area"
+                      value={editParkingArea}
+                      onChange={(e) => setEditParkingArea(e.target.value)}
+                      className="w-full h-10 text-xs md:text-sm"
+                    />
+                  </div>
+                  <div className="flex-1 space-y-2">
+                    <p className="text-xs ">Parking Slot Number:</p>
+                    <Input
+                      type="number"
+                      placeholder="Parking Slot Number"
+                      value={editParkingSlotNumber}
+                      onChange={(e) =>
+                        setEditParkingSlotNumber(parseInt(e.target.value))
+                      }
+                      className="w-full h-10 text-xs md:text-sm"
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
             {role === "admin" && !isMobile && (
               <>
                 <hr />
@@ -401,8 +518,8 @@ export function ParkingSlotInfoCard({
           >
             Cancel
           </Button>
-          <Button onClick={handleSave} className="text-xs md:text-sm">
-            <Check className="mr-2 h-4 w-4" /> Save
+          <Button onClick={handleSaveAndNotify} className="text-xs md:text-sm">
+            <Check className="mr-2 h-4 w-4" /> Notify
           </Button>
         </CardFooter>
       </Card>
