@@ -6,17 +6,17 @@ import { Spinner } from "@/components/spinner";
 import { Card } from "@/components/ui/card";
 import { CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import useUserState from "@/hooks/useUserState";
+import useVehicles from "@/hooks/useUserVehicles";
+import { Toaster } from "sonner";
 
 const DataList: React.FC<{ tab: string }> = ({ tab }) => {
-  const {
-    userFirstName,
-    userLastName,
-    userId,
-    loading: userLoading,
-  } = useUserState();
+  const { userFirstName, userLastName, userId, loading: userLoading } = useUserState();
+
   const [userVehicle, setUserVehicle] = useState<string | null>(null);
   const [userTimeIn, setUserTimeIn] = useState<Timestamp | null>(null);
   const [userTimeOut, setUserTimeOut] = useState<Timestamp | null>(null);
+
+  const { vehicles, loading: vehiclesLoading } = useVehicles();
 
   const fetchUserData = useCallback(async () => {
     if (!userId) return;
@@ -25,12 +25,8 @@ const DataList: React.FC<{ tab: string }> = ({ tab }) => {
       if (userDataDoc.exists()) {
         const userData = userDataDoc.data();
         setUserVehicle(userData.vehicle);
-        setUserTimeIn(
-          userData.timeIn instanceof Timestamp ? userData.timeIn : null
-        );
-        setUserTimeOut(
-          userData.timeOut instanceof Timestamp ? userData.timeOut : null
-        );
+        setUserTimeIn(userData.timeIn instanceof Timestamp ? userData.timeIn : null);
+        setUserTimeOut(userData.timeOut instanceof Timestamp ? userData.timeOut : null);
       } else {
         console.log("User data not found");
       }
@@ -43,7 +39,7 @@ const DataList: React.FC<{ tab: string }> = ({ tab }) => {
     fetchUserData();
   }, [fetchUserData, tab, userId]);
 
-  if (userLoading) {
+  if (userLoading || (tab === "vehicles" && vehiclesLoading)) {
     return (
       <div className="flex items-center justify-center relative inset-y-0 h-full w-full z-50">
         <Spinner size="lg" text="default" />
@@ -53,6 +49,7 @@ const DataList: React.FC<{ tab: string }> = ({ tab }) => {
 
   return (
     <div className="flex flex-col space-y-4">
+      <Toaster />
       <Card>
         <CardHeader>
           <CardTitle>{`${userFirstName} ${userLastName}`}</CardTitle>
@@ -63,22 +60,29 @@ const DataList: React.FC<{ tab: string }> = ({ tab }) => {
               <p>Vehicle: {userVehicle}</p>
               <p>
                 Time In:{" "}
-                {userTimeIn
-                  ? userTimeIn.toDate().toLocaleString()
-                  : "No time in available"}
+                {userTimeIn ? userTimeIn.toDate().toLocaleString() : "No time in available"}
               </p>
               <p>
                 Time Out:{" "}
-                {userTimeOut
-                  ? userTimeOut.toDate().toLocaleString()
-                  : "No time out available"}
+                {userTimeOut ? userTimeOut.toDate().toLocaleString() : "No time out available"}
               </p>
             </>
           )}
           {tab === "vehicles" && (
             <>
-              <p>{userVehicle}</p>
-              <p>License PLATE: DUMMY-23</p>
+              {vehicles.length > 0 ? (
+                vehicles.map((vehicle, index) => (
+                  <div key={index} className="mb-4">
+                    <h3 className="font-bold">{`Vehicle ${index + 1} details`}</h3>
+                    <p>Color: {vehicle.color}</p>
+                    <p>License Plate: {vehicle.licensePlate}</p>
+                    <p>Model: {vehicle.model}</p>
+                    <p>Vehicle Type: {vehicle.vehicleType}</p>
+                  </div>
+                ))
+              ) : (
+                <p>No vehicles available</p>
+              )}
             </>
           )}
         </CardContent>

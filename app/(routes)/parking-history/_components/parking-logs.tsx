@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import DataList from "./data-list-logs";
-import Announcement from "./announcement";
+import VehicleConfiguration from "./configure";
 
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
@@ -29,7 +29,7 @@ const ParkingLogs: React.FC = () => {
           <DataList tab="vehicles" />
         </TabsContent>
         <TabsContent value="configure">
-          {/* Add configure content here */}
+          <VehicleConfiguration />
         </TabsContent>
       </Tabs>
       {/*<Announcement />*/}
