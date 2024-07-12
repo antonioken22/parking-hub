@@ -23,6 +23,7 @@ const RTLOpenCourtMap = () => {
       </div>
       <ParkingLayout
         databaseTable="RTLOpenCourtParkingSlots"
+        parkingArea="RTL-OC"
         parkingSlotDefaultWidth={17}
         parkingSlotDefaultHeight={4}
         parkingSlotDefaultRotation={0}

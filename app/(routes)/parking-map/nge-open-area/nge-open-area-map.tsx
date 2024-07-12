@@ -23,6 +23,7 @@ const NGEOpenAreaMap = () => {
       </div>
       <ParkingLayout
         databaseTable="NGEOpenAreaParkingSlots"
+        parkingArea="NGE-OA"
         parkingSlotDefaultWidth={19}
         parkingSlotDefaultHeight={2}
         parkingSlotDefaultRotation={0}

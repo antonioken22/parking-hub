@@ -264,7 +264,7 @@ const ParkingSlot: React.FC<ParkingSlotProps> = ({
             />
           </div>
         )}
-        {(role === "admin" || "manager") && selected && (
+        {(role === "admin" || role === "manager") && selected && (
           <div className="absolute top-1/2 -right-11 md:-right-16 transform -translate-y-1/2">
             <SquarePen
               className="w-5 h-5 md:w-7 md:h-7 p-1 bg-secondary text-primary cursor-pointer border border-primary"

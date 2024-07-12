@@ -14,6 +14,7 @@ import ParkingSlot from "./parking-slot";
 
 interface ParkingLayoutProps {
   databaseTable: string;
+  parkingArea: string;
   parkingSlotDefaultWidth: number;
   parkingSlotDefaultHeight: number;
   parkingSlotDefaultRotation: number;
@@ -26,6 +27,7 @@ interface ParkingLayoutProps {
 
 const ParkingLayout = ({
   databaseTable,
+  parkingArea,
   parkingSlotDefaultWidth,
   parkingSlotDefaultHeight,
   parkingSlotDefaultRotation,
@@ -183,6 +185,8 @@ const ParkingLayout = ({
                 className="text-xs md:text-base shadow-md"
                 onClick={() =>
                   addParkingSlot({
+                    parkingArea: parkingArea,
+                    parkingSlotNumber: 1,
                     top: 50,
                     left: 50,
                     width: parkingSlotDefaultWidth,
