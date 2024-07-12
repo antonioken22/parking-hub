@@ -38,7 +38,8 @@ const NotificationDropdown = () => {
     setUnreadCount(0);
   };
 
-  const handleMarkAsViewed = async (notificationId: string) => {
+  const handleRemoveFromView = async (notificationId: string) => {
+    await markAsRead(notificationId);
     await removeFromView(notificationId);
   };
 
@@ -53,11 +54,11 @@ const NotificationDropdown = () => {
           (recipient) => recipient.userId === userId
         ) && notification.isView
     )
-    // Sort notifications from newest to oldest using dateCreated
+    // Sort notifications based on timestamp seconds
     .sort((a, b) => {
-      const dateA = new Date(a.dateCreated ?? 0).getTime();
-      const dateB = new Date(b.dateCreated ?? 0).getTime();
-      return dateB - dateA;
+      const dateA = a.dateCreated?.seconds ?? 0;
+      const dateB = b.dateCreated?.seconds ?? 0;
+      return dateB - dateA; // Sort in descending order (latest first)
     })
     // Limit the number of notifications displayed
     .slice(0, maxNotificationsToShow);
@@ -108,7 +109,9 @@ const NotificationDropdown = () => {
                   <div className="flex flex-col items-center">
                     <div
                       role="button"
-                      onClick={() => handleMarkAsViewed(notification.id || "")}
+                      onClick={() =>
+                        handleRemoveFromView(notification.id || "")
+                      }
                       className="p-2"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -119,7 +122,10 @@ const NotificationDropdown = () => {
               </div>
             ))
           ) : (
-            <div className="py-2 text-xs md:text-sm text-muted-foreground italic">
+            <div
+              className="py-2 text-xs md:text-sm text-muted-foreground italic
+            text-center"
+            >
               No notifications.
             </div>
           )}
