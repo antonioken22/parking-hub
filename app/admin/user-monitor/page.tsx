@@ -55,6 +55,8 @@ const UserMonitorPage = () => {
       router.push("/dashboard");
     }
   }, [authLoading, userRole, router]);
+  // Consider devices with width less than or equal to 768px as mobile
+  const isMobile = window.innerWidth <= 768;
   const { users, updateBookingStatuses } = useUsers();
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -73,8 +75,16 @@ const UserMonitorPage = () => {
   const [selectedLastName, setSelectedLastName] = useState<string | null>(null);
   const [pagination, setPagination] = useState({
     pageIndex: 0,
-    pageSize: 6,
+    pageSize: 6, // Default number of rows to be displayed
   });
+
+useEffect(() => {
+    // Update pageSize when on mobile view
+    setPagination((prevPagination) => ({
+      ...prevPagination,
+      pageSize: isMobile ? 4 : 6,
+    }));
+  }, [isMobile]);
 
   useEffect(() => {
     setLocalUsers(users);
