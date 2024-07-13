@@ -123,7 +123,6 @@ export function ParkingSlotInfoCard({
     });
   };
 
-  // TODO: Refactor this component.
   const handleNotify = () => {
     const occupant = users.find((user) => user.email === occupantEmail);
 
@@ -132,7 +131,16 @@ export function ParkingSlotInfoCard({
       return;
     }
 
-    const formatTime = (date: Date) => date.toLocaleString();
+    const formatTime = (date: Date) => {
+      const options: Intl.DateTimeFormatOptions = {
+        month: "long",
+        day: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      };
+      return date.toLocaleString("en-US", options).replace(",", "");
+    };
 
     if (startTime && endTime) {
       const now = new Date();
@@ -166,46 +174,52 @@ export function ParkingSlotInfoCard({
         ],
       });
 
-      if (startNotificationTime > 0) {
-        setTimeout(async () => {
-          const notification = createNotification(startMessage);
-          addNotification(notification);
-          updateRemoteUserIsBooked(occupant.id, true);
-          sendNotification(
-            occupant.fcmSwToken || "",
-            "Parking Hub",
-            startMessage,
-            "/booking"
-          );
-        }, startNotificationTime);
-      }
+      // Listener that prevents refreshing when sending the push notifs payload
+      const beforeUnloadListener = (event: BeforeUnloadEvent) => {
+        event.preventDefault();
+        // Custom messages in onbeforeunload dialogs (removed):
+        // In Chrome 51. It is widely considered a security issue,
+        // and most vendors have removed support.
+        // Read more: https://stackoverflow.com/questions/40570164/how-to-customize-the-message-changes-you-made-may-not-be-saved-for-window-onb
+        // return "Refreshing the page will cause the push notifications to not push through. Are you sure you want to proceed?";
+      };
 
-      if (oneMinuteBeforeEndNotificationTime > 0) {
-        setTimeout(() => {
-          const notification = createNotification(beforeEndMessage);
-          addNotification(notification);
-          sendNotification(
-            occupant.fcmSwToken || "",
-            "Parking Hub",
-            beforeEndMessage,
-            "/booking"
-          );
-        }, oneMinuteBeforeEndNotificationTime);
-      }
+      const removeBeforeUnloadListener = () => {
+        window.removeEventListener("beforeunload", beforeUnloadListener);
+      };
 
-      if (endNotificationTime > 0) {
-        setTimeout(async () => {
-          const notification = createNotification(endMessage);
-          addNotification(notification);
-          updateRemoteUserIsBooked(occupant.id, false);
-          sendNotification(
-            occupant.fcmSwToken || "",
-            "Parking Hub",
-            endMessage,
-            "/booking"
-          );
-        }, endNotificationTime);
-      }
+      window.addEventListener("beforeunload", beforeUnloadListener);
+
+      const handleNotification = async (
+        notificationMessage: string,
+        timeDelay: number,
+        updateBookingStatus?: boolean
+      ) => {
+        if (timeDelay > 0) {
+          setTimeout(async () => {
+            const notification = createNotification(notificationMessage);
+            addNotification(notification);
+            if (updateBookingStatus !== undefined) {
+              updateRemoteUserIsBooked(occupant.id, updateBookingStatus);
+            }
+            await sendNotification(
+              occupant.fcmSwToken || "",
+              "Parking Hub",
+              notificationMessage,
+              "/booking"
+            );
+            if (updateBookingStatus === false) {
+              // Remove the listener after the last message is sent
+              removeBeforeUnloadListener();
+            }
+          }, timeDelay);
+        }
+      };
+
+      handleNotification(startMessage, startNotificationTime, true);
+      handleNotification(beforeEndMessage, oneMinuteBeforeEndNotificationTime);
+      handleNotification(endMessage, endNotificationTime, false);
+
       toast.info("Notification timers set.");
     }
   };

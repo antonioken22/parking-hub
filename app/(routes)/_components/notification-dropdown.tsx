@@ -32,9 +32,16 @@ const NotificationDropdown = () => {
   }, [notifications, userId]);
 
   const markAllAsRead = async () => {
-    const unreadNotifications = notifications.filter(
-      (notification) => !notification.isRead
-    );
+    const unreadNotifications = notifications
+      .filter((notification) => !notification.isRead)
+      // Unreads from the oldest to newest
+      .sort((a, b) => {
+        const dateA = (a.dateCreated as unknown as Timestamp)?.seconds ?? 0;
+        const dateB = (b.dateCreated as unknown as Timestamp)?.seconds ?? 0;
+        // Sort in ascending order (oldest first)
+        return dateA - dateB;
+      });
+
     for (const notification of unreadNotifications) {
       await markAsRead(notification.id || "");
     }
