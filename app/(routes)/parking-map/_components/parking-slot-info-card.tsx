@@ -102,8 +102,8 @@ export function ParkingSlotInfoCard({
     setEditDescription(slot.description);
   }, [slot]);
 
-const handleSave = () => {
- onSave({
+  const handleSave = () => {
+    onSave({
       id: slotId,
       parkingArea: editParkingArea,
       parkingSlotNumber: editParkingSlotNumber,
@@ -121,7 +121,7 @@ const handleSave = () => {
       endTime: endTime,
       description: editDescription,
     });
-};
+  };
 
   // TODO: Refactor this component.
   const handleNotify = () => {
@@ -317,18 +317,20 @@ const handleSave = () => {
               </CommandList>
             </Command>
           </div>
-          <Input
-            placeholder="Occupant's First Name"
-            value={occupantFirstName || ""}
-            onChange={(e) => setOccupantFirstName(e.target.value)}
-            readOnly
-          />
-          <Input
-            placeholder="Occupant's Last Name"
-            value={occupantLastName || ""}
-            onChange={(e) => setOccupantLastName(e.target.value)}
-            readOnly
-          />
+          <div className="grid grid-cols-2 gap-1">
+            <Input
+              placeholder="First Name"
+              value={occupantFirstName || ""}
+              onChange={(e) => setOccupantFirstName(e.target.value)}
+              readOnly
+            />
+            <Input
+              placeholder="Last Name"
+              value={occupantLastName || ""}
+              onChange={(e) => setOccupantLastName(e.target.value)}
+              readOnly
+            />
+          </div>
           <Textarea
             placeholder="Description"
             value={editDescription || ""}
@@ -416,35 +418,10 @@ const handleSave = () => {
               <>
                 <hr />
                 <div className="grid grid-cols-5 gap-4 w-full">
-                  <div className="col-span-5">
+                  {/* <div className="col-span-5">
                     <p className="text-sm font-medium leading-none">
                       Properties:
                     </p>
-                  </div>
-                  {/* <div className="flex flex-col col-span-5">
-                    <div className="flex flex-row space-x-4">
-                      <div className="flex-1 space-y-2">
-                        <p className="text-xs ">Parking Area:</p>
-                        <Input
-                          placeholder="Parking Area"
-                          value={editParkingArea}
-                          onChange={(e) => setEditParkingArea(e.target.value)}
-                          className="w-full h-10 text-xs md:text-sm"
-                        />
-                      </div>
-                      <div className="flex-1 space-y-2">
-                        <p className="text-xs ">Parking Slot Number:</p>
-                        <Input
-                          type="number"
-                          placeholder="Parking Slot Number"
-                          value={editParkingSlotNumber}
-                          onChange={(e) =>
-                            setEditParkingSlotNumber(parseInt(e.target.value))
-                          }
-                          className="w-full h-10 text-xs md:text-sm"
-                        />
-                      </div>
-                    </div>
                   </div> */}
                   <div className="flex flex-col space-y-2">
                     <p className="text-xs">Top (%):</p>
@@ -523,8 +500,8 @@ const handleSave = () => {
           >
             Cancel
           </Button>
- <Button onClick={handleSave} className="text-xs md:text-sm">
-           Save Details
+          <Button onClick={handleSave} className="text-xs md:text-sm">
+            Save Details
           </Button>
           <Button onClick={handleNotify} className="text-xs md:text-sm">
             <Check className="mr-2 h-4 w-4" /> Notify

@@ -46,7 +46,6 @@ const useUsers = () => {
   }, [fetchUsers]);
 
   // Update users' booking status in Firestore
-  /* Disabled to make it read-only
   const updateBookingStatuses = useCallback(
     async (updatedUsers: UserData[]) => {
       try {
@@ -68,9 +67,8 @@ const useUsers = () => {
     },
     []
   );
-  */
 
-  return { users, loading };
+  return { users, loading, updateBookingStatuses };
 };
 
 export default useUsers;
