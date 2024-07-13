@@ -55,8 +55,24 @@ const UserMonitorPage = () => {
       router.push("/dashboard");
     }
   }, [authLoading, userRole, router]);
+
   // Consider devices with width less than or equal to 768px as mobile
-  const isMobile = window.innerWidth <= 768;
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    // Set initial state
+    handleResize();
+
+    // Add event listener
+    window.addEventListener("resize", handleResize);
+
+    // Remove event listener on cleanup
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const { users, updateBookingStatuses } = useUsers();
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -78,7 +94,7 @@ const UserMonitorPage = () => {
     pageSize: 6, // Default number of rows to be displayed
   });
 
-useEffect(() => {
+  useEffect(() => {
     // Update pageSize when on mobile view
     setPagination((prevPagination) => ({
       ...prevPagination,
