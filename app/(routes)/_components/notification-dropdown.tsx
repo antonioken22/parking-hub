@@ -2,12 +2,15 @@
 
 import { useState, useEffect } from "react";
 import { Bell, Trash2, CheckCircle } from "lucide-react";
+import { Timestamp } from "firebase/firestore";
+
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
+
 import useUserState from "@/hooks/useUserState";
 import useNotifications from "@/hooks/useNotifications";
 import { Notification } from "@/types/Notification";
@@ -56,8 +59,8 @@ const NotificationDropdown = () => {
     )
     // Sort notifications based on timestamp seconds
     .sort((a, b) => {
-      const dateA = a.dateCreated?.seconds ?? 0;
-      const dateB = b.dateCreated?.seconds ?? 0;
+      const dateA = (a.dateCreated as unknown as Timestamp)?.seconds ?? 0;
+      const dateB = (b.dateCreated as unknown as Timestamp)?.seconds ?? 0;
       return dateB - dateA; // Sort in descending order (latest first)
     })
     // Limit the number of notifications displayed

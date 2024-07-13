@@ -5,6 +5,8 @@ import {
   doc,
   updateDoc,
   addDoc,
+  query,
+  onSnapshot,
 } from "firebase/firestore";
 import { toast } from "sonner";
 
@@ -15,6 +17,22 @@ const useNotifications = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Add an update listener to ensure that new changes update the UI
+  useEffect(() => {
+    const q = query(collection(firestore, "notifications"));
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const newNotifications = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      })) as Notification[];
+      setNotifications(newNotifications);
+    });
+
+    // Clean up the listener when the component unmounts
+    return () => unsubscribe();
+  }, []);
 
   // Fetch notifications from Firestore
   const fetchNotifications = useCallback(async () => {
@@ -79,7 +97,7 @@ const useNotifications = () => {
     const notificationWithDateCreated = {
       ...newNotification,
       // Set dateCreated to the current date and time
-      dateCreated: { seconds: Math.floor(Date.now() / 1000) },
+      dateCreated: new Date(),
     };
     try {
       await addDoc(

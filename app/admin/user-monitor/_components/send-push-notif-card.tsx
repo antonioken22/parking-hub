@@ -1,6 +1,8 @@
 "use client";
 
-import * as React from "react";
+import { useState } from "react";
+import { toast } from "sonner";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -19,9 +21,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { toast } from "sonner";
+import useNotifications from "@/hooks/useNotifications";
 
 interface SendPushNotificationCardProps {
+  id: string;
   token: string;
   email: string;
   firstName: string;
@@ -30,25 +33,60 @@ interface SendPushNotificationCardProps {
 }
 
 const SendPushNotificationCard: React.FC<SendPushNotificationCardProps> = ({
+  id,
   token,
   email,
   firstName,
   lastName,
   onClose,
 }) => {
-  const [title, setTitle] = React.useState("Parking Hub");
-  const [message, setMessage] = React.useState(
-    "You've successfully booked a parking slot."
+  const { addNotification } = useNotifications();
+
+  const [title, setTitle] = useState("Parking Hub");
+  const [message, setMessage] = useState(
+    "You've exceeded your booking expiry time. Please vacate the area immediately."
   );
-  const [link, setLink] = React.useState("/booking");
+  const [link, setLink] = useState("/booking");
 
   const defaultMessages = [
-    "You've successfully booked a parking slot.",
-    "You only have 10 minutes until your booked parking slot will expire.",
-    "Your booked parking slot has expired. Please vacate the area immediately to avoid incurring additional fees.",
+    "You've exceeded your booking expiry time. Please vacate the area immediately to avoid additional charges.",
+    "You have exceeded 30 minutes on your booking expiry time. \nAdditional Charge: Php 100.00",
+    "You have exceeded 1 hour on your booking expiry time. \nAdditional Charge: Php 250.00",
+    "You have exceeded more than 1 hour and 30 minutes on your booking expiry time. \nClamping action enforced. Please settle this to the manager.",
   ];
 
   const handleSendNotification = async () => {
+    const createNotification = (message: string) => ({
+      title: title,
+      body: message,
+      link: link,
+      isRead: false,
+      isView: true,
+      timeStart: null,
+      timeEnd: null,
+      recipient: [
+        {
+          userId: id,
+          userEmail: email,
+          userFirstName: firstName || "",
+          userLastName: lastName || "",
+          userFcmSwToken: token || "",
+        },
+      ],
+    });
+
+    const notification = createNotification(message);
+    addNotification(notification);
+    sendNotification(token, title, message, link);
+    onClose();
+  };
+
+  const sendNotification = async (
+    token: string,
+    title: string,
+    message: string,
+    link: string
+  ) => {
     const response = await fetch("/send-push-notification", {
       method: "POST",
       headers: {
@@ -63,15 +101,12 @@ const SendPushNotificationCard: React.FC<SendPushNotificationCardProps> = ({
     });
 
     const data = await response.json();
-    // console.log(data);
 
     if (data.success === true) {
       toast.success("Successfully sent a notification.");
     } else {
       toast.error("Notification sent unsuccessfully.");
     }
-
-    onClose();
   };
 
   const handleSelectChange = (value: string) => {

@@ -3,11 +3,11 @@ export interface Notification {
   title: string;
   body: string;
   link?: string | null;
-  timeStart: Date;
-  timeEnd: Date;
+  timeStart: Date | null;
+  timeEnd: Date | null;
   isRead: boolean;
   isView: boolean;
-  dateCreated?: { seconds: number }; // For sorting notifications only
+  dateCreated?: Date;
   recipient: Array<{
     userId: string;
     userEmail: string;

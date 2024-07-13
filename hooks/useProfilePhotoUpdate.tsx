@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { doc, updateDoc } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { toast } from "sonner";
 import { firestore, storage } from "@/firebase/config";
@@ -11,6 +11,23 @@ const useProfilePhotoUpdate = () => {
     null
   );
   const [newPhotoUrl, setNewPhotoUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (userId) {
+      const userDocRef = doc(firestore, "users", userId);
+      const unsubscribe = onSnapshot(userDocRef, (doc) => {
+        if (doc.exists()) {
+          const data = doc.data();
+          if (data?.photoUrl) {
+            setNewPhotoUrl(data.photoUrl);
+          }
+        }
+      });
+
+      // Clean up the listener when the component unmounts
+      return () => unsubscribe();
+    }
+  }, [userId]);
 
   const updateProfilePicture = () => {
     if (selectedImageUpload == null) {

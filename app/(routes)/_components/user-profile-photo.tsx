@@ -53,7 +53,11 @@ const UserProfilePhoto = () => {
             </p>
           </div>
           <div className="grid gap-2">
-            <div className="flex flex-col items-center gap-4">
+            <div className="flex flex-col items-center gap-2">
+              <p className="text-xs text-muted-foreground text-wrap">
+                Note: Use Square (Aspect Ratio: 1:1) images in order for it not
+                to get distorted when displayed.
+              </p>
               <Input
                 type="file"
                 accept=".jpg,.jpeg,.png"
@@ -66,6 +70,7 @@ const UserProfilePhoto = () => {
                 }}
               />
             </div>
+
             <div className="flex flex-col justify-center w-full ">
               <Button onClick={updateProfilePicture}>Update</Button>
             </div>

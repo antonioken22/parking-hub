@@ -1,13 +1,17 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ChevronDown, ArrowUpDown, Monitor } from "lucide-react";
+import {
+  ChevronDown,
+  ArrowUpDown,
+  Monitor,
+  ArrowUp,
+  ArrowDown,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 
 import { Spinner } from "@/components/spinner";
 import { Heading } from "@/app/(routes)/_components/heading";
-import useUserState from "@/hooks/useUserState";
-import useUsers from "@/hooks/useUsers";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -21,7 +25,6 @@ import {
   getPaginationRowModel,
 } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -38,6 +41,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import SendPushNotificationCard from "./_components/send-push-notif-card";
+import ComboboxBookingStatus from "./_components/combobox-booking-status";
+import useUserState from "@/hooks/useUserState";
+import useUsers from "@/hooks/useUsers";
 
 const UserMonitorPage = () => {
   const { loading: authLoading, userRole } = useUserState();
@@ -49,8 +55,7 @@ const UserMonitorPage = () => {
       router.push("/dashboard");
     }
   }, [authLoading, userRole, router]);
-
-  const { users } = useUsers();
+  const { users, updateBookingStatuses } = useUsers();
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -59,35 +64,44 @@ const UserMonitorPage = () => {
   }>({});
   const [localUsers, setLocalUsers] = useState(users);
   const [showNotificationCard, setShowNotificationCard] = useState(false);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [selectedFcmToken, setSelectedFcmToken] = useState<string | null>(null);
   const [selectedEmail, setSelectedEmail] = useState<string | null>(null);
   const [selectedFirstName, setSelectedFirstName] = useState<string | null>(
     null
   );
   const [selectedLastName, setSelectedLastName] = useState<string | null>(null);
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 6,
+  });
 
   useEffect(() => {
     setLocalUsers(users);
   }, [users]);
 
+  // Only changes user's isBooked state
   const handleDropdownChange = (userId: string, value: boolean) => {
-    setLocalUsers((prevUsers) =>
-      prevUsers.map((user) =>
+    setLocalUsers((prevUsers) => {
+      const updatedUsers = prevUsers.map((user) =>
         user.id === userId ? { ...user, isBooked: value } : user
-      )
-    );
+      );
+      return updatedUsers;
+    });
   };
 
-  // const handleSaveChanges = async () => {
-  //   await updateBookingStatuses(localUsers);
-  // };
+  const handleSaveChanges = async () => {
+    await updateBookingStatuses(localUsers);
+  };
 
   const handleNotifyClick = (
+    id: string | null,
     fcmToken: string | null,
     email: string | null,
     firstName: string | null,
     lastName: string | null
   ) => {
+    setSelectedId(id);
     setSelectedEmail(email);
     setSelectedFcmToken(fcmToken);
     setSelectedFirstName(firstName);
@@ -96,29 +110,6 @@ const UserMonitorPage = () => {
   };
 
   const columns: ColumnDef<any>[] = [
-    /* Disabled as it is not used
-    {
-      id: "select",
-      header: ({ table }) => (
-        <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && "indeterminate")
-          }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-        />
-      ),
-      cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
-      ),
-      enableSorting: false,
-      enableHiding: false,
-    }, */
     {
       accessorKey: "firstName",
       header: "First Name",
@@ -153,18 +144,29 @@ const UserMonitorPage = () => {
       header: "Push Notification Status",
       cell: ({ cell }) => <div>{cell.getValue() ? "Allowed" : "Disabled"}</div>,
     },
-
     {
       accessorKey: "isBooked",
       header: "Booking Status",
       cell: ({ row }) => (
-        <div className="flex items-center">
-          <span>{row.original.isBooked ? "Booked" : "Not Booked"}</span>
+        <ComboboxBookingStatus
+          userId={row.original.id}
+          value={row.original.isBooked}
+          onChange={handleDropdownChange}
+        />
+      ),
+    },
+    {
+      id: "notify",
+      header: "Actions",
+      enableSorting: false,
+      cell: ({ row }) => (
+        <div>
           <Button
             variant="outline"
             className="ml-2"
             onClick={() =>
               handleNotifyClick(
+                row.original.id,
                 row.original.fcmSwToken,
                 row.original.email,
                 row.original.firstName,
@@ -182,7 +184,13 @@ const UserMonitorPage = () => {
   const table = useReactTable({
     data: localUsers,
     columns,
-    state: { sorting, columnFilters, columnVisibility, rowSelection },
+    state: {
+      sorting,
+      columnFilters,
+      columnVisibility,
+      rowSelection,
+      pagination,
+    },
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
@@ -190,6 +198,10 @@ const UserMonitorPage = () => {
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    // Pagination
+    manualPagination: false, // False for automatic pagination
+    pageCount: Math.ceil(localUsers.length / pagination.pageSize),
+    onPaginationChange: setPagination,
     getPaginationRowModel: getPaginationRowModel(),
   });
 
@@ -264,20 +276,33 @@ const UserMonitorPage = () => {
                             <div
                               {...{
                                 className: header.column.getCanSort()
-                                  ? "cursor-pointer select-none"
-                                  : "",
-                                onClick:
-                                  header.column.getToggleSortingHandler(),
+                                  ? "cursor-pointer select-none flex items-center"
+                                  : // Ensure consistent alignment
+                                    "flex items-center",
+
+                                onClick: header.column.getCanSort()
+                                  ? header.column.getToggleSortingHandler()
+                                  : // Disable click handler if sorting is disabled
+                                    undefined,
                               }}
                             >
                               {flexRender(
                                 header.column.columnDef.header,
                                 header.getContext()
                               )}
-                              {{
-                                asc: <ArrowUpDown className="ml-2 h-4 w-4" />,
-                                desc: <ArrowUpDown className="ml-2 h-4 w-4" />,
-                              }[header.column.getIsSorted() as string] ?? null}
+                              {
+                                // Conditionally render sorting icon
+                                header.column.getCanSort() && (
+                                  <div className="ml-2 h-4 w-4">
+                                    {{
+                                      asc: <ArrowDown className="h-4 w-4" />,
+                                      desc: <ArrowUp className="h-4 w-4" />,
+                                    }[
+                                      header.column.getIsSorted() as string
+                                    ] ?? <ArrowUpDown className="h-4 w-4" />}
+                                  </div>
+                                )
+                              }
                             </div>
                           )}
                         </TableHead>
@@ -315,20 +340,44 @@ const UserMonitorPage = () => {
                 )}
               </TableBody>
             </Table>
-            {/* <Button
+            <div className="pagination">
+              <Button
+                variant="outline"
+                onClick={() => table.previousPage()}
+                disabled={!table.getCanPreviousPage()}
+                className=""
+              >
+                Previous
+              </Button>
+              <span className="mx-2 text-sm text-muted-foreground">
+                Page {table.getState().pagination.pageIndex + 1} of{" "}
+                {table.getPageCount()}
+              </span>
+              <Button
+                variant="outline"
+                onClick={() => table.nextPage()}
+                disabled={!table.getCanNextPage()}
+              >
+                Next
+              </Button>
+            </div>
+
+            <Button
               onClick={handleSaveChanges}
               className="flex flex-col mt-4 ml-auto text-xs md:text-base"
             >
               Save Changes
-            </Button> */}
+            </Button>
           </div>
           {showNotificationCard &&
+            selectedId &&
             selectedFcmToken &&
             selectedEmail &&
             selectedFirstName &&
             selectedLastName && (
               <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75">
                 <SendPushNotificationCard
+                  id={selectedId}
                   token={selectedFcmToken}
                   email={selectedEmail}
                   firstName={selectedFirstName}

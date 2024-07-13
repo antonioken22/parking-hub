@@ -1,13 +1,18 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
-
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
 const Error = () => {
+  const router = useRouter();
+
+  const handleGoBack = () => {
+    router.back();
+  };
+
   return (
-    <div className="h-full flex flex-col items-center justify-center space-y-4">
+    <div className="h-screen flex flex-col items-center justify-center space-y-4">
       <Image
         src="/error.png"
         height="300"
@@ -23,9 +28,7 @@ const Error = () => {
         className="hidden dark:block"
       />
       <h2>Something went wrong!</h2>
-      <Button asChild>
-        <Link href="/dashboard">Go to Dashboard</Link>
-      </Button>
+      <Button onClick={handleGoBack}>Go Back</Button>
     </div>
   );
 };
