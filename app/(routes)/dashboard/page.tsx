@@ -16,10 +16,19 @@ interface ActiveUser {
 }
 
 const formatDate = (date: Date) => {
-  const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
+  const year = date.getFullYear();
+  return `${month}-${day}-${year}`;
+};
+
+const formatTime = (date: Date) => {
+  const hours = date.getHours();
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  const seconds = String(date.getSeconds()).padStart(2, "0");
+  const ampm = hours >= 12 ? "PM" : "AM";
+  const formattedHours = hours % 12 || 12;
+  return `${formattedHours}:${minutes}:${seconds} ${ampm}`;
 };
 
 const DashboardPage = () => {
@@ -37,6 +46,16 @@ const DashboardPage = () => {
   }, [userId, userEmail, userFirstName, userLastName, logActiveUser]);
   const [activeUsersData, setActiveUsersData] = useState<any>({});
   const currentDate = formatDate(new Date());
+  const [currentTime, setCurrentTime] = useState(formatTime(new Date()));
+
+  // Always update the currentTime every second (client-side only)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTime(formatTime(new Date()));
+    }, 1000);
+    // Cleanup interval on component unmount
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const fetchParkingSlots = async () => {
@@ -181,15 +200,31 @@ const DashboardPage = () => {
         <div className="flex flex-col md:flex-row">
           <main className="flex flex-col items-center justify-center flex-grow mt-10">
             {userId && (
-              <h1 className="text-xl md:text-4xl font-bold mb-6 md:ml-10">
-                <span className="text-orange-500">Welcome,</span>{" "}
-                {userFirstName} {userLastName}!
-              </h1>
+              <div className="text-center md:text-left mx-2 md:ml-10 mb-6">
+                <h1 className="text-xl md:text-4xl font-bold">
+                  <span className="text-primary">Welcome,</span> {userFirstName}{" "}
+                  {userLastName}!
+                </h1>
+                <div className="flex flex-row space-x-4 justify-center">
+                  <h2 className="text-primary text-sm md:text-lg">
+                    Date:{" "}
+                    <span className="text-secondary-foreground">
+                      {currentDate}
+                    </span>
+                  </h2>
+                  <h2 className="text-primary text-sm md:text-lg">
+                    Time:{" "}
+                    <span className="text-secondary-foreground">
+                      {currentTime}
+                    </span>
+                  </h2>
+                </div>
+              </div>
             )}
             <div className="grid-cols-1 w-full max-w-7xl p-4">
               <h2 className="text-xl md:text-2xl font-bold mb-4">
                 Parking Slot Status{" "}
-                <span className="text-orange-500">(Overview)</span>
+                <span className="text-primary">(Overview)</span>
               </h2>
               <Bar
                 data={chartData}
@@ -199,10 +234,7 @@ const DashboardPage = () => {
             </div>
             <div className="grid-cols-1 w-full max-w-7xl p-4 mt-8">
               <h2 className="text-xl md:text-2xl font-bold mb-4">
-                Active Users{" "}
-                <span className="text-orange-500">
-                  (24 hours - {currentDate})
-                </span>
+                Active Users <span className="text-primary">(Today)</span>
               </h2>
               <Line
                 data={activeUsersData}

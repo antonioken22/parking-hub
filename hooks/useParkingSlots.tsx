@@ -7,6 +7,7 @@ import {
   addDoc,
   deleteDoc,
   Timestamp,
+  onSnapshot,
 } from "firebase/firestore";
 import { toast } from "sonner";
 
@@ -18,6 +19,33 @@ const useParkingSlots = (databaseTable: string) => {
   const [selectedSlotIndex, setSelectedSlotIndex] = useState<number | null>(
     null
   );
+
+  // Add an update listener to ensure that new changes update the UI
+  useEffect(() => {
+    const slotsRef = collection(firestore, databaseTable);
+
+    const unsubscribe = onSnapshot(slotsRef, (snapshot) => {
+      const slotsData: ParkingSlotData[] = snapshot.docs.map((doc) => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          ...data,
+          // Convert type Timestamp (Firestore) to Date
+          startTime:
+            data.startTime instanceof Timestamp
+              ? data.startTime.toDate()
+              : data.startTime,
+          endTime:
+            data.endTime instanceof Timestamp
+              ? data.endTime.toDate()
+              : data.endTime,
+        } as ParkingSlotData;
+      });
+      setParkingSlots(slotsData);
+    });
+
+    return () => unsubscribe(); // Cleanup listener on unmount
+  }, [databaseTable]);
 
   // Read from Firestore
   const fetchParkingSlots = useCallback(async () => {
