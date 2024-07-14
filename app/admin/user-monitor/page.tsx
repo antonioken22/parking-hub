@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ChangeEvent } from "react";
 import {
   ChevronDown,
   ArrowUpDown,
@@ -43,7 +43,7 @@ import {
 import SendPushNotificationCard from "./_components/send-push-notif-card";
 import ComboboxBookingStatus from "./_components/combobox-booking-status";
 import useUserState from "@/hooks/useUserState";
-import useUsers from "@/hooks/useUsers";
+import useUserMonitor from "@/hooks/useUserMonitor";
 
 const UserMonitorPage = () => {
   const { loading: authLoading, userRole } = useUserState();
@@ -73,7 +73,7 @@ const UserMonitorPage = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const { users, updateBookingStatuses } = useUsers();
+  const { users, updateBookingStatuses } = useUserMonitor();
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -106,11 +106,15 @@ const UserMonitorPage = () => {
     setLocalUsers(users);
   }, [users]);
 
-  // Only changes user's isBooked state
-  const handleDropdownChange = (userId: string, value: boolean) => {
+  // Only changes user's isBooked and parkingSlotAssignment local state
+  const handleDropdownChange = (
+    userId: string,
+    isBooked: boolean,
+    parkingSlotAssignment: string
+  ) => {
     setLocalUsers((prevUsers) => {
       const updatedUsers = prevUsers.map((user) =>
-        user.id === userId ? { ...user, isBooked: value } : user
+        user.id === userId ? { ...user, isBooked, parkingSlotAssignment } : user
       );
       return updatedUsers;
     });
@@ -176,10 +180,17 @@ const UserMonitorPage = () => {
       cell: ({ row }) => (
         <ComboboxBookingStatus
           userId={row.original.id}
-          value={row.original.isBooked}
-          onChange={handleDropdownChange}
+          isBooked={row.original.isBooked}
+          parkingSlotAssignment={row.original.parkingSlotAssignment}
+          onChange={(userId, isBooked, parkingSlotAssignment) =>
+            handleDropdownChange(userId, isBooked, parkingSlotAssignment)
+          }
         />
       ),
+    },
+    {
+      accessorKey: "parkingSlotAssignment",
+      header: "Parking Slot Assigned",
     },
     {
       id: "notify",
@@ -397,7 +408,6 @@ const UserMonitorPage = () => {
           </div>
           {showNotificationCard &&
             selectedId &&
-            selectedFcmToken &&
             selectedEmail &&
             selectedFirstName &&
             selectedLastName && (

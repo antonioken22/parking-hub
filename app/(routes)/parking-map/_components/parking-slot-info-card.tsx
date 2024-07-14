@@ -123,6 +123,7 @@ export function ParkingSlotInfoCard({
     });
   };
 
+  // TODO: Refactor this function.
   const handleNotify = () => {
     const occupant = users.find((user) => user.email === occupantEmail);
 
@@ -151,13 +152,17 @@ export function ParkingSlotInfoCard({
       const startFormatted = formatTime(startTime);
       const endFormatted = formatTime(endTime);
 
-      const startMessage = `You've successfully booked a parking slot.\nStart Time: ${startFormatted}\nEnd Time: ${endFormatted}\nAt: ${slot.parkingArea} #${slot.parkingSlotNumber}`;
-      const beforeEndMessage = `Your booked parking slot will expire soon.\nStart Time: ${startFormatted}\nEnd Time: ${endFormatted}\nAt: ${slot.parkingArea} #${slot.parkingSlotNumber}`;
-      const endMessage = `Your booked parking slot has expired.\nStart Time: ${startFormatted}\nEnd Time: ${endFormatted}\nAt: ${slot.parkingArea} #${slot.parkingSlotNumber}`;
+      const startMessage = `You've successfully booked a parking slot.\nStart: ${startFormatted}\nEnd: ${endFormatted}\nAt: ${slot.parkingArea} #${slot.parkingSlotNumber}`;
+      const beforeEndMessage = `Your booked parking slot will expire soon.\nStart: ${startFormatted}\nEnd: ${endFormatted}\nAt: ${slot.parkingArea} #${slot.parkingSlotNumber}`;
+      const endMessage = `Your booked parking slot has expired.\nStart: ${startFormatted}\nEnd: ${endFormatted}\nAt: ${slot.parkingArea} #${slot.parkingSlotNumber}`;
+
+      const replaceNewLines = (str: string) => {
+        return str.replace(/\n/g, "<nl/>");
+      };
 
       const createNotification = (message: string) => ({
         title: "Parking Slot Booking",
-        body: message,
+        body: replaceNewLines(message),
         link: "/booking",
         timeStart: startTime,
         timeEnd: endTime,
@@ -190,6 +195,12 @@ export function ParkingSlotInfoCard({
 
       window.addEventListener("beforeunload", beforeUnloadListener);
 
+      const parkingAreaAssignment = `${slot.parkingArea} #${slot.parkingSlotNumber}`;
+      const resetParkingSlotArea = async () => {
+        // Your logic to reset the parking slot area for the occupant
+        await updateRemoteUserIsBooked(occupant.id, false, null);
+      };
+
       const handleNotification = async (
         notificationMessage: string,
         timeDelay: number,
@@ -200,7 +211,11 @@ export function ParkingSlotInfoCard({
             const notification = createNotification(notificationMessage);
             addNotification(notification);
             if (updateBookingStatus !== undefined) {
-              updateRemoteUserIsBooked(occupant.id, updateBookingStatus);
+              updateRemoteUserIsBooked(
+                occupant.id,
+                updateBookingStatus,
+                parkingAreaAssignment
+              );
             }
             await sendNotification(
               occupant.fcmSwToken || "",
@@ -209,6 +224,8 @@ export function ParkingSlotInfoCard({
               "/booking"
             );
             if (updateBookingStatus === false) {
+              // Reset the parking slot area
+              await resetParkingSlotArea();
               // Remove the listener after the last message is sent
               removeBeforeUnloadListener();
             }

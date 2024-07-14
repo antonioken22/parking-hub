@@ -8,4 +8,5 @@ export interface UserData {
   pushNotificationStatus: boolean;
   fcmSwToken: string | null;
   isBooked: boolean;
+  parkingSlotAssignment: string | null;
 }

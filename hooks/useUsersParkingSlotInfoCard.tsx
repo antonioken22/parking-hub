@@ -34,6 +34,7 @@ const useUsersParkingSlotInfoCard = () => {
         toast.success("Users fetched successfully.");
       }
     } catch (error) {
+      // Only show toast if admin
       if (userRole === "admin" || userRole === "manager") {
         toast.error("Failed to fetch users.");
       }

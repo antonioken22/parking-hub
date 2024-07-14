@@ -4,9 +4,13 @@ import { firestore } from "@/firebase/config";
 
 export const useRemoteUserIsBooked = () => {
   const updateRemoteUserIsBooked = useCallback(
-    async (userId: string, isBooked: boolean) => {
+    async (
+      userId: string,
+      isBooked: boolean,
+      parkingSlotAssignment: string | null
+    ) => {
       const userDocRef = doc(firestore, "users", userId);
-      await updateDoc(userDocRef, { isBooked });
+      await updateDoc(userDocRef, { isBooked, parkingSlotAssignment });
     },
     []
   );

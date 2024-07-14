@@ -11,6 +11,9 @@ import { auth, firestore } from "@/firebase/config";
 
 const useStoreFcmToken = (token: string | null) => {
   const [isBooked, setIsBooked] = useState<boolean | null>(null);
+  const [parkingSlotAssignment, setParkingSlotAssignment] = useState<
+    string | null
+  >(null);
 
   useEffect(() => {
     const unsubscribeAuth = onAuthStateChanged(auth, async (user) => {
@@ -29,6 +32,7 @@ const useStoreFcmToken = (token: string | null) => {
         const unsubscribeSnapshot = onSnapshot(userDocRef, (doc) => {
           if (doc.exists()) {
             setIsBooked(doc.data().isBooked);
+            setParkingSlotAssignment(doc.data().parkingSlotAssignment);
           }
         });
 
@@ -41,7 +45,7 @@ const useStoreFcmToken = (token: string | null) => {
     return () => unsubscribeAuth();
   }, [token]);
 
-  return isBooked;
+  return { isBooked, parkingSlotAssignment };
 };
 
 export default useStoreFcmToken;

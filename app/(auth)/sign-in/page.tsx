@@ -49,6 +49,7 @@ const SignInPage = () => {
             role: "user",
             pushNotificationStatus: false,
             isBooked: false,
+            parkingSlotAssignment: null,
           });
         }
         router.push("/dashboard");
