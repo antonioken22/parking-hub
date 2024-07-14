@@ -75,7 +75,7 @@ const BookingPage = () => {
 
   // Firebase operations
   const { token, notificationPermissionStatus } = useFcmToken();
-  const isBooked = useStoreFcmToken(token);
+  const { isBooked, parkingSlotAssignment } = useStoreFcmToken(token);
 
   if (userLoading) {
     return (
@@ -143,7 +143,7 @@ const BookingPage = () => {
                   Booking Status
                 </AlertTitle>
                 <AlertDescription className="text-muted-foreground">
-                  You have successfully booked a parking slot.
+                  Your Parking Slot Assignment is at: {parkingSlotAssignment}
                 </AlertDescription>
               </Alert>
             ) : notificationPermissionStatus !== null ? (

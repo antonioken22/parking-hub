@@ -1,6 +1,8 @@
 import { useState } from "react";
+
 import { Check, ChevronsUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Popover,
   PopoverContent,
@@ -8,28 +10,45 @@ import {
 } from "@/components/ui/popover";
 
 const bookingStatuses = [
-  { value: true, label: "Booked" },
-  { value: false, label: "Not Booked" },
+  { isBooked: true, label: "Booked" },
+  { isBooked: false, label: "Not Booked" },
 ];
 
 interface ComboboxBookingStatusProps {
   userId: string;
-  value: boolean;
-  onChange: (userId: string, value: boolean) => void;
+  isBooked: boolean;
+  parkingSlotAssignment: string;
+  onChange: (
+    userId: string,
+    isBooked: boolean,
+    parkingSlotAssignment: string
+  ) => void;
 }
 
 const ComboboxBookingStatus: React.FC<ComboboxBookingStatusProps> = ({
   userId,
-  value,
+  isBooked,
+  parkingSlotAssignment,
   onChange,
 }) => {
   const [open, setOpen] = useState(false);
-  const [selectedValue, setSelectedValue] = useState(value);
+  const [selectedIsBooked, setSelectedIsBooked] = useState(isBooked);
+  const [inputValue, setInputValue] = useState(
+    selectedIsBooked ? parkingSlotAssignment : ""
+  );
 
-  const handleSelect = (currentValue: boolean) => {
-    setSelectedValue(currentValue);
+  const handleSelect = (currentIsBooked: boolean) => {
+    setSelectedIsBooked(currentIsBooked);
+    setInputValue(currentIsBooked ? inputValue : "");
+  };
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value);
+  };
+
+  const handleSave = () => {
+    onChange(userId, selectedIsBooked, inputValue);
     setOpen(false);
-    onChange(userId, currentValue);
   };
 
   return (
@@ -41,25 +60,46 @@ const ComboboxBookingStatus: React.FC<ComboboxBookingStatusProps> = ({
           aria-expanded={open}
           className="w-[200px] justify-between"
         >
-          {selectedValue ? "Booked" : "Not Booked"}
+          {selectedIsBooked ? "Booked" : "Not Booked"}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent className="w-[300px] p-4 space-y-2 mr-2">
         {bookingStatuses.map((status) => (
           <div
-            key={status.value.toString()}
-            onClick={() => handleSelect(status.value)}
-            className="cursor-pointer p-2 flex items-center"
+            key={status.isBooked.toString()}
+            onClick={() => handleSelect(status.isBooked)}
+            className="cursor-pointer flex items-center justify-between"
           >
-            <Check
-              className={`mr-2 h-4 w-4 ${
-                selectedValue === status.value ? "opacity-100" : "opacity-0"
-              }`}
-            />
-            {status.label}
+            <div className="flex items-center">
+              <Check
+                className={`mr-2 h-4 w-4 ${
+                  selectedIsBooked === status.isBooked
+                    ? "opacity-100"
+                    : "opacity-0"
+                }`}
+              />
+              {status.label}
+            </div>
+            {status.isBooked && selectedIsBooked === status.isBooked && (
+              <Input
+                value={inputValue}
+                onChange={handleInputChange}
+                placeholder="Slot Assignment"
+                readOnly={!selectedIsBooked}
+                className="ml-2"
+              />
+            )}
           </div>
         ))}
+        <div className="flex justify-end space-x-2 pt-2">
+          <Button variant="outline" onClick={() => setOpen(false)}>
+            Close
+          </Button>
+          <Button variant="outline" onClick={handleSave}>
+            Change
+          </Button>
+        </div>
       </PopoverContent>
     </Popover>
   );

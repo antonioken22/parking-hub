@@ -6,13 +6,14 @@ import {
   updateDoc,
   doc,
   DocumentData,
+  onSnapshot,
 } from "firebase/firestore";
 
 import { firestore } from "@/firebase/config";
 import { UserData } from "@/types/UserData";
 import { useUserRole } from "./useUserRole";
 
-const useUsers = () => {
+const useUserMonitor = () => {
   const userRole = useUserRole();
   const [users, setUsers] = useState<UserData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -41,8 +42,21 @@ const useUsers = () => {
     }
   }, [userRole]);
 
+  // Add an update listener to ensure that new changes update the UI
   useEffect(() => {
     fetchUsers();
+
+    const usersCollection = collection(firestore, "users");
+    const unsubscribe = onSnapshot(usersCollection, (snapshot) => {
+      const usersList: UserData[] = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      })) as UserData[];
+      setUsers(usersList);
+    });
+
+    // Clean up the listener on unmount
+    return () => unsubscribe();
   }, [fetchUsers]);
 
   // Update users' booking status in Firestore
@@ -54,11 +68,12 @@ const useUsers = () => {
             const userDocRef = doc(firestore, "users", user.id);
             return updateDoc(userDocRef, {
               isBooked: user.isBooked,
+              parkingSlotAssignment: user.parkingSlotAssignment,
             } as DocumentData);
           })
         );
         // Directly update the local state
-        setUsers(updatedUsers);
+        // setUsers(updatedUsers);
         toast.success("Users updated successfully.");
       } catch (error) {
         console.log(error);
@@ -71,4 +86,4 @@ const useUsers = () => {
   return { users, loading, updateBookingStatuses };
 };
 
-export default useUsers;
+export default useUserMonitor;

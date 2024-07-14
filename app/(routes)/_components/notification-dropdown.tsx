@@ -73,6 +73,16 @@ const NotificationDropdown = () => {
     // Limit the number of notifications displayed
     .slice(0, maxNotificationsToShow);
 
+  // <nl/> parser from Firestore to actual new line in layout
+  const replaceNlWithNewLine = (str: string) => {
+    return str.split("<nl/>").map((item, index) => (
+      <span key={index}>
+        {item}
+        {index < str.split("<nl/>").length - 1 && <br />}
+      </span>
+    ));
+  };
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -104,7 +114,7 @@ const NotificationDropdown = () => {
                   notification.isRead ? "text-muted-foreground" : "font-normal"
                 }`}
               >
-                <span>{notification.body || ""}</span>
+                <span>{replaceNlWithNewLine(notification.body || "")}</span>
                 <div className="flex flex-col items-center space-y-1 ml-1">
                   <div className="flex flex-col items-center">
                     <div

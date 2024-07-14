@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -22,10 +22,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import useNotifications from "@/hooks/useNotifications";
+import useUserState from "@/hooks/useUserState";
 
 interface SendPushNotificationCardProps {
   id: string;
-  token: string;
+  token: string | null;
   email: string;
   firstName: string;
   lastName: string;
@@ -41,24 +42,40 @@ const SendPushNotificationCard: React.FC<SendPushNotificationCardProps> = ({
   onClose,
 }) => {
   const { addNotification } = useNotifications();
+  const { userFirstName, userLastName } = useUserState();
+  const [managerFullName, setManagerFullName] = useState(
+    `${userFirstName} ${userLastName}`
+  );
 
-  const [title, setTitle] = useState("Parking Hub");
+  useEffect(() => {
+    setManagerFullName(`${userFirstName} ${userLastName}`);
+  }, [userFirstName, userLastName, setManagerFullName]);
+
+  const [title, setTitle] = useState("Parking Hub Manager");
   const [message, setMessage] = useState(
-    "You've exceeded your booking expiry time. Please vacate the area immediately."
+    `You've exceeded your booking expiry time. Please vacate the area immediately to avoid additional charges.`
   );
   const [link, setLink] = useState("/booking");
+  const [defaultMessages, setDefaultMessages] = useState<string[]>([]);
 
-  const defaultMessages = [
-    "You've exceeded your booking expiry time. Please vacate the area immediately to avoid additional charges.",
-    "You have exceeded 30 minutes on your booking expiry time. \nAdditional Charge: Php 100.00",
-    "You have exceeded 1 hour on your booking expiry time. \nAdditional Charge: Php 250.00",
-    "You have exceeded more than 1 hour and 30 minutes on your booking expiry time. \nClamping action enforced. Please settle this to the manager.",
-  ];
+  useEffect(() => {
+    setDefaultMessages([
+      `You've exceeded your booking expiry time. Please vacate the area immediately to avoid additional charges.`,
+      `You have exceeded 30 minutes on your booking expiry time. Additional Charge: Php 100.00.`,
+      `You have exceeded 1 hour on your booking expiry time. Additional Charge: Php 250.00.`,
+      `You have exceeded more than 1 hour and 30 minutes on your booking expiry time. Clamping action enforced. Please settle this with the manager.`,
+    ]);
+  }, [managerFullName]);
+
+  const replaceNewLines = (str: string) => {
+    return str.replace(/\n/g, "<nl/>");
+  };
 
   const handleSendNotification = async () => {
+    const fullMessage = `${message}\nFrom: ${managerFullName}, Parking Hub Manager`;
     const createNotification = (message: string) => ({
       title: title,
-      body: message,
+      body: replaceNewLines(message),
       link: link,
       isRead: false,
       isView: true,
@@ -75,9 +92,11 @@ const SendPushNotificationCard: React.FC<SendPushNotificationCardProps> = ({
       ],
     });
 
-    const notification = createNotification(message);
+    const notification = createNotification(fullMessage);
     addNotification(notification);
-    sendNotification(token, title, message, link);
+    if (token) {
+      sendNotification(token, title, fullMessage, link);
+    }
     onClose();
   };
 
@@ -130,7 +149,7 @@ const SendPushNotificationCard: React.FC<SendPushNotificationCardProps> = ({
             <div className="grid w-full items-center gap-4">
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="token">FCM Token</Label>
-                <Input id="token" value={token} readOnly />
+                <Input id="token" value={token ?? ""} readOnly />
               </div>
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="email">Email</Label>

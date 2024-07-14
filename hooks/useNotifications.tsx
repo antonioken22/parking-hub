@@ -96,9 +96,11 @@ const useNotifications = () => {
   const addNotification = useCallback(async (newNotification: Notification) => {
     const notificationWithDateCreated = {
       ...newNotification,
+      body: newNotification.body,
       // Set dateCreated to the current date and time
       dateCreated: new Date(),
     };
+
     try {
       await addDoc(
         collection(firestore, "notifications"),
@@ -106,7 +108,6 @@ const useNotifications = () => {
       );
       setNotifications((prevNotifications) => [
         ...prevNotifications,
-
         notificationWithDateCreated,
       ]);
       toast.success("Notification added successfully");
