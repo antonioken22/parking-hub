@@ -432,33 +432,33 @@ export function ParkingSlotInfoCard({
                 disableClock
               />
             </div>
-            {!isMobile && (
-              <div className="flex flex-col col-span-5">
-                <div className="flex flex-row space-x-4">
-                  <div className="flex-1 space-y-2">
-                    <p className="text-xs ">Parking Area:</p>
-                    <Input
-                      placeholder="Parking Area"
-                      value={editParkingArea}
-                      onChange={(e) => setEditParkingArea(e.target.value)}
-                      className="w-full h-10 text-xs md:text-sm"
-                    />
-                  </div>
-                  <div className="flex-1 space-y-2">
-                    <p className="text-xs ">Parking Slot Number:</p>
-                    <Input
-                      type="number"
-                      placeholder="Parking Slot Number"
-                      value={editParkingSlotNumber}
-                      onChange={(e) =>
-                        setEditParkingSlotNumber(parseInt(e.target.value))
-                      }
-                      className="w-full h-10 text-xs md:text-sm"
-                    />
-                  </div>
+
+            <div className="flex flex-col col-span-5">
+              <div className="flex flex-row space-x-4">
+                <div className="flex-1 space-y-2">
+                  <p className="text-xs ">Parking Area:</p>
+                  <Input
+                    placeholder="Parking Area"
+                    value={editParkingArea}
+                    onChange={(e) => setEditParkingArea(e.target.value)}
+                    className="w-full h-10 text-xs md:text-sm"
+                  />
+                </div>
+                <div className="flex-1 space-y-2">
+                  <p className="text-xs ">Parking Slot Number:</p>
+                  <Input
+                    type="number"
+                    placeholder="Parking Slot Number"
+                    value={editParkingSlotNumber}
+                    onChange={(e) =>
+                      setEditParkingSlotNumber(parseInt(e.target.value))
+                    }
+                    className="w-full h-10 text-xs md:text-sm"
+                  />
                 </div>
               </div>
-            )}
+            </div>
+
             {role === "admin" && !isMobile && (
               <>
                 <hr />

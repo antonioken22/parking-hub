@@ -3,6 +3,12 @@ importScripts(
   "https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"
 );
 
+/* The supplied keys are the ones needed in order for the Firebase
+Cloud Messaging to work with your web app, I still have no idea on
+how I can store it privately. Nevertheless, it's not a security risk
+here since Firebase needs to identify your app with the following
+keys to grant your web app the service for push notifications.
+Read more: https://stackoverflow.com/questions/37482366/is-it-safe-to-expose-firebase-apikey-to-the-public */
 // Replace these with your own Firebase config keys...
 const firebaseConfig = {
   apiKey: "AIzaSyDK__8f9aOe2IQY3fZvZQp1uE2tkatBQtA",
@@ -18,7 +24,7 @@ firebase.initializeApp(firebaseConfig);
 
 const messaging = firebase.messaging();
 
-/*
+/* For debugging purposes
 messaging.onBackgroundMessage((payload) => {
   console.log(
     "[firebase-messaging-sw.js] Received background message ",
@@ -37,6 +43,12 @@ messaging.onBackgroundMessage((payload) => {
 });
 */
 
+/* Event listener for the supported* browser's push notification that gets triggered to show on client side. If the browser is
+in the background running, clicking the notification will redirect
+that user to the link provided by the web app. And if the browser
+is running on the foreground (in the web app), clicking the
+notification will just focus on that tab and disregard link
+redirection. */
 self.addEventListener("notificationclick", function (event) {
   // console.log("[firebase-messaging-sw.js] Notification click received.");
 
