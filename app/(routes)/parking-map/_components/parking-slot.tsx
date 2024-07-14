@@ -106,7 +106,7 @@ const ParkingSlot: React.FC<ParkingSlotProps> = ({
   useEffect(() => {
     if (!selected) {
       setZIndex(10); // Reset zIndex to 10 when not selected
-    } else if (role === "admin") {
+    } else if (role !== "manager") {
       const handleKeyDown = (event: KeyboardEvent) => {
         if (keyboardListenerActive) {
           switch (event.key) {
