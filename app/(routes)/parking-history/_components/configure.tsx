@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { doc, updateDoc, addDoc, collection } from "firebase/firestore";
+import { doc, updateDoc, addDoc, deleteDoc, collection } from "firebase/firestore";
 import { firestore, auth } from "@/firebase/config";
 import { toast } from "sonner";
 import useVehicles from "@/hooks/useUserVehicles";
-import useUserState from "@/hooks/useUserState"; // Import the hook
+import useUserState from "@/hooks/useUserState";
 import { VehicleData } from "@/types/UserVehicle";
 
 import { Button } from "@/components/ui/button";
@@ -25,11 +25,7 @@ import { AccordionContent } from "@/components/ui/accordion";
 
 const VehicleConfiguration: React.FC = () => {
   const { vehicles } = useVehicles();
-  const {
-    userFirstName,
-    userLastName,
-    userEmail,
-  } = useUserState(); // Use the hook to get user data
+  const { userFirstName, userLastName, userEmail } = useUserState();
 
   const [selectedVehicle, setSelectedVehicle] = useState<VehicleData | null>(null);
   const [color, setColor] = useState<string>("");
@@ -43,7 +39,7 @@ const VehicleConfiguration: React.FC = () => {
   const [newVehicleType, setNewVehicleType] = useState<string>("");
 
   const handleVehicleSelect = (vehicleId: string) => {
-    const vehicle = vehicles.find(v => v.id === vehicleId) || null;
+    const vehicle = vehicles.find((v) => v.id === vehicleId) || null;
     setSelectedVehicle(vehicle);
 
     if (vehicle) {
@@ -64,11 +60,7 @@ const VehicleConfiguration: React.FC = () => {
     if (!selectedVehicle) return;
 
     try {
-      const vehicleDocRef = doc(
-        firestore,
-        "vehicles",
-        selectedVehicle.id
-      );
+      const vehicleDocRef = doc(firestore, "vehicles", selectedVehicle.id);
 
       await updateDoc(vehicleDocRef, {
         color,
@@ -111,6 +103,26 @@ const VehicleConfiguration: React.FC = () => {
     }
   };
 
+  const handleDeleteVehicle = async () => {
+    if (!selectedVehicle) return;
+
+    try {
+      const vehicleDocRef = doc(firestore, "vehicles", selectedVehicle.id);
+
+      await deleteDoc(vehicleDocRef);
+
+      toast.success("Vehicle deleted successfully");
+      setSelectedVehicle(null);
+      setColor("");
+      setLicensePlate("");
+      setModel("");
+      setVehicleType("");
+    } catch (error) {
+      toast.error("Failed to delete vehicle");
+      console.error("Error deleting vehicle:", error);
+    }
+  };
+
   return (
     <div className="p-4 space-y-4">
       <Accordion type="single" collapsible>
@@ -127,7 +139,6 @@ const VehicleConfiguration: React.FC = () => {
                     <div>
                       <Label htmlFor="vehicle">Select Vehicle:</Label>
                       <Select
-                        id="vehicle"
                         onValueChange={handleVehicleSelect}
                         value={selectedVehicle?.id || ""}
                       >
@@ -245,6 +256,41 @@ const VehicleConfiguration: React.FC = () => {
                     <Button type="submit">Add Vehicle</Button>
                   </div>
                 </form>
+              </CardContent>
+            </Card>
+          </AccordionContent>
+        </AccordionItem>
+
+        <AccordionItem value="item-3">
+          <AccordionTrigger>Delete Vehicle</AccordionTrigger>
+          <AccordionContent>
+            <Card>
+              <CardHeader>
+                <CardTitle>Delete Vehicle</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid gap-4">
+                  <div>
+                    <Label htmlFor="vehicle">Select Vehicle:</Label>
+                    <Select
+                      onValueChange={handleVehicleSelect}
+                      value={selectedVehicle?.id || ""}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select a vehicle" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {vehicles.map((vehicle) => (
+                          <SelectItem key={vehicle.id} value={vehicle.id}>
+                            {vehicle.licensePlate} - {vehicle.model}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <Button type="button" onClick={handleDeleteVehicle} variant="destructive">Delete Vehicle</Button>
+                </div>
               </CardContent>
             </Card>
           </AccordionContent>
