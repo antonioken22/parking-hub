@@ -32,18 +32,13 @@ const formatTime = (date: Date) => {
 };
 
 const DashboardPage = () => {
-  const { userId, userEmail, userFirstName, userLastName, loading } =
-    useUserState();
+  const { userId, userFirstName, userLastName, loading } = useUserState();
   // Parking Slot Status Hooks
   const { GLE, NGE, RTL, SAL } = useParkingSlotCount();
   const [chartData, setChartData] = useState<any>({});
   // Active Users Hooks
-  const { activeUsers, logActiveUser } = useActiveUsers();
-  useEffect(() => {
-    if (userId && userEmail && userFirstName && userLastName) {
-      logActiveUser(userId, userEmail, userFirstName, userLastName);
-    }
-  }, [userId, userEmail, userFirstName, userLastName, logActiveUser]);
+  const { activeUsers } = useActiveUsers();
+
   const [activeUsersData, setActiveUsersData] = useState<any>({});
   const currentDate = formatDate(new Date());
   const [currentTime, setCurrentTime] = useState(formatTime(new Date()));
