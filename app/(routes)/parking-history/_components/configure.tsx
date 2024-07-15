@@ -3,7 +3,7 @@ import { doc, updateDoc, addDoc, collection } from "firebase/firestore";
 import { firestore, auth } from "@/firebase/config";
 import { toast } from "sonner";
 import useVehicles from "@/hooks/useUserVehicles";
-import {useUserRole} from "@/hooks/useUserRole";
+import useUserState from "@/hooks/useUserState"; // Import the hook
 import { VehicleData } from "@/types/UserVehicle";
 
 import { Button } from "@/components/ui/button";
@@ -25,6 +25,12 @@ import { AccordionContent } from "@/components/ui/accordion";
 
 const VehicleConfiguration: React.FC = () => {
   const { vehicles } = useVehicles();
+  const {
+    userFirstName,
+    userLastName,
+    userEmail,
+  } = useUserState(); // Use the hook to get user data
+
   const [selectedVehicle, setSelectedVehicle] = useState<VehicleData | null>(null);
   const [color, setColor] = useState<string>("");
   const [licensePlate, setLicensePlate] = useState<string>("");
@@ -35,8 +41,6 @@ const VehicleConfiguration: React.FC = () => {
   const [newLicensePlate, setNewLicensePlate] = useState<string>("");
   const [newModel, setNewModel] = useState<string>("");
   const [newVehicleType, setNewVehicleType] = useState<string>("");
-
-  const userRole = useUserRole();
 
   const handleVehicleSelect = (vehicleId: string) => {
     const vehicle = vehicles.find(v => v.id === vehicleId) || null;
@@ -95,9 +99,9 @@ const VehicleConfiguration: React.FC = () => {
         licensePlate: newLicensePlate,
         model: newModel,
         vehicleType: newVehicleType,
-        ownerEmail: user.email,
-        ownerFirstName: user.displayName?.split(" ")[0] || "",
-        ownerLastName: user.displayName?.split(" ")[1] || "",
+        ownerEmail: userEmail,
+        ownerFirstName: userFirstName,
+        ownerLastName: userLastName,
       });
 
       toast.success("Vehicle added successfully");

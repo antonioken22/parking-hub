@@ -72,16 +72,20 @@ const DataList: React.FC<{ tab: string }> = ({ tab }) => {
             <>
               {vehicles.length > 0 ? (
                 vehicles.map((vehicle, index) => (
-                  <div key={index} className="mb-4">
-                    <h3 className="font-bold">{`Vehicle ${index + 1} details`}</h3>
-                    <p>Owner Email: {vehicle.ownerEmail}</p>
-                    <p>Owner First Name: {vehicle.ownerFirstName}</p>
-                    <p>Owner Last Name: {vehicle.ownerLastName}</p>
-                    <p>Color: {vehicle.color}</p>
-                    <p>License Plate: {vehicle.licensePlate}</p>
-                    <p>Model: {vehicle.model}</p>
-                    <p>Vehicle Type: {vehicle.vehicleType}</p>
-                  </div>
+                  <Card key={index} className="mb-4 shadow-md">
+                    <CardHeader>
+                      <CardTitle>{`Vehicle ${index + 1} Details`}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p>Owner Email: {vehicle.ownerEmail}</p>
+                      <p>Owner First Name: {vehicle.ownerFirstName}</p>
+                      <p>Owner Last Name: {vehicle.ownerLastName}</p>
+                      <p>Color: {vehicle.color}</p>
+                      <p>License Plate: {vehicle.licensePlate}</p>
+                      <p>Model: {vehicle.model}</p>
+                      <p>Vehicle Type: {vehicle.vehicleType}</p>
+                    </CardContent>
+                  </Card>
                 ))
               ) : (
                 <p>No vehicles available</p>
