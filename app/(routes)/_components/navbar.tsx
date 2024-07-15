@@ -1,13 +1,30 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
 
 import { MobileSidebar } from "./mobile-sidebar";
 import { Button } from "@/components/ui/button";
 import NotificationDropdown from "./notification-dropdown";
 import UserProfilePhoto from "./user-profile-photo";
+import useUserState from "@/hooks/useUserState";
+import useActiveUsers from "@/hooks/useActiveUsers";
+
+useActiveUsers;
 
 const Navbar = () => {
+  const { userId, userEmail, userFirstName, userLastName } = useUserState();
+  const { logActiveUser } = useActiveUsers();
+
+  // Logs the active user when he visits any part of the app
+  // since the the navbar is visible and called on all parts of
+  // the web app.
+  useEffect(() => {
+    if (userId && userEmail && userFirstName && userLastName) {
+      logActiveUser(userId, userEmail, userFirstName, userLastName);
+    }
+  }, [userId, userEmail, userFirstName, userLastName, logActiveUser]);
+
   return (
     <div className="flex items-center p-4">
       <MobileSidebar />
