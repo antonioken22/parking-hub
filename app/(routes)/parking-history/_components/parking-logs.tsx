@@ -17,7 +17,7 @@ const ParkingLogs: React.FC = () => {
         onValueChange={(tab) => setSelectedTab(tab as TabType)}
         className="flex flex-col w-full"
       >
-        <TabsList>
+        <TabsList className="justify-between md:justify-around">
           <TabsTrigger value="logs">Logs</TabsTrigger>
           <TabsTrigger value="vehicles">Vehicles</TabsTrigger>
           <TabsTrigger value="configure">Configure</TabsTrigger>
