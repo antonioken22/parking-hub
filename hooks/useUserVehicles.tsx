@@ -1,28 +1,42 @@
-import { useState, useEffect } from "react";
-import { onAuthStateChanged } from "firebase/auth";
-import { collection, getDocs } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 import { toast } from "sonner";
 import { auth, firestore } from "@/firebase/config";
 import { VehicleData } from "@/types/UserVehicle";
+import { useUserRole } from "./useUserRole";
 
 const useVehicles = () => {
   const [vehicles, setVehicles] = useState<VehicleData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const userRole = useUserRole();
 
   const fetchVehicles = async () => {
     try {
       const user = auth.currentUser;
       if (!user) {
         toast.error("User is not authenticated");
+        setLoading(false);
         return;
       }
 
-      const vehiclesCollectionRef = collection(firestore, "users", user.uid, "vehicles");
-      const vehiclesSnapshot = await getDocs(vehiclesCollectionRef);
+      const vehiclesCollectionRef = collection(firestore, "vehicles");
+
+      let vehiclesQuery;
+      if (userRole === "admin") {
+        vehiclesQuery = vehiclesCollectionRef;
+      } else {
+        vehiclesQuery = query(vehiclesCollectionRef, where("userId", "==", user.uid));
+      }
+
+      const vehiclesSnapshot = await getDocs(vehiclesQuery);
 
       const vehiclesData = vehiclesSnapshot.docs.map((doc) => ({
         id: doc.id,
-        userId: user.uid,
         ...doc.data(),
       })) as VehicleData[];
 
@@ -36,18 +50,8 @@ const useVehicles = () => {
   };
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        await fetchVehicles();
-      } else {
-        toast.error("User is not authenticated");
-        setLoading(false);
-      }
-    });
-
-    // Cleanup subscription on unmount
-    return () => unsubscribe();
-  }, []);
+    fetchVehicles();
+  }, [userRole]);
 
   return { vehicles, loading, fetchVehicles };
 };

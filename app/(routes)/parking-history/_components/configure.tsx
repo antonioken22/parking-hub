@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { doc, updateDoc, addDoc, collection } from "firebase/firestore";
-import { firestore } from "@/firebase/config";
+import { firestore, auth } from "@/firebase/config";
 import { toast } from "sonner";
 import useVehicles from "@/hooks/useUserVehicles";
+import {useUserRole} from "@/hooks/useUserRole";
 import { VehicleData } from "@/types/UserVehicle";
 
 import { Button } from "@/components/ui/button";
@@ -35,6 +36,8 @@ const VehicleConfiguration: React.FC = () => {
   const [newModel, setNewModel] = useState<string>("");
   const [newVehicleType, setNewVehicleType] = useState<string>("");
 
+  const userRole = useUserRole();
+
   const handleVehicleSelect = (vehicleId: string) => {
     const vehicle = vehicles.find(v => v.id === vehicleId) || null;
     setSelectedVehicle(vehicle);
@@ -59,8 +62,6 @@ const VehicleConfiguration: React.FC = () => {
     try {
       const vehicleDocRef = doc(
         firestore,
-        "users",
-        selectedVehicle.userId,
         "vehicles",
         selectedVehicle.id
       );
@@ -82,21 +83,24 @@ const VehicleConfiguration: React.FC = () => {
   const handleAddSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const userId = selectedVehicle ? selectedVehicle.userId : ""; // Adjust this based on how you retrieve userId
-      await addDoc(collection(firestore, "users", userId, "vehicles"), {
+      const user = auth.currentUser;
+      if (!user) {
+        toast.error("User is not authenticated");
+        return;
+      }
+
+      await addDoc(collection(firestore, "vehicles"), {
+        userId: user.uid,
         color: newColor,
         licensePlate: newLicensePlate,
         model: newModel,
         vehicleType: newVehicleType,
+        ownerEmail: user.email,
+        ownerFirstName: user.displayName?.split(" ")[0] || "",
+        ownerLastName: user.displayName?.split(" ")[1] || "",
       });
 
       toast.success("Vehicle added successfully");
-
-      // Reset form fields
-      setNewColor("");
-      setNewLicensePlate("");
-      setNewModel("");
-      setNewVehicleType("");
     } catch (error) {
       toast.error("Failed to add vehicle");
       console.error("Error adding vehicle:", error);
@@ -104,112 +108,145 @@ const VehicleConfiguration: React.FC = () => {
   };
 
   return (
-    <Card className="p-4">
+    <div className="p-4 space-y-4">
       <Accordion type="single" collapsible>
-        <AccordionItem value="edit-vehicle">
-          <AccordionTrigger>Edit Vehicle</AccordionTrigger>
+        <AccordionItem value="item-1">
+          <AccordionTrigger>Update Vehicle</AccordionTrigger>
           <AccordionContent>
-            {vehicles.length > 0 ? (
-              <div>
-                <Label>Select a vehicle</Label>
-                <Select onValueChange={(value) => handleVehicleSelect(value)}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a vehicle" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {vehicles.map((vehicle) => (
-                      <SelectItem key={vehicle.id} value={vehicle.id}>
-                        {vehicle.licensePlate} - {vehicle.model}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                {selectedVehicle && (
-                  <form onSubmit={handleUpdateSubmit} className="mt-4 space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>Update Vehicle</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleUpdateSubmit}>
+                  <div className="grid gap-4">
                     <div>
-                      <Label>Color</Label>
+                      <Label htmlFor="vehicle">Select Vehicle:</Label>
+                      <Select
+                        id="vehicle"
+                        onValueChange={handleVehicleSelect}
+                        value={selectedVehicle?.id || ""}
+                      >
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Select a vehicle" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {vehicles.map((vehicle) => (
+                            <SelectItem key={vehicle.id} value={vehicle.id}>
+                              {vehicle.licensePlate} - {vehicle.model}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div>
+                      <Label htmlFor="color">Color:</Label>
                       <Input
+                        id="color"
                         type="text"
                         value={color}
                         onChange={(e) => setColor(e.target.value)}
                       />
                     </div>
+
                     <div>
-                      <Label>License Plate</Label>
+                      <Label htmlFor="licensePlate">License Plate:</Label>
                       <Input
+                        id="licensePlate"
                         type="text"
                         value={licensePlate}
                         onChange={(e) => setLicensePlate(e.target.value)}
                       />
                     </div>
+
                     <div>
-                      <Label>Model</Label>
+                      <Label htmlFor="model">Model:</Label>
                       <Input
+                        id="model"
                         type="text"
                         value={model}
                         onChange={(e) => setModel(e.target.value)}
                       />
                     </div>
+
                     <div>
-                      <Label>Vehicle Type</Label>
+                      <Label htmlFor="vehicleType">Vehicle Type:</Label>
                       <Input
+                        id="vehicleType"
                         type="text"
                         value={vehicleType}
                         onChange={(e) => setVehicleType(e.target.value)}
                       />
                     </div>
+
                     <Button type="submit">Update Vehicle</Button>
-                  </form>
-                )}
-              </div>
-            ) : (
-              <p>No vehicles available</p>
-            )}
+                  </div>
+                </form>
+              </CardContent>
+            </Card>
           </AccordionContent>
         </AccordionItem>
-        <AccordionItem value="add-vehicle">
+
+        <AccordionItem value="item-2">
           <AccordionTrigger>Add Vehicle</AccordionTrigger>
           <AccordionContent>
-            <form onSubmit={handleAddSubmit} className="mt-4 space-y-4">
-              <div>
-                <Label>Color</Label>
-                <Input
-                  type="text"
-                  value={newColor}
-                  onChange={(e) => setNewColor(e.target.value)}
-                />
-              </div>
-              <div>
-                <Label>License Plate</Label>
-                <Input
-                  type="text"
-                  value={newLicensePlate}
-                  onChange={(e) => setNewLicensePlate(e.target.value)}
-                />
-              </div>
-              <div>
-                <Label>Model</Label>
-                <Input
-                  type="text"
-                  value={newModel}
-                  onChange={(e) => setNewModel(e.target.value)}
-                />
-              </div>
-              <div>
-                <Label>Vehicle Type</Label>
-                <Input
-                  type="text"
-                  value={newVehicleType}
-                  onChange={(e) => setNewVehicleType(e.target.value)}
-                />
-              </div>
-              <Button type="submit">Add Vehicle</Button>
-            </form>
+            <Card>
+              <CardHeader>
+                <CardTitle>Add Vehicle</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleAddSubmit}>
+                  <div className="grid gap-4">
+                    <div>
+                      <Label htmlFor="newColor">Color:</Label>
+                      <Input
+                        id="newColor"
+                        type="text"
+                        value={newColor}
+                        onChange={(e) => setNewColor(e.target.value)}
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="newLicensePlate">License Plate:</Label>
+                      <Input
+                        id="newLicensePlate"
+                        type="text"
+                        value={newLicensePlate}
+                        onChange={(e) => setNewLicensePlate(e.target.value)}
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="newModel">Model:</Label>
+                      <Input
+                        id="newModel"
+                        type="text"
+                        value={newModel}
+                        onChange={(e) => setNewModel(e.target.value)}
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="newVehicleType">Vehicle Type:</Label>
+                      <Input
+                        id="newVehicleType"
+                        type="text"
+                        value={newVehicleType}
+                        onChange={(e) => setNewVehicleType(e.target.value)}
+                      />
+                    </div>
+
+                    <Button type="submit">Add Vehicle</Button>
+                  </div>
+                </form>
+              </CardContent>
+            </Card>
           </AccordionContent>
         </AccordionItem>
       </Accordion>
-    </Card>
+    </div>
   );
 };
 
