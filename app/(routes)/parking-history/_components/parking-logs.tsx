@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import DataList from "./data-list-logs";
-import Announcement from "./announcement";
+import VehicleConfiguration from "./configure";
 
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
@@ -17,7 +17,7 @@ const ParkingLogs: React.FC = () => {
         onValueChange={(tab) => setSelectedTab(tab as TabType)}
         className="flex flex-col w-full"
       >
-        <TabsList>
+        <TabsList className="justify-between md:justify-around">
           <TabsTrigger value="logs">Logs</TabsTrigger>
           <TabsTrigger value="vehicles">Vehicles</TabsTrigger>
           <TabsTrigger value="configure">Configure</TabsTrigger>
@@ -29,7 +29,7 @@ const ParkingLogs: React.FC = () => {
           <DataList tab="vehicles" />
         </TabsContent>
         <TabsContent value="configure">
-          {/* Add configure content here */}
+          <VehicleConfiguration />
         </TabsContent>
       </Tabs>
       {/*<Announcement />*/}
