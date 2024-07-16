@@ -55,6 +55,19 @@ const ChatMessageHistory: React.FC<ChatMessageHistoryProps> = ({
     );
   }
 
+  const formatDate = (timestamp: Timestamp) => {
+    const date = new Date(timestamp.seconds * 1000);
+    const options: Intl.DateTimeFormatOptions = {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    };
+    return date.toLocaleString(undefined, options);
+  };
+
   const filteredMessages = chatMessages
     .filter(
       (msg: ChatMessage) =>
@@ -66,11 +79,13 @@ const ChatMessageHistory: React.FC<ChatMessageHistoryProps> = ({
     .sort((a, b) => {
       const dateA = (a.dateCreated as unknown as Timestamp)?.seconds ?? 0;
       const dateB = (b.dateCreated as unknown as Timestamp)?.seconds ?? 0;
-      return dateA - dateB; // Sort in ascending order (oldest on top)
+      // Sort in ascending order
+      // (newest at bottom: oldest at top)
+      return dateA - dateB;
     });
 
   return (
-    <div className="p-4 space-y-4">
+    <div className="p-4 space-y-7">
       {filteredMessages.length === 0 ? (
         <div className="text-center text-muted-foreground py-4">
           Start a conversation
@@ -127,6 +142,11 @@ const ChatMessageHistory: React.FC<ChatMessageHistoryProps> = ({
                       <Trash className="w-4 h-4 text-muted-foreground" />
                     </button>
                   )}
+                  <div className="text-xs text-muted-foreground absolute -bottom-5 -left-0 text-nowrap">
+                    {`Sent at: ${formatDate(
+                      msg.dateCreated as unknown as Timestamp
+                    )}`}
+                  </div>
                 </div>
               </div>
               {isCurrentUser && (
