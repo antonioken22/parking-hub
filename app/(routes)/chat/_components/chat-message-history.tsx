@@ -3,6 +3,7 @@ import { Timestamp } from "firebase/firestore";
 import { Trash } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Skeleton } from "@/components/ui/skeleton";
 import useUserState from "@/hooks/useUserState";
 import useChatMessages from "@/hooks/useChatMessages";
 import { ChatMessage } from "@/types/ChatMessage";
@@ -20,7 +21,7 @@ const ChatMessageHistory: React.FC<ChatMessageHistoryProps> = ({
   selectedUser,
 }) => {
   const { userId, userFirstName, userLastName, userPhotoUrl } = useUserState();
-  const { chatMessages, removeFromView } = useChatMessages();
+  const { chatMessages, loading, removeFromView } = useChatMessages();
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -29,6 +30,22 @@ const ChatMessageHistory: React.FC<ChatMessageHistoryProps> = ({
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [chatMessages]);
+
+  if (loading) {
+    return (
+      <div className="p-4 space-y-4">
+        {[...Array(8)].map((_, index) => (
+          <div key={index} className="flex items-center space-x-2">
+            <Skeleton className="w-10 h-10 rounded-full" />
+            <div className="flex-grow space-y-2">
+              <Skeleton className="h-4 w-1/2" />
+              <Skeleton className="h-4 w-3/4" />
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
 
   if (!selectedUser) {
     return (

@@ -47,11 +47,19 @@ const ChatComposeMessage: React.FC<ChatComposeMessageProps> = ({
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
+
   return (
     <div className="flex items-center space-x-2 p-2 bg-background">
       <Textarea
         value={message}
         onChange={(e) => setMessage(e.target.value)}
+        onKeyDown={handleKeyDown}
         placeholder="Type your message..."
         className="flex-grow border-primary"
       />

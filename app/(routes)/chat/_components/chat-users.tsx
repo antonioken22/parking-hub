@@ -58,14 +58,15 @@ const ChatUsers: React.FC<ChatUsersProps> = ({ onSelectUser }) => {
     );
   }
 
-  // Separate managers and users
+  // Separate admins, managers, and users
+  const admins = users.filter((user) => user.role === "admin");
   const managers = users.filter((user) => user.role === "manager");
   const normalUsers = users.filter((user) => user.role === "user");
 
   return (
     <div>
       <div className="flex overflow-x-auto space-x-4 p-1">
-        {[...managers, ...normalUsers].map((user) => (
+        {[...managers, ...admins, ...normalUsers].map((user) => (
           <div
             key={user.id}
             className={`flex flex-col items-center space-y-1 md:space-y-2 cursor-pointer p-1 ${
@@ -91,6 +92,11 @@ const ChatUsers: React.FC<ChatUsersProps> = ({ onSelectUser }) => {
             {user.role === "manager" && (
               <div className="text-center text-xs md:text-sm text-muted-foreground">
                 Manager
+              </div>
+            )}
+            {user.role === "admin" && (
+              <div className="text-center text-xs md:text-sm text-muted-foreground">
+                Admin
               </div>
             )}
           </div>
