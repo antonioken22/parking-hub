@@ -11,6 +11,7 @@ import {
   Shield,
   SquareParking,
   Ticket,
+  Car,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { signOut } from "firebase/auth";
@@ -45,6 +46,12 @@ const routes = [
     icon: Ticket,
     color: "text-primary",
     href: "/booking",
+  },
+  {
+    label: "My Vehicles",
+    icon: Car,
+    color: "text-primary",
+    href: "/my-vehicles",
   },
   {
     label: "Parking Map",

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import {
   collection,
-  getDocs,
   query,
   where,
+  onSnapshot,
 } from "firebase/firestore";
 import { toast } from "sonner";
 import { auth, firestore } from "@/firebase/config";
@@ -15,45 +15,40 @@ const useVehicles = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const userRole = useUserRole();
 
-  const fetchVehicles = async () => {
-    try {
-      const user = auth.currentUser;
-      if (!user) {
-        toast.error("User is not authenticated");
-        setLoading(false);
-        return;
-      }
+  useEffect(() => {
+    const user = auth.currentUser;
+    if (!user) {
+      toast.error("User is not authenticated");
+      setLoading(false);
+      return;
+    }
 
-      const vehiclesCollectionRef = collection(firestore, "vehicles");
+    const vehiclesCollectionRef = collection(firestore, "vehicles");
 
-      let vehiclesQuery;
-      if (userRole === "admin") {
-        vehiclesQuery = vehiclesCollectionRef;
-      } else {
-        vehiclesQuery = query(vehiclesCollectionRef, where("userId", "==", user.uid));
-      }
+    let vehiclesQuery;
+    if (userRole === "admin") {
+      vehiclesQuery = vehiclesCollectionRef;
+    } else {
+      vehiclesQuery = query(vehiclesCollectionRef, where("ownerId", "==", user.uid));
+    }
 
-      const vehiclesSnapshot = await getDocs(vehiclesQuery);
-
-      const vehiclesData = vehiclesSnapshot.docs.map((doc) => ({
+    const unsubscribe = onSnapshot(vehiclesQuery, (snapshot) => {
+      const vehiclesData = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       })) as VehicleData[];
-
       setVehicles(vehiclesData);
-    } catch (error) {
+      setLoading(false);
+    }, (error) => {
       toast.error("Failed to fetch vehicle data");
       console.error("Error fetching vehicle data:", error);
-    } finally {
       setLoading(false);
-    }
-  };
+    });
 
-  useEffect(() => {
-    fetchVehicles();
+    return () => unsubscribe();
   }, [userRole]);
 
-  return { vehicles, loading, fetchVehicles };
+  return { vehicles, loading };
 };
 
 export default useVehicles;
