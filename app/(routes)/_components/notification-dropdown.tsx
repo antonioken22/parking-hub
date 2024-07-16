@@ -83,6 +83,20 @@ const NotificationDropdown = () => {
     ));
   };
 
+  // Format the dateCreated field in the format (mm-dd-yyyy @ hh:mm am/pm)
+  const formattedDate = (dateCreated: Timestamp | null) => {
+    if (!dateCreated) return "";
+    const date = dateCreated.toDate();
+    return date.toLocaleString("en-US", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
+  };
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -108,38 +122,48 @@ const NotificationDropdown = () => {
         <div className="divide-y divide-muted max-h-80 overflow-y-auto">
           {userNotifications.length > 0 ? (
             userNotifications.map((notification: Notification) => (
-              <div
-                key={notification.id}
-                className={`flex justify-between items-center py-2 text-xs md:text-sm ${
-                  notification.isRead ? "text-muted-foreground" : "font-normal"
-                }`}
-              >
-                <span>{replaceNlWithNewLine(notification.body || "")}</span>
-                <div className="flex flex-col items-center space-y-1 ml-1">
-                  <div className="flex flex-col items-center">
-                    <div
-                      role="button"
-                      onClick={() => handleMarkAsRead(notification.id || "")}
-                      className="p-2"
-                    >
-                      <CheckCircle className="w-4 h-4" />
+              <>
+                <div
+                  key={notification.id}
+                  className={`flex justify-between items-center py-2 text-xs md:text-sm ${
+                    notification.isRead
+                      ? "text-muted-foreground"
+                      : "font-normal"
+                  }`}
+                >
+                  <span>{replaceNlWithNewLine(notification.body || "")}</span>
+                  <div className="flex flex-col items-center space-y-1 ml-1">
+                    <div className="flex flex-col items-center">
+                      <div
+                        role="button"
+                        onClick={() => handleMarkAsRead(notification.id || "")}
+                        className="p-2"
+                      >
+                        <CheckCircle className="w-4 h-4" />
+                      </div>
+                      <span className="text-xs text-muted">Read</span>
                     </div>
-                    <span className="text-xs text-muted">Read</span>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <div
-                      role="button"
-                      onClick={() =>
-                        handleRemoveFromView(notification.id || "")
-                      }
-                      className="p-2"
-                    >
-                      <Trash2 className="w-4 h-4" />
+                    <div className="flex flex-col items-center">
+                      <div
+                        role="button"
+                        onClick={() =>
+                          handleRemoveFromView(notification.id || "")
+                        }
+                        className="p-2"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </div>
+                      <span className="text-xs text-muted">Delete</span>
                     </div>
-                    <span className="text-xs text-muted">Delete</span>
                   </div>
                 </div>
-              </div>
+                <h3 className="flex flex-col text-xs text-muted-foreground text-right pr-2 mb-2">
+                  Received at:{" "}
+                  {formattedDate(
+                    notification.dateCreated as unknown as Timestamp
+                  )}
+                </h3>
+              </>
             ))
           ) : (
             <div

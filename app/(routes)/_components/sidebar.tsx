@@ -12,6 +12,7 @@ import {
   SquareParking,
   Ticket,
   Car,
+  MessageSquare,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { signOut } from "firebase/auth";
@@ -40,6 +41,12 @@ const routes = [
     icon: LayoutDashboard,
     color: "text-primary",
     href: "/dashboard",
+  },
+  {
+    label: "Chat",
+    icon: MessageSquare,
+    color: "text-primary",
+    href: "/chat",
   },
   {
     label: "Booking",
