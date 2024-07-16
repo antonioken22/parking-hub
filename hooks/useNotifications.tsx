@@ -50,7 +50,7 @@ const useNotifications = () => {
       ) as Notification[];
       setNotifications(notificationsList);
     } catch (err) {
-      setError("Failed to fetch notifications");
+      // setError("Failed to fetch notifications");
       toast.error("Failed to fetch notifications");
     } finally {
       setLoading(false);
@@ -112,7 +112,7 @@ const useNotifications = () => {
       ]);
       toast.success("Notification added successfully");
     } catch (err) {
-      setError("Failed to add notification");
+      // setError("Failed to add notification");
       toast.error("Failed to add notification");
     }
   }, []);
