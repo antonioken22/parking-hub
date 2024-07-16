@@ -4,6 +4,7 @@ import {
   EmailAuthProvider,
   updatePassword,
 } from "firebase/auth";
+import { Eye, EyeOff } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { auth } from "@/firebase/config";
@@ -14,6 +15,19 @@ const ChangePassword = () => {
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
+
+  const togglePasswordVisibility = (type: string) => {
+    if (type === "current") {
+      setShowCurrentPassword((prevState) => !prevState);
+    } else if (type === "new") {
+      setShowNewPassword((prevState) => !prevState);
+    } else if (type === "confirm") {
+      setShowConfirmNewPassword((prevState) => !prevState);
+    }
+  };
 
   const handleCancelChanges = () => {
     setCurrentPassword("");
@@ -21,12 +35,19 @@ const ChangePassword = () => {
     setConfirmNewPassword("");
   };
 
+  const handleError = (message: string) => {
+    setError(message);
+    setTimeout(() => {
+      setError(null);
+    }, 2000);
+  };
+
   const handleChangePassword = async (event: React.FormEvent) => {
     event.preventDefault();
     setError(null);
     setMessage(null);
     if (newPassword !== confirmNewPassword) {
-      setError("New passwords do not match.");
+      handleError("New passwords do not match.");
       return;
     }
     try {
@@ -42,17 +63,15 @@ const ChangePassword = () => {
         setTimeout(() => {
           setMessage(null);
         }, 2000);
-        setCurrentPassword("");
-        setNewPassword("");
-        setConfirmNewPassword("");
+        handleCancelChanges();
       } else {
-        setError("No user is currently signed in.");
+        handleError("No user is currently signed in.");
       }
     } catch (error) {
       if (error instanceof Error) {
-        setError(error.message);
+        handleError(error.message);
       } else {
-        setError("An unknown error occurred.");
+        handleError("An unknown error occurred.");
       }
     }
   };
@@ -70,34 +89,73 @@ const ChangePassword = () => {
           <label className="text-sm font-medium block mb-2 text-primary">
             Current Password
           </label>
-          <input
-            type="password"
-            value={currentPassword}
-            onChange={(e) => setCurrentPassword(e.target.value)}
-            className="w-full border border-gray-300 p-2 rounded"
-          />
+          <div className="relative">
+            <input
+              type={showCurrentPassword ? "text" : "password"}
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+              className="w-full border border-gray-300 p-2 rounded"
+            />
+            <button
+              type="button"
+              onClick={() => togglePasswordVisibility("current")}
+              className="absolute top-1/2 right-3 transform -translate-y-1/2 text-primary hover:text-primary-foreground"
+            >
+              {showCurrentPassword ? (
+                <Eye className="h-5 w-5" />
+              ) : (
+                <EyeOff className="h-5 w-5" />
+              )}
+            </button>
+          </div>
         </div>
         <div className="mb-4">
           <label className="text-sm font-medium block mb-2 text-primary">
             New Password
           </label>
-          <input
-            type="password"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            className="w-full border border-gray-300 p-2 rounded"
-          />
+          <div className="relative">
+            <input
+              type={showNewPassword ? "text" : "password"}
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              className="w-full border border-gray-300 p-2 rounded"
+            />
+            <button
+              type="button"
+              onClick={() => togglePasswordVisibility("new")}
+              className="absolute top-1/2 right-3 transform -translate-y-1/2 text-primary hover:text-primary-foreground"
+            >
+              {showNewPassword ? (
+                <Eye className="h-5 w-5" />
+              ) : (
+                <EyeOff className="h-5 w-5" />
+              )}
+            </button>
+          </div>
         </div>
         <div className="mb-4">
           <label className="text-sm font-medium block mb-2 text-primary">
             Confirm New Password
           </label>
-          <input
-            type="password"
-            value={confirmNewPassword}
-            onChange={(e) => setConfirmNewPassword(e.target.value)}
-            className="w-full border border-gray-300 p-2 rounded"
-          />
+          <div className="relative">
+            <input
+              type={showConfirmNewPassword ? "text" : "password"}
+              value={confirmNewPassword}
+              onChange={(e) => setConfirmNewPassword(e.target.value)}
+              className="w-full border border-gray-300 p-2 rounded"
+            />
+            <button
+              type="button"
+              onClick={() => togglePasswordVisibility("confirm")}
+              className="absolute top-1/2 right-3 transform -translate-y-1/2 text-primary hover:text-primary-foreground"
+            >
+              {showConfirmNewPassword ? (
+                <Eye className="h-5 w-5" />
+              ) : (
+                <EyeOff className="h-5 w-5" />
+              )}
+            </button>
+          </div>
         </div>
         {error && <div className="text-red-500 mb-4">{error}</div>}
         {message && <div className="text-green-500 mb-4">{message}</div>}
