@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { toast } from "sonner";
 
 import { Spinner } from "@/components/spinner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -62,15 +63,25 @@ const UserProfileUpdatePhoto = () => {
       </p>
       <Input
         type="file"
-        accept="image/*"
+        accept=".jpg,.jpeg,.png"
         onChange={(e) => {
           if (e.target.files && e.target.files[0]) {
-            setSelectedImageUpload(e.target.files[0]);
+            const file = e.target.files[0];
+            const fileSizeInMB = file.size / (1024 * 1024);
+            if (fileSizeInMB > 2) {
+              toast.warning("File size exceeds 2MB.");
+              setSelectedImageUpload(null);
+            } else {
+              setSelectedImageUpload(file);
+            }
           } else {
             setSelectedImageUpload(null);
           }
         }}
       />
+      <p className="text-center text-xs text-muted-foreground text-wrap">
+        File size limit: 2 MB
+      </p>
       <div className="flex flex-col justify-center w-full my-1">
         <Button onClick={updateProfilePicture}>Update</Button>
       </div>

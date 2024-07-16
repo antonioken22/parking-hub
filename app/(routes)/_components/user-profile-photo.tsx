@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -54,23 +55,33 @@ const UserProfilePhoto = () => {
           </div>
           <div className="grid gap-2">
             <div className="flex flex-col items-center gap-2">
+              {/* Might use this note later.
               <p className="text-xs text-muted-foreground text-wrap">
                 Note: Use Square (Aspect Ratio: 1:1) images in order for it not
                 to get distorted when displayed.
-              </p>
+              </p> */}
               <Input
                 type="file"
                 accept=".jpg,.jpeg,.png"
                 onChange={(e) => {
                   if (e.target.files && e.target.files[0]) {
-                    setSelectedImageUpload(e.target.files[0]);
+                    const file = e.target.files[0];
+                    const fileSizeInMB = file.size / (1024 * 1024);
+                    if (fileSizeInMB > 2) {
+                      toast.warning("File size exceeds 2MB.");
+                      setSelectedImageUpload(null);
+                    } else {
+                      setSelectedImageUpload(file);
+                    }
                   } else {
                     setSelectedImageUpload(null);
                   }
                 }}
               />
+              <p className="text-xs text-muted-foreground text-wrap">
+                File size limit: 2 MB
+              </p>
             </div>
-
             <div className="flex flex-col justify-center w-full ">
               <Button onClick={updateProfilePicture}>Update</Button>
             </div>

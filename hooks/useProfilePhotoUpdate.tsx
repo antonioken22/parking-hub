@@ -12,6 +12,7 @@ const useProfilePhotoUpdate = () => {
   );
   const [newPhotoUrl, setNewPhotoUrl] = useState<string | null>(null);
 
+  // Add an update listener to ensure that new changes update the UI
   useEffect(() => {
     if (userId) {
       const userDocRef = doc(firestore, "users", userId);
