@@ -26,7 +26,7 @@ const useVehicles = () => {
     const vehiclesCollectionRef = collection(firestore, "vehicles");
 
     let vehiclesQuery;
-    if (userRole === "admin") {
+    if (userRole === "admin" || userRole ==="manager") {
       vehiclesQuery = vehiclesCollectionRef;
     } else {
       vehiclesQuery = query(vehiclesCollectionRef, where("ownerId", "==", user.uid));
