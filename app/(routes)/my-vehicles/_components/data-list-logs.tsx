@@ -6,6 +6,7 @@ import { Spinner } from "@/components/spinner";
 import { Card } from "@/components/ui/card";
 import { CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import useUserState from "@/hooks/useUserState";
+import useVehicles from "@/hooks/useUserVehicles";
 import { Toaster } from "sonner";
 
 const DataList: React.FC<{ tab: string }> = ({ tab }) => {
@@ -15,6 +16,7 @@ const DataList: React.FC<{ tab: string }> = ({ tab }) => {
   const [userTimeIn, setUserTimeIn] = useState<Timestamp | null>(null);
   const [userTimeOut, setUserTimeOut] = useState<Timestamp | null>(null);
 
+  const { vehicles, loading: vehiclesLoading } = useVehicles();
 
   const fetchUserData = useCallback(async () => {
     if (!userId) return;
@@ -37,30 +39,44 @@ const DataList: React.FC<{ tab: string }> = ({ tab }) => {
     fetchUserData();
   }, [fetchUserData, tab, userId]);
 
+  if (userLoading || (tab === "vehicles" && vehiclesLoading)) {
+    return (
+      <div className="flex items-center justify-center relative inset-y-0 h-full w-full z-50">
+        <Spinner size="lg" text="default" />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col space-y-4">
       <Toaster />
-      <Card>
-        <CardHeader>
-          <CardTitle>{`${userFirstName} ${userLastName}`}</CardTitle>
-        </CardHeader>
+      
         <CardContent>
-          {tab === "logs" && (
+          {tab === "vehicles" && (
             <>
-              <p>Vehicle: {userVehicle}</p>
-              <p>
-                Time In:{" "}
-                {userTimeIn ? userTimeIn.toDate().toLocaleString() : "No time in available"}
-              </p>
-              <p>
-                Time Out:{" "}
-                {userTimeOut ? userTimeOut.toDate().toLocaleString() : "No time out available"}
-              </p>
+              {vehicles.length > 0 ? (
+                vehicles.map((vehicle, index) => (
+                  <Card key={index} className="mb-4 shadow-md">
+                    <CardHeader>
+                      <CardTitle>{`Vehicle ${index + 1} Details`}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p>Owner Email: {vehicle.ownerEmail}</p>
+                      <p>Owner First Name: {vehicle.ownerFirstName}</p>
+                      <p>Owner Last Name: {vehicle.ownerLastName}</p>
+                      <p>Color: {vehicle.color}</p>
+                      <p>License Plate: {vehicle.licensePlate}</p>
+                      <p>Model: {vehicle.model}</p>
+                      <p>Vehicle Type: {vehicle.vehicleType}</p>
+                    </CardContent>
+                  </Card>
+                ))
+              ) : (
+                <p>No vehicles available</p>
+              )}
             </>
           )}
         </CardContent>
-      </Card>
     </div>
   );
 };

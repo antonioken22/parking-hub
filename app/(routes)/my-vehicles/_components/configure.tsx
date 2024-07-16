@@ -86,7 +86,7 @@ const VehicleConfiguration: React.FC = () => {
       }
 
       await addDoc(collection(firestore, "vehicles"), {
-        userId: user.uid,
+        ownerId: user.uid,
         color: newColor,
         licensePlate: newLicensePlate,
         model: newModel,

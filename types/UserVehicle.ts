@@ -1,6 +1,6 @@
 export interface VehicleData {
   id: string;
-  userId: string;
+  ownerId: string;
   color: string;
   licensePlate: string;
   model: string;
