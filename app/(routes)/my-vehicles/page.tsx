@@ -1,6 +1,6 @@
 "use client";
 
-import { FileClock } from "lucide-react";
+import { Car } from "lucide-react";
 
 import { Spinner } from "@/components/spinner";
 import { Heading } from "@/app/(routes)/_components/heading";
@@ -26,11 +26,11 @@ const MyVehicles = () => {
         <Card>
           <CardHeader>
             <div className="flex items-center gap-x-3">
-              <FileClock className="w-10 h-10 text-primary" />
+              <Car className="w-10 h-10 text-primary" />
               <div>
                 <Heading
-                  title="Parking History"
-                  description="Viewing your parking history."
+                  title="Vehicles"
+                  description="Viewing your vehicles."
                 />
               </div>
             </div>
