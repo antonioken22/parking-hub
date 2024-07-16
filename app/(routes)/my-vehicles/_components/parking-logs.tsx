@@ -3,7 +3,7 @@ import DataList from "./data-list-logs";
 import VehicleConfiguration from "./configure";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
-type TabType =  "vehicles" | "configure";
+type TabType = "vehicles" | "configure";
 
 const ParkingLogs: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<TabType>("vehicles");
@@ -26,7 +26,6 @@ const ParkingLogs: React.FC = () => {
           <VehicleConfiguration />
         </TabsContent>
       </Tabs>
-      {/*<Announcement />*/}
     </div>
   );
 };
