@@ -7,6 +7,7 @@ import {
   addDoc,
   query,
   onSnapshot,
+  where,
 } from "firebase/firestore";
 import { toast } from "sonner";
 
@@ -96,6 +97,43 @@ const useChatMessages = () => {
     }
   }, []);
 
+  // Mark messages as read
+  const markMessagesAsRead = useCallback(
+    async (currentUserId: string, chatUserId: string) => {
+      try {
+        const q = query(
+          collection(firestore, "chatMessages"),
+          where("sender.userId", "in", [currentUserId, chatUserId]),
+          where("recipient.userId", "in", [currentUserId, chatUserId]),
+          where("isRead", "==", false)
+        );
+
+        const querySnapshot = await getDocs(q);
+        const updatePromises = querySnapshot.docs.map((doc) =>
+          updateDoc(doc.ref, { isRead: true })
+        );
+
+        await Promise.all(updatePromises);
+
+        setChatMessages((prevChatMessages) =>
+          prevChatMessages.map((message) =>
+            (message.sender.userId === currentUserId &&
+              message.recipient.userId === chatUserId) ||
+            (message.sender.userId === chatUserId &&
+              message.recipient.userId === currentUserId)
+              ? { ...message, isRead: true }
+              : message
+          )
+        );
+
+        // toast.success("Messages marked as read.");
+      } catch (err) {
+        toast.error("Failed to mark messages as read.");
+      }
+    },
+    []
+  );
+
   useEffect(() => {
     fetchChatMessages();
   }, [fetchChatMessages]);
@@ -106,6 +144,7 @@ const useChatMessages = () => {
     error,
     addChatMessage,
     removeFromView,
+    markMessagesAsRead,
   };
 };
 

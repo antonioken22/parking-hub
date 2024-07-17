@@ -25,7 +25,10 @@ const ChatPage = () => {
           <div className="flex items-center gap-x-3 mr-auto pl-4">
             <MessageSquare className="w-10 h-10 text-primary" />
             <div>
-              <Heading title="Chat" description="Chat with the managers." />
+              <Heading
+                title="Chat"
+                description="Chat with the managers and everyone."
+              />
             </div>
           </div>
           <div className="px-4 lg:px-8 pt-4">

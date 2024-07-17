@@ -29,12 +29,12 @@ const ChatMessageHistory: React.FC<ChatMessageHistoryProps> = ({
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [chatMessages]);
+  }, [chatMessages, selectedUser]);
 
   if (loading) {
     return (
       <div className="p-4 space-y-4">
-        {[...Array(8)].map((_, index) => (
+        {[...Array(16)].map((_, index) => (
           <div key={index} className="flex items-center space-x-2">
             <Skeleton className="w-10 h-10 rounded-full" />
             <div className="flex-grow space-y-2">
@@ -85,7 +85,7 @@ const ChatMessageHistory: React.FC<ChatMessageHistoryProps> = ({
     });
 
   return (
-    <div className="p-4 space-y-7">
+    <div className="p-4 space-y-7 ">
       {filteredMessages.length === 0 ? (
         <div className="text-center text-muted-foreground py-4">
           Start a conversation
@@ -109,12 +109,12 @@ const ChatMessageHistory: React.FC<ChatMessageHistoryProps> = ({
                 </Avatar>
               )}
               <div
-                className={`flex flex-col ${
+                className={`flex flex-col${
                   isCurrentUser ? "items-end" : "items-start"
                 }`}
               >
                 <div
-                  className={`relative ${
+                  className={`relative break-words max-w-[64vw] md:max-w-[50vw] ${
                     isCurrentUser
                       ? "border border-primary bg-muted text-primary"
                       : "border border-muted-foreground bg-muted text-muted-foreground"
