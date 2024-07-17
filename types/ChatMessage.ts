@@ -2,6 +2,7 @@ export interface ChatMessage {
   id?: string;
   message: string;
   dateCreated?: Date;
+  isRead: boolean;
   isView: boolean;
   sender: {
     userId: string;

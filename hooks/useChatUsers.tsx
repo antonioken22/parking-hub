@@ -6,7 +6,7 @@ import { firestore } from "@/firebase/config";
 import { UserData } from "@/types/UserData";
 import { useUserRole } from "./useUserRole";
 
-const useChatManagers = () => {
+const useChatUsers = () => {
   const userRole = useUserRole();
   const [users, setUsers] = useState<UserData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -55,4 +55,4 @@ const useChatManagers = () => {
   return { users, loading };
 };
 
-export default useChatManagers;
+export default useChatUsers;

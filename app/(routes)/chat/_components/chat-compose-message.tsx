@@ -28,6 +28,7 @@ const ChatComposeMessage: React.FC<ChatComposeMessageProps> = ({
     if (message.trim() && selectedUser) {
       const newChatMessage: ChatMessage = {
         message,
+        isRead: false,
         isView: true,
         sender: {
           userId: userId || "",
