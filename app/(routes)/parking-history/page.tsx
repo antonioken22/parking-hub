@@ -30,7 +30,7 @@ const ParkingHistoryPage = () => {
               <div>
                 <Heading
                   title="Parking History"
-                  description="Viewing your parking history."
+                  description="View your parking history."
                 />
               </div>
             </div>

@@ -257,10 +257,7 @@ const UserMonitorPage = () => {
           <div className="flex items-center gap-x-3 mr-auto pl-4">
             <Monitor className="w-10 h-10 text-primary" />
             <div>
-              <Heading
-                title="User Monitor"
-                description="Viewing all user data."
-              />
+              <Heading title="User Monitor" description="View all user data." />
             </div>
           </div>
           <div className="px-4 lg:px-8 space-y-4 pt-8">
