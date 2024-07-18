@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { BellRing, Ticket, Check, X } from "lucide-react";
 
-import { Spinner } from "@/components/spinner";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Heading } from "@/app/(routes)/_components/heading";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Switch } from "@/components/ui/switch";
@@ -19,7 +19,10 @@ const BookingPage = () => {
     userPushNotificationStatus,
     setUserPushNotificationStatus,
   } = useUserState();
-  const { updatePushNotificationStatus } = useUserNotificationStatus();
+  const {
+    updatePushNotificationStatus,
+    loading: updatingUserNotificationStatus,
+  } = useUserNotificationStatus();
   const [pushNotification, setPushNotification] = useState(
     userPushNotificationStatus
   );
@@ -74,14 +77,56 @@ const BookingPage = () => {
   };
 
   // Firebase operations
-  const { token, notificationPermissionStatus } = useFcmToken();
-  const { isBooked, parkingSlotAssignment } = useStoreFcmToken(token);
+  const {
+    token,
+    notificationPermissionStatus,
+    isLoadingRef: fetchedFcmToken,
+  } = useFcmToken();
+  const {
+    isBooked,
+    parkingSlotAssignment,
+    loading: storingFcmToken,
+  } = useStoreFcmToken(token);
 
-  if (userLoading) {
+  if (
+    userLoading ||
+    !fetchedFcmToken ||
+    storingFcmToken ||
+    updatingUserNotificationStatus ||
+    (pushNotification && !notificationPermissionStatus)
+  ) {
     return (
-      <div className="flex items-center justify-center absolute inset-y-0 h-full w-full bg-background/80 z-50 md:pr-56">
-        <Spinner size="lg" />
-      </div>
+      <>
+        <div className="flex items-center gap-x-3 mr-auto pl-4">
+          <Ticket className="w-10 h-10 text-primary" />
+          <div>
+            <Heading title="Booking" description="Book a parking slot." />
+          </div>
+        </div>
+        <div className="px-4 lg:px-8 space-y-4 pt-4">
+          <h1 className="text-4xl mb-4 font-bold">
+            Contact The Manager or Any Authorized Personnel
+          </h1>
+          <p className="text-muted-foreground">
+            Please enable your notification to proceed with booking
+          </p>
+          <div className="flex items-center space-x-4 rounded-md border p-4">
+            <BellRing />
+            <div className="flex-1 space-y-1">
+              <p className="text-sm font-medium leading-none">
+                Push Notifications
+              </p>
+              <p className="text-sm text-muted-foreground">{description}</p>
+            </div>
+            <Switch
+              checked={pushNotification}
+              onCheckedChange={handlePushNotificationChange}
+            />
+          </div>
+          <Skeleton className="h-20 w-full mt-4" />
+          <Skeleton className="h-20 w-full mt-4" />
+        </div>
+      </>
     );
   }
 
@@ -92,11 +137,13 @@ const BookingPage = () => {
           <div className="flex items-center gap-x-3 mr-auto pl-4">
             <Ticket className="w-10 h-10 text-primary" />
             <div>
-              <Heading title="Booking" description="Rent a parking slot." />
+              <Heading title="Booking" description="Book a parking slot." />
             </div>
           </div>
           <div className="px-4 lg:px-8 space-y-4 pt-4">
-            <h1 className="text-4xl mb-4 font-bold">Contact The Guard</h1>
+            <h1 className="text-4xl mb-4 font-bold">
+              Contact The Manager or Any Authorized Personnel
+            </h1>
             <p className="text-muted-foreground">
               Please enable your notification to proceed with booking
             </p>

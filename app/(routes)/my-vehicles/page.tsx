@@ -28,10 +28,7 @@ const MyVehicles = () => {
             <div className="flex items-center gap-x-3">
               <Car className="w-10 h-10 text-primary" />
               <div>
-                <Heading
-                  title="Vehicles"
-                  description="Viewing your vehicles."
-                />
+                <Heading title="Vehicles" description="View your vehicles." />
               </div>
             </div>
           </CardHeader>

@@ -38,13 +38,13 @@ const useFcmToken = () => {
     useState<NotificationPermission | null>(null); // State to store the notification permission status.
   const [token, setToken] = useState<string | null>(null); // State to store the FCM token.
   const retryLoadToken = useRef(0); // Ref to keep track of retry attempts.
-  const isLoading = useRef(false); // Ref to keep track if a token fetch is currently in progress.
+  const isLoadingRef = useRef(false); // Ref to keep track if a token fetch is currently in progress.
 
   const loadToken = useCallback(async () => {
     // Step 4: Prevent multiple fetches if already fetched or in progress.
-    if (isLoading.current) return;
+    if (isLoadingRef.current) return;
 
-    isLoading.current = true; // Mark loading as in progress.
+    isLoadingRef.current = true; // Mark loading as in progress.
     const token = await getNotificationPermissionAndToken(); // Fetch the token.
 
     // Step 5: Handle the case where permission is denied.
@@ -54,7 +54,7 @@ const useFcmToken = () => {
         "%cPush Notifications issue - permission denied",
         "color: green; background: #c7c7c7; padding: 8px; font-size: 20px"
       );
-      isLoading.current = false;
+      isLoadingRef.current = false;
       return;
     }
 
@@ -67,13 +67,13 @@ const useFcmToken = () => {
           "%cPush Notifications issue - unable to load token after 3 retries",
           "color: green; background: #c7c7c7; padding: 8px; font-size: 20px"
         );
-        isLoading.current = false;
+        isLoadingRef.current = false;
         return;
       }
 
       retryLoadToken.current += 1;
       console.error("An error occurred while retrieving token. Retrying...");
-      isLoading.current = false;
+      isLoadingRef.current = false;
       await loadToken();
       return;
     }
@@ -81,7 +81,7 @@ const useFcmToken = () => {
     // Step 7: Set the fetched token and mark as fetched.
     setNotificationPermissionStatus(Notification.permission);
     setToken(token);
-    isLoading.current = false;
+    isLoadingRef.current = false;
   }, []);
 
   useEffect(() => {
@@ -165,7 +165,7 @@ const useFcmToken = () => {
     return () => unsubscribe?.();
   }, [token, router]);
 
-  return { token, notificationPermissionStatus }; // Return the token and permission status.
+  return { token, notificationPermissionStatus, isLoadingRef };
 };
 
 export default useFcmToken;
