@@ -14,6 +14,7 @@ const useStoreFcmToken = (token: string | null) => {
   const [parkingSlotAssignment, setParkingSlotAssignment] = useState<
     string | null
   >(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const unsubscribeAuth = onAuthStateChanged(auth, async (user) => {
@@ -25,7 +26,11 @@ const useStoreFcmToken = (token: string | null) => {
         const userDoc = await getDoc(userDocRef);
         if (userDoc.exists()) {
           setIsBooked(userDoc.data().isBooked);
+          setParkingSlotAssignment(userDoc.data().parkingSlotAssignment);
           updateDoc(userDocRef, { fcmSwToken: token || null });
+          setLoading(false);
+        } else {
+          setLoading(false);
         }
 
         // Listen for real-time updates to the isBooked status
@@ -38,6 +43,8 @@ const useStoreFcmToken = (token: string | null) => {
 
         // Clean up the Firestore listener
         return () => unsubscribeSnapshot();
+      } else {
+        setLoading(false);
       }
     });
 
@@ -45,7 +52,7 @@ const useStoreFcmToken = (token: string | null) => {
     return () => unsubscribeAuth();
   }, [token]);
 
-  return { isBooked, parkingSlotAssignment };
+  return { isBooked, parkingSlotAssignment, loading };
 };
 
 export default useStoreFcmToken;

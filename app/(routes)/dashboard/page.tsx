@@ -216,26 +216,28 @@ const DashboardPage = () => {
                 </div>
               </div>
             )}
-            <div className="grid-cols-1 w-full max-w-7xl p-4">
-              <h2 className="text-xl md:text-2xl font-bold mb-4">
-                Parking Slot Status{" "}
-                <span className="text-primary">(Overview)</span>
-              </h2>
-              <Bar
-                data={chartData}
-                options={chartOptions}
-                plugins={[ChartDataLabels]}
-              />
-            </div>
-            <div className="grid-cols-1 w-full max-w-7xl p-4 mt-8">
-              <h2 className="text-xl md:text-2xl font-bold mb-4">
-                Active Users <span className="text-primary">(Today)</span>
-              </h2>
-              <Line
-                data={activeUsersData}
-                options={lineChartOptions}
-                plugins={[ChartDataLabels]}
-              />
+            <div className="flex flex-col lg:flex-row lg:space-x-4 w-full max-w-7xl p-4">
+              <div className="w-full lg:w-1/2 mb-8 lg:mb-0">
+                <h2 className="text-xl md:text-2xl font-bold mb-4">
+                  Parking Slot Status{" "}
+                  <span className="text-primary">(Overview)</span>
+                </h2>
+                <Bar
+                  data={chartData}
+                  options={chartOptions}
+                  plugins={[ChartDataLabels]}
+                />
+              </div>
+              <div className="w-full lg:w-1/2">
+                <h2 className="text-xl md:text-2xl font-bold mb-4">
+                  Active Users <span className="text-primary">(Today)</span>
+                </h2>
+                <Line
+                  data={activeUsersData}
+                  options={lineChartOptions}
+                  plugins={[ChartDataLabels]}
+                />
+              </div>
             </div>
           </main>
         </div>

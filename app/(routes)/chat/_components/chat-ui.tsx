@@ -15,7 +15,7 @@ const ChatUI = () => {
     <div className="flex flex-col">
       <ChatUsers onSelectUser={setSelectedUser} />
       <hr />
-      <div className="h-[61vh] md:h-[63vh] overflow-y-auto">
+      <div className="h-[59vh] md:h-[60vh] overflow-y-auto">
         <ChatMessageHistory selectedUser={selectedUser} />
       </div>
       <div className="fixed left-2 md:left-56 md:ml-2 bottom-0 right-2">
