@@ -7,6 +7,7 @@ import {
 import { Eye, EyeOff } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { auth } from "@/firebase/config";
 
 const ChangePassword = () => {
@@ -90,11 +91,10 @@ const ChangePassword = () => {
             Current Password
           </label>
           <div className="relative">
-            <input
+            <Input
               type={showCurrentPassword ? "text" : "password"}
               value={currentPassword}
               onChange={(e) => setCurrentPassword(e.target.value)}
-              className="w-full border border-gray-300 p-2 rounded"
             />
             <button
               type="button"
@@ -114,11 +114,10 @@ const ChangePassword = () => {
             New Password
           </label>
           <div className="relative">
-            <input
+            <Input
               type={showNewPassword ? "text" : "password"}
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
-              className="w-full border border-gray-300 p-2 rounded"
             />
             <button
               type="button"
@@ -138,11 +137,10 @@ const ChangePassword = () => {
             Confirm New Password
           </label>
           <div className="relative">
-            <input
+            <Input
               type={showConfirmNewPassword ? "text" : "password"}
               value={confirmNewPassword}
               onChange={(e) => setConfirmNewPassword(e.target.value)}
-              className="w-full border border-gray-300 p-2 rounded"
             />
             <button
               type="button"
