@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Accordion,
   AccordionContent,
@@ -98,11 +100,10 @@ const HelpSection = () => {
             <label className="text-sm font-medium block mb-2 text-primary">
               Search FAQ
             </label>
-            <input
+            <Input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded mb-4 text-muted-foreground text-sm"
               placeholder="Type to search..."
             />
           </div>
@@ -115,7 +116,7 @@ const HelpSection = () => {
                 {filteredItems.map((faq) => (
                   <AccordionItem key={faq.id} value={faq.id}>
                     <AccordionTrigger>{faq.question}</AccordionTrigger>
-                    <AccordionContent>
+                    <AccordionContent className="text-justify whitespace-pre-wrap">
                       {faq.answer}
                       {(userRole === "manager" || userRole === "admin") && (
                         <div className="flex justify-end mt-2">
@@ -139,6 +140,11 @@ const HelpSection = () => {
                   </AccordionItem>
                 ))}
               </Accordion>
+              {filteredItems.length === 0 && (
+                <p className="text-center text-sm text-muted-foreground mt-4">
+                  No matching results
+                </p>
+              )}
             </div>
           </div>
         </div>
@@ -152,15 +158,13 @@ const HelpSection = () => {
                 <label className="text-sm font-medium block mb-2 text-primary">
                   Question
                 </label>
-                <input
-                  type="text"
+                <Textarea
                   value={editFAQ ? editFAQ.question : newFAQ.question}
                   onChange={(e) =>
                     editFAQ
                       ? setEditFAQ({ ...editFAQ, question: e.target.value })
                       : setNewFAQ({ ...newFAQ, question: e.target.value })
                   }
-                  className="w-full p-2 border border-gray-300 rounded mb-4 text-muted-foreground text-sm"
                   placeholder="Enter question"
                 />
               </div>
@@ -168,14 +172,13 @@ const HelpSection = () => {
                 <label className="text-sm font-medium block mb-2 text-primary">
                   Answer
                 </label>
-                <textarea
+                <Textarea
                   value={editFAQ ? editFAQ.answer : newFAQ.answer}
                   onChange={(e) =>
                     editFAQ
                       ? setEditFAQ({ ...editFAQ, answer: e.target.value })
                       : setNewFAQ({ ...newFAQ, answer: e.target.value })
                   }
-                  className="w-full p-2 border border-gray-300 rounded mb-4 text-muted-foreground text-sm"
                   placeholder="Enter answer"
                 />
               </div>

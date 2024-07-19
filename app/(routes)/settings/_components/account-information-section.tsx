@@ -15,6 +15,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import useUserState from "@/hooks/useUserState";
 import UserProfileUpdatePhoto from "./user-profile-update-photo";
 
@@ -62,22 +63,20 @@ const AccountInformation = () => {
             <label className="text-sm font-medium block mb-2 text-primary">
               First Name
             </label>
-            <input
+            <Input
               type="text"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
-              className="w-full border border-gray-300 p-2 rounded"
             />
           </div>
           <div>
             <label className="text-sm font-medium block mb-2 text-primary">
               Last Name
             </label>
-            <input
+            <Input
               type="text"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
-              className="w-full border border-gray-300 p-2 rounded"
             />
             <aside className="mt-10">
               {userId && <UserProfileUpdatePhoto />}
