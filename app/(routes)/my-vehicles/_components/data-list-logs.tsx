@@ -1,17 +1,20 @@
 import { useEffect, useState, useCallback } from "react";
 import { doc, getDoc, Timestamp } from "firebase/firestore";
-
 import { firestore } from "@/firebase/config";
 import { Spinner } from "@/components/spinner";
 import { Card } from "@/components/ui/card";
-import { CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import useUserState from "@/hooks/useUserState";
 import useVehicles from "@/hooks/useUserVehicles";
 import { Toaster } from "sonner";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Eraser, X } from "lucide-react";
+
 
 const DataList: React.FC<{ tab: string }> = ({ tab }) => {
-  const { userId, loading: userLoading } = useUserState();
-
+  const { userId, userRole, loading: userLoading } = useUserState(); // Assuming userRole is provided here
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const [userVehicle, setUserVehicle] = useState<string | null>(null);
   const [userTimeIn, setUserTimeIn] = useState<Timestamp | null>(null);
   const [userTimeOut, setUserTimeOut] = useState<Timestamp | null>(null);
@@ -50,12 +53,27 @@ const DataList: React.FC<{ tab: string }> = ({ tab }) => {
   return (
     <div className="flex flex-col space-y-4">
       <Toaster />
-      
-        <CardContent>
-          {tab === "vehicles" && (
-            <>
-              {vehicles.length > 0 ? (
-                vehicles.map((vehicle, index) => (
+      {userRole === "admin" || userRole === "manager" ? (
+        <div className="mb-4 w-full max-w-md">
+        <Input
+          type="text"
+          placeholder="Search by email or name"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
+      ) : null}
+      <CardContent>
+        {tab === "vehicles" && (
+          <>
+            {vehicles.length > 0 ? (
+              vehicles
+                .filter((vehicle) =>
+                  vehicle.ownerEmail.includes(searchTerm) ||
+                  vehicle.ownerFirstName.includes(searchTerm) ||
+                  vehicle.ownerLastName.includes(searchTerm)
+                )
+                .map((vehicle, index) => (
                   <Card key={index} className="mb-4 shadow-md">
                     <CardHeader>
                       <CardTitle>{`Vehicle ${index + 1} Details`}</CardTitle>
@@ -71,12 +89,12 @@ const DataList: React.FC<{ tab: string }> = ({ tab }) => {
                     </CardContent>
                   </Card>
                 ))
-              ) : (
-                <p>No vehicles available</p>
-              )}
-            </>
-          )}
-        </CardContent>
+            ) : (
+              <p>No vehicles available</p>
+            )}
+          </>
+        )}
+      </CardContent>
     </div>
   );
 };

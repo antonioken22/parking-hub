@@ -337,23 +337,25 @@ export function ParkingSlotInfoCard({
         {...props}
       >
         <CardHeader>
-  <div className="flex items-center justify-between">
-    <CardTitle>Edit Parking Slot</CardTitle>
-    <div className="flex items-center space-x-2">
-    <Eraser
-      onClick={clearData}
-      className="flex items-center ml-3 cursor-pointer hover:text-gray-600 transition-colors"
-    />
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={onClose}
-        className="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center"
-      >
-        <X className="w-5 h-5" />
-      </Button>
-    </div>
-  </div>
+        <div className="flex items-center justify-between">
+  <CardTitle>Edit Parking Slot</CardTitle>
+  <div className="flex items-center space-x-5">
+  <Eraser
+    onClick={clearData}
+    className="cursor-pointer hover:text-gray-600 transition-colors text-primary text-xl p-2 rounded-md border border-primary w-8 h-8 md:w-10 md:h-10 flex items-center justify-center"
+  />
+  <Button
+    variant="ghost"
+    size="icon"
+    onClick={onClose}
+    className="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center"
+  >
+    <X className="w-5 h-5" />
+  </Button>
+</div>
+
+</div>
+
   <CardDescription className="hidden md:block text-sm">
     {editParkingArea} #{editParkingSlotNumber}
   </CardDescription>
