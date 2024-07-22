@@ -1,4 +1,4 @@
-import { Calendar, Check, X } from "lucide-react";
+import { Calendar, Check, X, Eraser } from "lucide-react";
 import React, { useState, useEffect, useMemo } from "react";
 import { DateTimePicker } from "react-datetime-picker";
 import { toast } from "sonner";
@@ -340,8 +340,10 @@ export function ParkingSlotInfoCard({
   <div className="flex items-center justify-between">
     <CardTitle>Edit Parking Slot</CardTitle>
     <div className="flex items-center space-x-2">
-      <Button variant="destructive" onClick={clearData} className="flex items-center ml-3"> Clear
-      </Button>
+    <Eraser
+      onClick={clearData}
+      className="flex items-center ml-3 cursor-pointer hover:text-gray-600 transition-colors"
+    />
       <Button
         variant="ghost"
         size="icon"
