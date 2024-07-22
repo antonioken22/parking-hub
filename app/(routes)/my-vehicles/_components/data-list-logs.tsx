@@ -10,7 +10,7 @@ import useVehicles from "@/hooks/useUserVehicles";
 import { Toaster } from "sonner";
 
 const DataList: React.FC<{ tab: string }> = ({ tab }) => {
-  const { userFirstName, userLastName, userId, loading: userLoading } = useUserState();
+  const { userId, loading: userLoading } = useUserState();
 
   const [userVehicle, setUserVehicle] = useState<string | null>(null);
   const [userTimeIn, setUserTimeIn] = useState<Timestamp | null>(null);

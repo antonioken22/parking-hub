@@ -337,21 +337,25 @@ export function ParkingSlotInfoCard({
         {...props}
       >
         <CardHeader>
-          <div className="flex justify-between items-center">
-            <CardTitle>Edit Parking Slot</CardTitle>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={onClose}
-              className="w-8 h-8 md:w-10 md:h-10"
-            >
-              <X className="w-5 h-5" />
-            </Button>
-          </div>
-          <CardDescription className="hidden md:block text-sm">
-            {editParkingArea} #{editParkingSlotNumber}
-          </CardDescription>
-        </CardHeader>
+  <div className="flex items-center justify-between">
+    <CardTitle>Edit Parking Slot</CardTitle>
+    <div className="flex items-center space-x-2">
+      <Button variant="destructive" onClick={clearData} className="flex items-center ml-3"> Clear
+      </Button>
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={onClose}
+        className="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center"
+      >
+        <X className="w-5 h-5" />
+      </Button>
+    </div>
+  </div>
+  <CardDescription className="hidden md:block text-sm">
+    {editParkingArea} #{editParkingSlotNumber}
+  </CardDescription>
+</CardHeader>
         <CardContent className="grid gap-1 md:gap-4">
           <div>
             <Command className="rounded-lg border shadow-md">
@@ -564,9 +568,7 @@ export function ParkingSlotInfoCard({
           <Button onClick={handleNotify} className="text-xs md:text-sm">
             <Check className="mr-2 h-4 w-4" /> Notify
           </Button>
-          <Button variant="destructive" onClick={clearData}>
-          <X className="mr-2 h-4 w-4" /> Clear
-        </Button>
+          
         </CardFooter>
       </Card>
     </div>
