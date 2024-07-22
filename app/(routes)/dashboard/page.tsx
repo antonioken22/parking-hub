@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Bar, Line, Pie } from 'react-chartjs-2';
+import { Bar, Line, Pie } from 'react-chartjs-2'; // Import Pie for pie chart
 import 'chart.js/auto';
 import '@/public/chartConfig';
 import { Spinner } from '@/components/spinner';
@@ -9,96 +9,176 @@ import useUserState from '@/hooks/useUserState';
 import useParkingSlotCount from '@/hooks/useParkingSlotCount';
 import useActiveUsers from '@/hooks/useActiveUsers';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { formatDate, formatTime } from '@/utils/formatters';
-import { ChartType, ChartData, ActiveUser } from '@/types';
 
-const DashboardPage: React.FC = () => {
+interface ActiveUser {
+  time: string;
+  count: number;
+}
+
+const formatDate = (date: Date) => {
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const year = date.getFullYear();
+  return `${month}-${day}-${year}`;
+};
+
+const formatTime = (date: Date) => {
+  const hours = date.getHours();
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+  const formattedHours = hours % 12 || 12;
+  return `${formattedHours}:${minutes}:${seconds} ${ampm}`;
+};
+
+const DashboardPage = () => {
   const { userId, userFirstName, userLastName, loading } = useUserState();
   const { GLE, NGE, RTL, SAL } = useParkingSlotCount();
   const { activeUsers } = useActiveUsers();
 
-  const [chartType, setChartType] = useState<ChartType>('bar');
-  const [chartData, setChartData] = useState<ChartData>({});
-  const [activeUsersData, setActiveUsersData] = useState<ChartData>({});
-  const [pieChartData, setPieChartData] = useState<ChartData>({});
+  const [chartType, setChartType] = useState<'bar' | 'line' | 'pie'>('bar');
+  const [chartData, setChartData] = useState<any>({});
+  const [activeUsersData, setActiveUsersData] = useState<any>({});
+  const [pieChartData, setPieChartData] = useState<any>({});
   const currentDate = formatDate(new Date());
   const [currentTime, setCurrentTime] = useState(formatTime(new Date()));
 
-  // Update the currentTime every second
+  // Always update the currentTime every second (client-side only)
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTime(formatTime(new Date()));
     }, 1000);
-
+    // Cleanup interval on component unmount
     return () => clearInterval(interval);
   }, []);
 
-  // Fetch and set parking slot data
   useEffect(() => {
     const fetchParkingSlots = async () => {
-      try {
-        const data = [
-          { name: 'GLE Open Area', availableSlots: GLE.available, occupiedSlots: GLE.occupied, reservedSlots: GLE.reserved, unavailableSlots: GLE.unavailable },
-          { name: 'NGE Open Area', availableSlots: NGE.available, occupiedSlots: NGE.occupied, reservedSlots: NGE.reserved, unavailableSlots: NGE.unavailable },
-          { name: 'RTL Open Court', availableSlots: RTL.available, occupiedSlots: RTL.occupied, reservedSlots: RTL.reserved, unavailableSlots: RTL.unavailable },
-          { name: 'SAL Open Court', availableSlots: SAL.available, occupiedSlots: SAL.occupied, reservedSlots: SAL.reserved, unavailableSlots: SAL.unavailable },
-        ];
+      const data = [
+        {
+          name: 'GLE Open Area',
+          availableSlots: GLE.available,
+          occupiedSlots: GLE.occupied,
+          reservedSlots: GLE.reserved,
+          unavailableSlots: GLE.unavailable,
+        },
+        {
+          name: 'NGE Open Area',
+          availableSlots: NGE.available,
+          occupiedSlots: NGE.occupied,
+          reservedSlots: NGE.reserved,
+          unavailableSlots: NGE.unavailable,
+        },
+        {
+          name: 'RTL Open Court',
+          availableSlots: RTL.available,
+          occupiedSlots: RTL.occupied,
+          reservedSlots: RTL.reserved,
+          unavailableSlots: RTL.unavailable,
+        },
+        {
+          name: 'SAL Open Court',
+          availableSlots: SAL.available,
+          occupiedSlots: SAL.occupied,
+          reservedSlots: SAL.reserved,
+          unavailableSlots: SAL.unavailable,
+        },
+      ];
 
-        setChartData({
-          labels: data.map((lot) => lot.name),
-          datasets: [
-            { label: 'Available', data: data.map((lot) => lot.availableSlots), backgroundColor: 'green' },
-            { label: 'Occupied', data: data.map((lot) => lot.occupiedSlots), backgroundColor: 'gray' },
-            { label: 'Reserved', data: data.map((lot) => lot.reservedSlots), backgroundColor: 'yellow' },
-            { label: 'Unavailable', data: data.map((lot) => lot.unavailableSlots), backgroundColor: 'red' },
-          ],
-        });
+      // Bar and Line chart data
+      setChartData({
+        labels: data.map((lot) => lot.name),
+        datasets: [
+          {
+            label: 'Available',
+            data: data.map((lot) => lot.availableSlots),
+            backgroundColor: 'green',
+          },
+          {
+            label: 'Occupied',
+            data: data.map((lot) => lot.occupiedSlots),
+            backgroundColor: 'gray',
+          },
+          {
+            label: 'Reserved',
+            data: data.map((lot) => lot.reservedSlots),
+            backgroundColor: 'yellow',
+          },
+          {
+            label: 'Unavailable',
+            data: data.map((lot) => lot.unavailableSlots),
+            backgroundColor: 'red',
+          },
+        ],
+      });
 
-        const totalData = [
-          { label: 'Available', value: data.reduce((sum, lot) => sum + lot.availableSlots, 0) },
-          { label: 'Occupied', value: data.reduce((sum, lot) => sum + lot.occupiedSlots, 0) },
-          { label: 'Reserved', value: data.reduce((sum, lot) => sum + lot.reservedSlots, 0) },
-          { label: 'Unavailable', value: data.reduce((sum, lot) => sum + lot.unavailableSlots, 0) },
-        ];
+      // Pie chart data
+      const totalData = [
+        {
+          label: 'Available',
+          value: data.reduce((sum, lot) => sum + lot.availableSlots, 0),
+        },
+        {
+          label: 'Occupied',
+          value: data.reduce((sum, lot) => sum + lot.occupiedSlots, 0),
+        },
+        {
+          label: 'Reserved',
+          value: data.reduce((sum, lot) => sum + lot.reservedSlots, 0),
+        },
+        {
+          label: 'Unavailable',
+          value: data.reduce((sum, lot) => sum + lot.unavailableSlots, 0),
+        },
+      ];
 
-        setPieChartData({
-          labels: totalData.map((entry) => entry.label),
-          datasets: [
-            {
-              label: 'Slot Distribution',
-              data: totalData.map((entry) => entry.value),
-              backgroundColor: ['rgba(0, 255, 0, 0.2)', 'rgba(128, 128, 128, 0.2)', 'rgba(255, 255, 0, 0.2)', 'rgba(255, 0, 0, 0.2)'],
-              borderColor: ['rgba(0, 255, 0, 1)', 'rgba(128, 128, 128, 1)', 'rgba(255, 255, 0, 1)', 'rgba(255, 0, 0, 1)'],
-              borderWidth: 1,
-            },
-          ],
-        });
-      } catch (error) {
-        console.error('Error fetching parking slots:', error);
-      }
+      setPieChartData({
+        labels: totalData.map((entry) => entry.label),
+        datasets: [
+          {
+            label: 'Slot Distribution',
+            data: totalData.map((entry) => entry.value),
+            backgroundColor: [
+              'rgba(0, 255, 0, 0.2)',
+              'rgba(128, 128, 128, 0.2)',
+              'rgba(255, 255, 0, 0.2)',
+              'rgba(255, 0, 0, 0.2)',
+            ],
+            borderColor: [
+              'rgba(0, 255, 0, 1)',
+              'rgba(128, 128, 128, 1)',
+              'rgba(255, 255, 0, 1)',
+              'rgba(255, 0, 0, 1)',
+            ],
+            borderWidth: 1,
+          },
+        ],
+      });
     };
 
     fetchParkingSlots();
   }, [GLE, NGE, RTL, SAL]);
 
-  // Fetch and set active users data
   useEffect(() => {
     const fetchActiveUsers = async () => {
-      try {
-        const data = activeUsers.map((entry: ActiveUser) => ({
-          time: entry.time,
-          count: entry.count,
-        }));
+      const data = activeUsers.map((entry: ActiveUser) => ({
+        time: entry.time,
+        count: entry.count,
+      }));
 
-        setActiveUsersData({
-          labels: data.map((entry: ActiveUser) => entry.time),
-          datasets: [
-            { label: 'Active Users', data: data.map((entry: ActiveUser) => entry.count), borderColor: 'red', backgroundColor: 'red', fill: false },
-          ],
-        });
-      } catch (error) {
-        console.error('Error fetching active users:', error);
-      }
+      // Active Users Line chart data
+      setActiveUsersData({
+        labels: data.map((entry: ActiveUser) => entry.time),
+        datasets: [
+          {
+            label: 'Active Users',
+            data: data.map((entry: ActiveUser) => entry.count),
+            borderColor: 'red',
+            backgroundColor: 'red',
+            fill: false,
+          },
+        ],
+      });
     };
 
     fetchActiveUsers();
@@ -109,24 +189,31 @@ const DashboardPage: React.FC = () => {
       datalabels: {
         display: true,
         color: 'orange',
-        font: { weight: 'bold' as const },
+        font: {
+          weight: 'bold' as const,
+        },
       },
     },
     responsive: true,
     scales: {
-      x: { beginAtZero: true },
-      y: { beginAtZero: true },
+      x: {
+        beginAtZero: true,
+      },
+      y: {
+        beginAtZero: true,
+      },
     },
   };
 
   const pieChartOptions = {
     ...chartOptions,
     plugins: {
-      ...chartOptions.plugins,
       datalabels: {
         display: true,
         color: 'orange',
-        font: { weight: 'bold' as const },
+        font: {
+          weight: 'bold' as const,
+        },
       },
     },
   };
@@ -165,7 +252,7 @@ const DashboardPage: React.FC = () => {
             <select
               aria-label="Select Chart Type"
               value={chartType}
-              onChange={(e) => setChartType(e.target.value as ChartType)}
+              onChange={(e) => setChartType(e.target.value as 'bar' | 'line' | 'pie')}
               className="border border-gray-300 p-2 rounded"
             >
               <option value="bar">Bar</option>
@@ -173,9 +260,15 @@ const DashboardPage: React.FC = () => {
               <option value="pie">Pie</option>
             </select>
           </div>
-          {chartType === 'bar' && <Bar data={chartData} options={chartOptions} plugins={[ChartDataLabels]} />}
-          {chartType === 'line' && <Line data={chartData} options={chartOptions} plugins={[ChartDataLabels]} />}
-          {chartType === 'pie' && <Pie data={pieChartData} options={pieChartOptions} plugins={[ChartDataLabels]} />}
+          {chartType === 'bar' && (
+            <Bar data={chartData} options={chartOptions} plugins={[ChartDataLabels]} />
+          )}
+          {chartType === 'line' && (
+            <Line data={chartData} options={chartOptions} plugins={[ChartDataLabels]} />
+          )}
+          {chartType === 'pie' && (
+            <Pie data={pieChartData} options={pieChartOptions} plugins={[ChartDataLabels]} />
+          )}
         </div>
         <div className="w-full max-w-7xl p-4 mt-8">
           <h2 className="text-xl md:text-2xl font-bold mb-4">
