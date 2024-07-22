@@ -269,6 +269,19 @@ export function ParkingSlotInfoCard({
     }
   };
 
+  //cleardata
+  const clearData = () => {
+    setOccupantEmail("");
+    setOccupantFirstName("");
+    setOccupantLastName("");
+    setEditDescription("");
+    setStartTime(null);
+    setEndTime(null);
+    handleColorChange("green");
+    setEditStatus("Available");
+    
+  };
+
   // Local operations
   const handleColorChange = (newColor: string) => {
     setEditColor(newColor);
@@ -551,6 +564,9 @@ export function ParkingSlotInfoCard({
           <Button onClick={handleNotify} className="text-xs md:text-sm">
             <Check className="mr-2 h-4 w-4" /> Notify
           </Button>
+          <Button variant="destructive" onClick={clearData}>
+          <X className="mr-2 h-4 w-4" /> Clear
+        </Button>
         </CardFooter>
       </Card>
     </div>
