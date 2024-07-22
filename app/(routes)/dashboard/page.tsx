@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Bar, Line, Pie } from 'react-chartjs-2'; // Import Pie for pie chart
+import { Bar, Line, Pie } from 'react-chartjs-2'; // Import Bar for histogram
 import 'chart.js/auto';
 import '@/public/chartConfig';
 import { Spinner } from '@/components/spinner';
@@ -36,19 +36,18 @@ const DashboardPage = () => {
   const { GLE, NGE, RTL, SAL } = useParkingSlotCount();
   const { activeUsers } = useActiveUsers();
 
-  const [chartType, setChartType] = useState<'bar' | 'line' | 'pie'>('bar');
+  const [chartType, setChartType] = useState<'bar' | 'line' | 'pie' | 'histogram'>('bar');
   const [chartData, setChartData] = useState<any>({});
   const [activeUsersData, setActiveUsersData] = useState<any>({});
   const [pieChartData, setPieChartData] = useState<any>({});
+  const [histogramData, setHistogramData] = useState<any>({});
   const currentDate = formatDate(new Date());
   const [currentTime, setCurrentTime] = useState(formatTime(new Date()));
 
-  // Always update the currentTime every second (client-side only)
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTime(formatTime(new Date()));
     }, 1000);
-    // Cleanup interval on component unmount
     return () => clearInterval(interval);
   }, []);
 
@@ -85,7 +84,6 @@ const DashboardPage = () => {
         },
       ];
 
-      // Bar and Line chart data
       setChartData({
         labels: data.map((lot) => lot.name),
         datasets: [
@@ -112,7 +110,6 @@ const DashboardPage = () => {
         ],
       });
 
-      // Pie chart data
       const totalData = [
         {
           label: 'Available',
@@ -154,6 +151,22 @@ const DashboardPage = () => {
           },
         ],
       });
+
+      // Histogram Data: Example data (adjust as needed)
+      const histogramExampleData = {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+        datasets: [
+          {
+            label: 'Monthly Slots Usage',
+            data: [30, 45, 50, 40, 60], // Example values
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1,
+          },
+        ],
+      };
+
+      setHistogramData(histogramExampleData);
     };
 
     fetchParkingSlots();
@@ -166,7 +179,6 @@ const DashboardPage = () => {
         count: entry.count,
       }));
 
-      // Active Users Line chart data
       setActiveUsersData({
         labels: data.map((entry: ActiveUser) => entry.time),
         datasets: [
@@ -252,12 +264,13 @@ const DashboardPage = () => {
             <select
               aria-label="Select Chart Type"
               value={chartType}
-              onChange={(e) => setChartType(e.target.value as 'bar' | 'line' | 'pie')}
+              onChange={(e) => setChartType(e.target.value as 'bar' | 'line' | 'pie' | 'histogram')}
               className="border border-gray-300 p-2 rounded"
             >
               <option value="bar">Bar</option>
               <option value="line">Line</option>
               <option value="pie">Pie</option>
+              <option value="histogram">Histogram</option>
             </select>
           </div>
           {chartType === 'bar' && (
@@ -268,6 +281,9 @@ const DashboardPage = () => {
           )}
           {chartType === 'pie' && (
             <Pie data={pieChartData} options={pieChartOptions} plugins={[ChartDataLabels]} />
+          )}
+          {chartType === 'histogram' && (
+            <Bar data={histogramData} options={chartOptions} plugins={[ChartDataLabels]} />
           )}
         </div>
         <div className="w-full max-w-7xl p-4 mt-8">
