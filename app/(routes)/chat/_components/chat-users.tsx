@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import useUserState from "@/hooks/useUserState";
 import useChatUsers from "@/hooks/useChatUsers";
 import useChatMessages from "@/hooks/useChatMessages";
-import useActiveUsers from "@/hooks/useActiveUsers";
+import useChatActiveUsers from "@/hooks/useChatActiveUsers";
 
 interface User {
   id: string;
@@ -35,7 +35,8 @@ const ChatUsers: React.FC<ChatUsersProps> = ({ onSelectUser }) => {
     loading: chatMessagesLoading,
     markMessagesAsRead,
   } = useChatMessages();
-  const { activeUsers, loading: activeUsersLoading } = useActiveUsers();
+  const { chatActiveUsers, loading: chatActiveUsersLoading } =
+    useChatActiveUsers();
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>("");
 
@@ -84,14 +85,17 @@ const ChatUsers: React.FC<ChatUsersProps> = ({ onSelectUser }) => {
     2,
     "0"
   )}-${currentDate.getFullYear()}`;
-  const currentHour = currentDate.getHours();
-  const hourRangeStart = currentHour % 12 || 12;
-  const hourRangePeriod = currentHour < 12 ? "AM" : "PM";
-  const formattedHourRange = `${hourRangeStart}:00 - ${hourRangeStart}:59 ${hourRangePeriod}`;
+  const currentHours = currentDate.getHours();
+  const currentMinutes = currentDate.getMinutes();
+  const hourRangeStart = currentHours % 12 || 12;
+  const hourRangePeriod = currentHours < 12 ? "AM" : "PM";
+  const formattedCurrentMinute = `${hourRangeStart}:${String(
+    currentMinutes
+  ).padStart(2, "0")} ${hourRangePeriod}`;
 
-  // Extract active user IDs in the current time range
-  const activeUserIds = activeUsers
-    .filter((entry) => entry.time === formattedHourRange)
+  // Extract active user IDs in the current minute
+  const chatActiveUserIds = chatActiveUsers
+    .filter((entry) => entry.time === formattedCurrentMinute)
     .reduce<string[]>((acc, cur) => {
       const ids = cur.users.map((user) => user.userId);
       return [...acc, ...ids];
@@ -102,7 +106,7 @@ const ChatUsers: React.FC<ChatUsersProps> = ({ onSelectUser }) => {
     (message) => message.recipient.userId === userId && message.isRead === false
   );
 
-  if (usersLoading || activeUsersLoading || chatMessagesLoading) {
+  if (usersLoading || chatActiveUsersLoading || chatMessagesLoading) {
     return (
       <div className="flex flex-col mb-1">
         <Input placeholder="Search by name" disabled />
@@ -154,7 +158,7 @@ const ChatUsers: React.FC<ChatUsersProps> = ({ onSelectUser }) => {
               </Avatar>
               <span
                 className={`absolute bottom-0 right-0 w-3 h-3 border-2 border-background rounded-full ${
-                  activeUserIds.includes(user.id)
+                  chatActiveUserIds.includes(user.id)
                     ? "bg-green-500"
                     : "bg-gray-500"
                 }`}

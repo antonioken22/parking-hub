@@ -86,9 +86,9 @@ const useNotifications = () => {
             : notification
         )
       );
-      toast.success("Notification removed from view");
+      toast.success("Notification deleted.");
     } catch (err) {
-      toast.error("Failed to update notification");
+      toast.error("Failed to delete notification.");
     }
   }, []);
 
