@@ -85,3 +85,12 @@
   }
 }
 
+/* Custom styles for Swiper pagination dots */
+.swiper-pagination-bullet {
+  background-color: rgba(247, 149, 29, 0.4); /* Default custom orange color with transparency */
+  opacity: 1;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: rgba(247, 149, 29, 1); /* Custom orange color for active dot */
+}

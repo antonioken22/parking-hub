@@ -6,7 +6,8 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import { LandingNavbar } from "./_components/landing-navbar";
 import { LandingHero } from "./_components/landing-hero";
-import { LandingContent } from "./_components/landing-content";
+//import { LandingContent } from "./_components/landing-content";
+import LandingPageSlider from "./_components/landing-slider";
 import LandingBg1 from "@/public/landing-bg-sal0.jpg";
 import LandingBg2 from "@/public/landing-bg-sal1.jpg";
 import LandingBg3 from "@/public/landing-bg-sal2.jpg";
@@ -58,7 +59,8 @@ const LandingPage = () => {
       <div className="relative z-10">
         <LandingNavbar />
         <LandingHero />
-        <LandingContent />
+        
+        <LandingPageSlider />
       </div>
     </div>
   );
