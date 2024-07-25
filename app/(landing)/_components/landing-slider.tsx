@@ -3,7 +3,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/free-mode";
 import "swiper/css/autoplay"; // Ensure Autoplay CSS is imported
-
+import LoginBg from "@/public/login-bg.png";
 import { Autoplay, FreeMode, Pagination } from "swiper/modules"; // No need to import Loop
 import { RxArrowTopRight } from "react-icons/rx";
 import { ServiceData } from "@/app/(landing)/constants/testimonials";
@@ -44,7 +44,7 @@ const LandingPageSlider = () => {
             <div className="flex flex-col gap-6 mb-20 group relative shadow-lg text-white rounded-xl px-6 py-8 h-[250px] w-[215px] lg:h-[400px] lg:w-[350px] overflow-hidden cursor-pointer border-2 border-customOrange"> {/* Changed border color to custom orange */}
               <div
                 className="absolute inset-0 bg-cover bg-center"
-                style={{ backgroundImage: `url(${item.backgroundImage})` }}
+                style={{ backgroundImage: 'url(/landing-bg-dark.jpg)' }}
               />
               <div className="absolute inset-0 bg-black opacity-30 group-hover:opacity-50" />
               <div className="relative flex flex-col gap-3 text-white group-hover:text-customOrange"> {/* Changed hover text color to custom orange */}
