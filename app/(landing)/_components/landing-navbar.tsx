@@ -32,39 +32,52 @@ export const LandingNavbar = () => {
   }, []);
 
   return (
-    <nav className="p-4 bg-transparent flex items-center justify-between">
-      <Link href="/" className="flex items-center">
-        <div className="relative h-8 w-8 mr-1">
-          <Image
-            priority
-            alt="Logo"
-            src="/logo.svg"
-            fill
-            className="dark:hidden"
-          />
-          <Image
-            priority
-            alt="Logo"
-            src="/logo-dark.svg"
-            fill
-            className="hidden dark:block"
-          />
+    <>
+      <style jsx>{`
+        .bg-background-color {
+          background-color: rgba(0, 0, 0, 0.4); /* Adjust the color and opacity as needed */
+        }
+
+        .shadow-lg {
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+      `}</style>
+      <nav className="p-4 bg-background-color fixed top-0 left-0 w-full flex items-center justify-center shadow-lg z-50">
+        <div className="flex items-center justify-between w-full max-w-screen-lg">
+          <Link href="/" className="flex items-center">
+            <div className="relative h-8 w-8 mr-1">
+              <Image
+                priority
+                alt="Logo"
+                src="/logo.svg"
+                fill
+                className="dark:hidden"
+              />
+              <Image
+                priority
+                alt="Logo"
+                src="/logo-dark.svg"
+                fill
+                className="hidden dark:block"
+              />
+            </div>
+            <h2 className="font-bold text-primary">
+              Parking{" "}
+              <span className="bg-primary text-background border-primary-foreground px-1 rounded-sm">
+                Hub
+              </span>
+            </h2>
+          </Link>
+          <div className="flex items-center gap-x-2">
+            <Link href={user ? "/dashboard" : "/sign-in"}>
+              <Button>{loading ? <Spinner /> : <p>Log in</p>}</Button>
+            </Link>
+            <div>
+              <ModeToggle />
+            </div>
+          </div>
         </div>
-        <h2 className="w-full font-bold text-center text-primary">
-          Parking{" "}
-          <span className="bg-primary text-background border-primary-foreground px-1 rounded-sm">
-            Hub
-          </span>
-        </h2>
-      </Link>
-      <div className="flex items-center gap-x-2 ml-auto">
-        <Link href={user ? "/dashboard" : "/sign-in"}>
-          <Button>{loading ? <Spinner /> : <p>Log in</p>}</Button>
-        </Link>
-        <div>
-          <ModeToggle />
-        </div>
-      </div>
-    </nav>
+      </nav>
+    </>
   );
 };
