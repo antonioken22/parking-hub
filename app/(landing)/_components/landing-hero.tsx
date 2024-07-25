@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import type { User } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 export const LandingHero = () => {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
+  const shakeRef = useRef<HTMLHeadingElement | null>(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -29,10 +30,32 @@ export const LandingHero = () => {
     return () => unsubscribe();
   }, []);
 
+  useEffect(() => {
+    const startShake = () => {
+      if (shakeRef.current) {
+        shakeRef.current.classList.add('shake');
+        setTimeout(() => {
+          shakeRef.current?.classList.remove('shake');
+        }, 1000); // Duration of shake
+      }
+    };
+
+    const initialTimeout = setTimeout(() => {
+      startShake();
+      const interval = setInterval(startShake, 5000); // Interval between shakes
+
+      // Clear interval on component unmount
+      return () => clearInterval(interval);
+    }, 5000); // Initial delay before the first shake
+
+    // Clear timeout on component unmount
+    return () => clearTimeout(initialTimeout);
+  }, []);
+
   return (
     <div className="text-primary font-bold py-36 text-center space-y-5">
       <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl space-y-5 font-extrabold">
-        <h1>Park Now!</h1>
+        <h1 ref={shakeRef}>Park Now!</h1>
       </div>
       <div className="text-sm md:text-xl font-light text-primary">
         Here at Cebu Institute of Technology - University.
