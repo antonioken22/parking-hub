@@ -19,7 +19,7 @@ const SettingsPage = () => {
   >("account");
 
   const handleSectionChange = (
-    section: "account" | "password" | "notifications" | "help"
+    section: "account" | "password" | "help"
   ) => {
     setActiveSection(section);
   };
