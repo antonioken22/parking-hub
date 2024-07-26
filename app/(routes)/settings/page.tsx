@@ -15,7 +15,7 @@ import HelpSection from "./_components/help-section";
 const SettingsPage = () => {
   const { userId, loading } = useUserState();
   const [activeSection, setActiveSection] = useState<
-    "account" | "password" | "notifications" | "help"
+    "account" | "password" | "help"
   >("account");
 
   const handleSectionChange = (
@@ -79,7 +79,6 @@ const SettingsPage = () => {
             </nav>
             {activeSection === "account" && <AccountInformation />}
             {activeSection === "password" && <ChangePassword />}
-            {activeSection === "notifications" && <NotificationSection />}
             {activeSection === "help" && <HelpSection />}
           </div>
         </div>
