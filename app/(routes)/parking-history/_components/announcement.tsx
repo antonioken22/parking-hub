@@ -8,7 +8,7 @@ const Announcement: React.FC = () => {
     <Card className="flex flex-col items-stretch p-4 bg-primary text-white rounded-lg">
       <CardHeader className="mb-4 text-center">
         <CardTitle className="bg-primary-foreground p-4 rounded">
-          <Link href="" className="text-black hover:underline">
+          <Link href="/dashboard" className="text-black hover:underline">
             ANNOUNCEMENT!
           </Link>
         </CardTitle>
