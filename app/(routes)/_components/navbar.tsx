@@ -34,7 +34,7 @@ const Navbar = () => {
 
         // Then polls every 1 minute from there
         const interval = setInterval(() => {
-          logChatActiveUser(userId, userEmail, userFirstName, userLastName);
+         // logChatActiveUser(userId, userEmail, userFirstName, userLastName);
         }, 60000);
 
         return () => clearInterval(interval);
