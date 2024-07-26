@@ -63,14 +63,6 @@ const SettingsPage = () => {
                 Password
               </Button>
               <Button
-                variant={
-                  activeSection === "notifications" ? "clicked" : "notclicked"
-                }
-                onClick={() => handleSectionChange("notifications")}
-              >
-                Notifications
-              </Button>
-              <Button
                 variant={activeSection === "help" ? "clicked" : "notclicked"}
                 onClick={() => handleSectionChange("help")}
               >
