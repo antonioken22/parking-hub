@@ -66,12 +66,12 @@ const routes = [
     color: "text-primary",
     href: "/parking-map",
   },
-  {
+  /* {
     label: "Parking History",
     icon: FileClock,
     color: "text-primary",
     href: "/parking-history",
-  },
+  }, */
   {
     label: "Settings",
     icon: Settings,
