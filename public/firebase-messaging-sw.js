@@ -11,12 +11,12 @@ keys to grant your web app the service for push notifications.
 Read more: https://stackoverflow.com/questions/37482366/is-it-safe-to-expose-firebase-apikey-to-the-public */
 // Replace these with your own Firebase config keys...
 const firebaseConfig = {
-  apiKey: "AIzaSyDK__8f9aOe2IQY3fZvZQp1uE2tkatBQtA",
+  apiKey: "AIzaSyD8_dkUAnbZQWK72eU87mVp_mo9DyU4Aew",
   authDomain: null,
-  projectId: "parking-hub-79189",
+  projectId: "parking-hub-presentation",
   storageBucket: null,
-  messagingSenderId: "954964268771",
-  appId: "1:954964268771:web:f0f9b7ce897b029f2897d6",
+  messagingSenderId: "372530545580",
+  appId: "1:372530545580:web:d7cddb183cb1e06137f009",
   measurementId: null,
 };
 
