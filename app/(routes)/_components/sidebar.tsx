@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import {
   FileClock,
+  FileClockIcon,
   LayoutDashboard,
   LogOut,
   Monitor,
@@ -77,6 +78,12 @@ const routes = [
     icon: Settings,
     color: "text-primary",
     href: "/settings",
+  },
+  {
+    label: "Announcement",
+    icon: FileClockIcon,
+    color: "text-primary",
+    href: "/announcement",
   },
 ];
 
