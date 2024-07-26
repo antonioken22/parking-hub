@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Bar, Line, Pie } from 'react-chartjs-2'; // Import Bar for histogram
+import { Bar, Line, Pie } from 'react-chartjs-2';
 import 'chart.js/auto';
 import '@/public/chartConfig';
 import { Spinner } from '@/components/spinner';
@@ -257,40 +257,63 @@ const DashboardPage = () => {
           </div>
         )}
         <div className="w-full max-w-7xl p-4">
-          <h2 className="text-xl md:text-2xl font-bold mb-4">
-            Parking Slot Status <span className="text-primary">(Overview)</span>
-          </h2>
-          <div className="mb-4">
-            <select
-              aria-label="Select Chart Type"
-              value={chartType}
-              onChange={(e) => setChartType(e.target.value as 'bar' | 'line' | 'pie' | 'histogram')}
-              className="border border-gray-300 p-2 rounded"
+          <h1 className="text-center text-3xl font-bold text-primary mb-4">Dashboard</h1>
+          <div className="flex flex-col md:flex-row justify-center mb-4">
+            <button
+              className={`mx-2 my-1 px-4 py-2 border-2 rounded-md ${
+                chartType === 'bar'
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-secondary text-secondary-foreground'
+              }`}
+              onClick={() => setChartType('bar')}
             >
-              <option value="bar">Bar</option>
-              <option value="line">Line</option>
-              <option value="pie">Pie</option>
-              <option value="histogram">Histogram</option>
-            </select>
+              Bar Chart
+            </button>
+            <button
+              className={`mx-2 my-1 px-4 py-2 border-2 rounded-md ${
+                chartType === 'line'
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-secondary text-secondary-foreground'
+              }`}
+              onClick={() => setChartType('line')}
+            >
+              Line Chart
+            </button>
+            <button
+              className={`mx-2 my-1 px-4 py-2 border-2 rounded-md ${
+                chartType === 'pie'
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-secondary text-secondary-foreground'
+              }`}
+              onClick={() => setChartType('pie')}
+            >
+              Pie Chart
+            </button>
+            <button
+              className={`mx-2 my-1 px-4 py-2 border-2 rounded-md ${
+                chartType === 'histogram'
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-secondary text-secondary-foreground'
+              }`}
+              onClick={() => setChartType('histogram')}
+            >
+              Histogram
+            </button>
           </div>
-          {chartType === 'bar' && (
-            <Bar data={chartData} options={chartOptions} plugins={[ChartDataLabels]} />
-          )}
-          {chartType === 'line' && (
-            <Line data={chartData} options={chartOptions} plugins={[ChartDataLabels]} />
-          )}
-          {chartType === 'pie' && (
-            <Pie data={pieChartData} options={pieChartOptions} plugins={[ChartDataLabels]} />
-          )}
-          {chartType === 'histogram' && (
-            <Bar data={histogramData} options={chartOptions} plugins={[ChartDataLabels]} />
-          )}
-        </div>
-        <div className="w-full max-w-7xl p-4 mt-8">
-          <h2 className="text-xl md:text-2xl font-bold mb-4">
-            Active Users <span className="text-primary">(Today)</span>
-          </h2>
-          <Line data={activeUsersData} options={chartOptions} plugins={[ChartDataLabels]} />
+          <div className="w-full p-4 border-2 rounded-md shadow-md bg-primary text-primary-foreground">
+            {chartType === 'bar' && (
+              <Bar data={chartData} options={chartOptions} plugins={[ChartDataLabels as any]} />
+            )}
+            {chartType === 'line' && (
+              <Line data={activeUsersData} options={chartOptions} plugins={[ChartDataLabels as any]} />
+            )}
+            {chartType === 'pie' && (
+              <Pie data={pieChartData} options={pieChartOptions} plugins={[ChartDataLabels as any]} />
+            )}
+            {chartType === 'histogram' && (
+              <Bar data={histogramData} options={chartOptions} plugins={[ChartDataLabels as any]} />
+            )}
+          </div>
         </div>
       </main>
     </div>
