@@ -52,7 +52,7 @@ export const LandingHero = () => {
           <div className="flex items-center gap-2">
             <MapPin className="h-5 w-5 md:h-7 md:w-7" />
             <p
-              className="text-lg md:text-xl font-medium"
+              className="text-sm md:text-xl font-medium"
               style={{ textShadow: "1px 1px 4px rgba(0, 0, 0, 0.4)" }}
             >
               Cebu Institute of Technology - University
