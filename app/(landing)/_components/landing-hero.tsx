@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import type { User } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
+import { ArrowUpRight, MapPin } from "lucide-react";
 
 import { auth, firestore } from "@/firebase/config";
 import { Spinner } from "@/components/spinner";
@@ -13,7 +14,6 @@ import { Button } from "@/components/ui/button";
 export const LandingHero = () => {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
-  const shakeRef = useRef<HTMLHeadingElement | null>(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -23,46 +23,57 @@ export const LandingHero = () => {
           setUser(user);
         }
       }
+      setLoading(false);
     });
 
-    setLoading(false);
-    // Cleanup subscription on unmount
     return () => unsubscribe();
   }, []);
 
-  useEffect(() => {
-    const startShake = () => {
-      if (shakeRef.current) {
-        shakeRef.current.classList.add('shake');
-        setTimeout(() => {
-          shakeRef.current?.classList.remove('shake');
-        }, 1000); // Duration of shake
-      }
-    };
-
-    const initialTimeout = setTimeout(() => {
-      startShake();
-      const interval = setInterval(startShake, 5000); // Interval between shakes
-
-      // Clear interval on component unmount
-      return () => clearInterval(interval);
-    }, 5000); // Initial delay before the first shake
-
-    // Clear timeout on component unmount
-    return () => clearTimeout(initialTimeout);
-  }, []);
-
   return (
-    <div className="text-primary font-bold py-36 text-center space-y-5">
-      <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl space-y-5 font-extrabold">
-        <h1 ref={shakeRef}>Park Now!</h1>
+    <div className="text-primary font-bold pt-36 text-center space-y-8 md:space-y-10">
+      {/* Title text */}
+      <div className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight leading-snug">
+        <h1 className="tracking-wider">
+          <span className="bg-primary text-background border-primary-foreground rounded-lg px-6 py-2 inline-block transition-transform transform hover:scale-105">
+            PARK
+          </span>{" "}
+          NOW!
+        </h1>
       </div>
-      <div className="text-sm md:text-xl font-light text-primary">
-        Here at Cebu Institute of Technology - University.
+
+      {/* Clickable location */}
+      <div className="flex justify-center items-center gap-2 transition-colors text-yellow-400 hover:text-red-800">
+        <Link
+          href="https://maps.app.goo.gl/1ZZcWrDtVyfTex3i9"
+          target="_blank"
+          rel="noreferrer"
+          aria-label="View location on map"
+        >
+          <div className="flex items-center gap-2">
+            <MapPin className="h-5 w-5 md:h-7 md:w-7" />
+            <p
+              className="text-lg md:text-xl font-medium"
+              style={{ textShadow: "1px 1px 4px rgba(0, 0, 0, 0.4)" }}
+            >
+              Cebu Institute of Technology - University
+            </p>
+          </div>
+        </Link>
       </div>
+
+      {/* Register here button */}
       <div>
         <Link href={user ? "/dashboard" : "/sign-up"}>
-          <Button>{loading ? <Spinner /> : <p>Register Here</p>}</Button>
+          <Button className="w-48 h-12 bg-primary rounded-lg shadow-lg transition-all transform hover:scale-105 focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+            {loading ? (
+              <Spinner text={"background"} />
+            ) : (
+              <div className="flex justify-center items-center gap-2">
+                <p className="text-lg font-semibold">Register Here</p>
+                <ArrowUpRight className="h-5 w-5" />
+              </div>
+            )}
+          </Button>
         </Link>
       </div>
     </div>

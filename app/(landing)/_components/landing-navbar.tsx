@@ -33,17 +33,8 @@ export const LandingNavbar = () => {
 
   return (
     <>
-      <style jsx>{`
-        .bg-background-color {
-          background-color: rgba(0, 0, 0, 0.4); /* Adjust the color and opacity as needed */
-        }
-
-        .shadow-lg {
-          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        }
-      `}</style>
-      <nav className="p-4 bg-background-color fixed top-0 left-0 w-full flex items-center justify-center shadow-lg z-50">
-        <div className="flex items-center justify-between w-full max-w-screen-lg">
+      <nav className="p-4 bg-black/50 fixed top-0 left-0 w-full flex items-center justify-center shadow-lg z-50">
+        <div className="flex items-center justify-between w-full max-w-screen-xl">
           <Link href="/" className="flex items-center">
             <div className="relative h-8 w-8 mr-1">
               <Image
@@ -70,7 +61,9 @@ export const LandingNavbar = () => {
           </Link>
           <div className="flex items-center gap-x-2">
             <Link href={user ? "/dashboard" : "/sign-in"}>
-              <Button>{loading ? <Spinner /> : <p>Log in</p>}</Button>
+              <Button className="w-20">
+                {loading ? <Spinner text={"background"} /> : <p>Log in</p>}
+              </Button>
             </Link>
             <div>
               <ModeToggle />

@@ -6,18 +6,17 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import { LandingNavbar } from "./_components/landing-navbar";
 import { LandingHero } from "./_components/landing-hero";
-//import { LandingContent } from "./_components/landing-content";
-import LandingPageSlider from "./_components/landing-slider";
-import LandingBg1 from "@/public/landing-bg-sal0.jpg";
-import LandingBg2 from "@/public/landing-bg-sal1.jpg";
-import LandingBg3 from "@/public/landing-bg-sal2.jpg";
-import LandingBg4 from "@/public/landing-bg-gle0.jpg";
+import { LandingPageSlider } from "./_components/landing-slider";
+
+import FlashyLandingPageBackground from "@/public/parking-hub-landing-flashy.png";
+import SALParkingSlot0Centered from "@/public/landing-bg-sal0-centered.png";
+import GLEParkingSlot0 from "@/public/landing-bg-gle0.jpg";
 
 const LandingPage = () => {
-  const [currentImage, setCurrentImage] = useState(LandingBg1);
+  const [currentImage, setCurrentImage] = useState(FlashyLandingPageBackground);
 
   useEffect(() => {
-    const images = [LandingBg1, LandingBg2, LandingBg3, LandingBg4];
+    const images = [FlashyLandingPageBackground];
     let currentIndex = 0;
 
     const interval = setInterval(() => {
@@ -42,16 +41,18 @@ const LandingPage = () => {
             alt="Landing Page"
             src={currentImage}
             fill
-            className="absolute inset-0 object-cover dark:hidden opacity-20"
+            className="absolute inset-0 object-cover dark:hidden opacity-90"
             placeholder="blur"
+            quality={100}
             priority
           />
           <Image
             alt="Landing Page"
             src={currentImage}
             fill
-            className="absolute inset-0 object-cover hidden dark:block opacity-20"
+            className="absolute inset-0 object-cover hidden dark:block opacity-90"
             placeholder="blur"
+            quality={100}
             priority
           />
         </motion.div>
@@ -59,7 +60,6 @@ const LandingPage = () => {
       <div className="relative z-10">
         <LandingNavbar />
         <LandingHero />
-        
         <LandingPageSlider />
       </div>
     </div>
