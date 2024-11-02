@@ -34,7 +34,7 @@ export const LandingPageSlider = () => {
           bulletActiveClass: "swiper-pagination-bullet-active", // Custom class for active pagination bullet
         }}
         autoplay={{
-          delay: 5000, // Time in ms between slides
+          delay: 6000, // Time in ms between slides
           disableOnInteraction: false, // Continue autoplay after interaction
         }}
         loop={true} // Enable continuous loop
