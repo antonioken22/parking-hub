@@ -39,7 +39,7 @@ export const LandingPageSlider = () => {
         }}
         loop={true} // Enable continuous loop
         modules={[Autoplay, FreeMode, Pagination]} // No Loop module needed
-        className="w-full max-w-[100%] flex items-center justify-center"
+        className="w-full flex items-center justify-center"
       >
         {ServiceData.map((item) => (
           <SwiperSlide
